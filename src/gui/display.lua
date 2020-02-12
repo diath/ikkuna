@@ -14,10 +14,11 @@ function Display:initialize()
 	child.onDragMove:connect(function() print('onDragMove()') return true end)
 	child.onDragEnd:connect(function() print('onDragEnd()') return true end)
 	child.onResize:connect(function() print('onResize()') end)
-
+	child.onHoverChange:connect(function(widget, hovered) return true end)
 	self.root:addChild(child)
 
 	self.draggingWidget = nil
+	self.hoveredWidget = nil
 end
 
 function Display:update(delta)
@@ -73,8 +74,20 @@ function Display:onMouseMoved(x, y, dx, dy, touch)
 	end
 
 	local widget = self.root:getChildAt(x, y)
+	if self.hoveredWidget and (not widget or widget ~= self.hoveredWidget) then
+		self.hoveredWidget:setHovered(false)
+		self.hoveredWidget = nil
+	end
+
 	if widget then
-		return widget:onMouseMoved(x, y, dx, dy, touch)
+		if widget:onMouseMoved(x, y, dx, dy, touch) then
+			local result = widget:setHovered(true)
+			if result then
+				self.hoveredWidget = widget
+			end
+
+			return result
+		end
 	end
 
 	return false

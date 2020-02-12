@@ -21,6 +21,7 @@ function Widget:initialize()
 	self.onDragMove = ikkuna.Event()
 	self.onDragEnd = ikkuna.Event()
 	self.onMouseMove = ikkuna.Event()
+	self.onHoverChange = ikkuna.Event()
 end
 
 function Widget:update(delta)
@@ -69,7 +70,12 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 		return self.onDoubleClick:emit(self, x, y, button, touch, presses)
 	end
 
-	return self.onClick:emit(self, x, y, button, touch, presses)
+	if self.onClick:emit(self, x, y, button, touch, presses) then
+		self.pressed = true
+		return true
+	end
+
+	return false
 end
 
 function Widget:onMouseReleased(x, y, button, touch, presses)
@@ -81,6 +87,10 @@ function Widget:onMouseReleased(x, y, button, touch, presses)
 	local child = self:getChildAt(x, y)
 	if child then
 		return child:onMouseReleased(x, y, button, touch, presses)
+	end
+
+	if self.pressed then
+		self.pressed = false
 	end
 
 	return false
@@ -98,6 +108,19 @@ function Widget:onMouseMoved(x, y, dx, dy, touch)
 	end
 
 	return self.onMouseMove:emit(self, x, y, dx, dy, touch)
+end
+
+function Widget:setHovered(hovered)
+	if self.hovered == hovered then
+		return false
+	end
+
+	if self.onHoverChange:emit(self, hovered) then
+		self.hovered = hovered
+		return true
+	end
+
+	return false
 end
 
 function Widget:setExplicitSize(width, height)
