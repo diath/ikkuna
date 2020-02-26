@@ -14,3 +14,6 @@ ikkuna.TextAlign.Center = 3
 require('gui.event')
 require('gui.display')
 require('gui.widget')
+
+-- Widgets
+require('widgets.checkbox')
