@@ -118,6 +118,9 @@ function Widget:onMouseMoved(x, y, dx, dy, touch)
 		if result then
 			self.x = x - self.dragOffset.x
 			self.y = y - self.dragOffset.y
+
+			-- TODO: setPosition() & onPositionChanged event instead?
+			self.isTextDirty = true
 		end
 
 		return result
