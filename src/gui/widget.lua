@@ -10,9 +10,15 @@ function Widget:initialize()
 
 	self.draggable = true
 	self.dragging = false
-	self.dragOffset = {}
-	self.dragOffset.x = 0
-	self.dragOffset.y = 0
+	self.dragOffset = {x = 0, y = 0}
+
+	self.isTextDirty = false
+	self.text = nil
+	self.textString = ''
+	self.textPosition = {x = 0, y = 0}
+	self.textOffset = {x = 0, y = 0}
+	self.textAlign = ikkuna.TextAlign.Left
+	self.textColor = {r = 1, g = 1, b = 1, a = 1}
 
 	self.onResize = ikkuna.Event()
 	self.onClick = ikkuna.Event()
@@ -30,6 +36,10 @@ function Widget:update(delta)
 			child:update(delta)
 		end
 	end
+
+	if self.isTextDirty then
+		self:calculateTextPosition()
+	end
 end
 
 function Widget:draw()
@@ -40,6 +50,12 @@ function Widget:draw()
 		if child:isVisible() then
 			child:draw()
 		end
+	end
+
+	if self.text then
+		local color = self.textColor
+		love.graphics.setColor(color.r, color.g, color.b, color.a)
+		love.graphics.draw(self.text, self.textPosition.x, self.textPosition.y)
 	end
 end
 
@@ -138,6 +154,41 @@ end
 
 function Widget:isVisible()
 	return true
+end
+
+function Widget:setText(text)
+	if not self.text then
+		-- TODO: Shared font resources?
+		self.text = love.graphics.newText(love.graphics.newFont('res/Verdana.ttf'))
+	end
+
+	self.text:set(text)
+	self.textString = text
+	self.isTextDirty = true
+end
+
+function Widget:getText()
+	return self.textString
+end
+
+function Widget:calculateTextPosition()
+	if not self.text then
+		return
+	end
+
+	local width = self.text:getWidth()
+	local height = self.text:getHeight()
+
+	if self.textAlign == ikkuna.TextAlign.Left then
+		self.textPosition.x = self.x + self.textOffset.x
+	elseif self.textAlign == ikkuna.TextAlign.Right then
+		self.textPosition.x = (self.x + self.width) - width + self.textOffset.x
+	elseif self.textAlign == ikkuna.TextAlign.Center then
+		self.textPosition.x = (self.x + self.width) / 2 - (width / 2) + self.textOffset.x
+	end
+	self.textPosition.y = self.y + self.textOffset.y
+
+	self.isTextDirty = false
 end
 
 function Widget:contains(x, y)
