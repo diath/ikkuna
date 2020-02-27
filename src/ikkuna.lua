@@ -3,12 +3,16 @@ if not class then
 end
 
 ikkuna = {}
+ikkuna.font = love.graphics.newFont('res/Verdana.ttf')
 
 -- Const
 ikkuna.TextAlign = {}
 ikkuna.TextAlign.Left = 1
 ikkuna.TextAlign.Right = 2
 ikkuna.TextAlign.Center = 3
+
+-- Util
+require('util.math')
 
 -- Base
 require('gui.event')
@@ -17,3 +21,4 @@ require('gui.widget')
 
 -- Widgets
 require('widgets.checkbox')
+require('widgets.progressbar')

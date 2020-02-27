@@ -162,7 +162,7 @@ end
 function Widget:setText(text)
 	if not self.text then
 		-- TODO: Shared font resources?
-		self.text = love.graphics.newText(love.graphics.newFont('res/Verdana.ttf'))
+		self.text = love.graphics.newText(ikkuna.font)
 	end
 
 	self.text:set(text)
