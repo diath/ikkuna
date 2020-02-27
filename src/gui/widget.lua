@@ -183,13 +183,13 @@ function Widget:calculateTextPosition()
 	local height = self.text:getHeight()
 
 	if self.textAlign == ikkuna.TextAlign.Left then
-		self.textPosition.x = self.x + self.textOffset.x
+		self.textPosition.x = math.floor(self.x + self.textOffset.x)
 	elseif self.textAlign == ikkuna.TextAlign.Right then
-		self.textPosition.x = (self.x + self.width) - width + self.textOffset.x
+		self.textPosition.x = math.floor((self.x + self.width) - width + self.textOffset.x)
 	elseif self.textAlign == ikkuna.TextAlign.Center then
-		self.textPosition.x = (self.x + self.width) / 2 - (width / 2) + self.textOffset.x
+		self.textPosition.x = math.floor((self.x + self.width) / 2 - (width / 2) + self.textOffset.x)
 	end
-	self.textPosition.y = self.y + self.textOffset.y
+	self.textPosition.y = math.floor(self.y + self.textOffset.y)
 
 	self.isTextDirty = false
 end
