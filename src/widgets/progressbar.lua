@@ -10,8 +10,6 @@ function ProgressBar:initialize()
 	self.value = 1
 	self.fillWidth = 0
 	self.fillColor = {r = 0, g = 0, b = 1, a = 1}
-
-	self.text = love.graphics.newText(ikkuna.font)
 end
 
 function ProgressBar:draw()
