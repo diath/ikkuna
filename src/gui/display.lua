@@ -77,7 +77,7 @@ function Display:onMouseReleased(x, y, button, touch, presses)
 
 	local widget = self.root:getChildAt(x, y)
 	if widget then
-		return widget:onMouseReleased(x, y, button, touch, pressed)
+		return widget:onMouseReleased(x, y, button, touch, presses)
 	end
 
 	return false
