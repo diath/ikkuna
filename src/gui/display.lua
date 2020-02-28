@@ -19,6 +19,7 @@ function Display:initialize()
 
 	self.draggingWidget = nil
 	self.hoveredWidget = nil
+	self.focusedWidget = nil
 end
 
 function Display:update(delta)
@@ -45,8 +46,22 @@ function Display:onMousePressed(x, y, button, touch, presses)
 	local widget = self.root:getChildAt(x, y)
 	if widget then
 		local result = widget:onMousePressed(x, y, button, touch, presses)
-		if result and widget.dragging then
-			self.draggingWidget = widget
+		if result then
+			if widget.dragging then
+				self.draggingWidget = widget
+			end
+
+			if widget ~= self.focusedWidget then
+				if self.focusedWidget then
+					self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
+					self.focusedWidget = nil
+				end
+
+				if widget.focusable then
+					self.focusedWidget = widget
+					self.focusedWidget.onFocusChange:emit(self.focusedWidget, true)
+				end
+			end
 		end
 
 		return result
@@ -62,7 +77,7 @@ function Display:onMouseReleased(x, y, button, touch, presses)
 
 	local widget = self.root:getChildAt(x, y)
 	if widget then
-		return widget:onMouseReleased(x, y, button, touch, presses)
+		return widget:onMouseReleased(x, y, button, touch, pressed)
 	end
 
 	return false

@@ -12,6 +12,8 @@ function Widget:initialize()
 	self.dragging = false
 	self.dragOffset = {x = 0, y = 0}
 
+	self.focusable = true
+
 	self.isTextDirty = false
 	self.text = nil
 	self.textString = ''
@@ -28,6 +30,7 @@ function Widget:initialize()
 	self.onDragEnd = ikkuna.Event()
 	self.onMouseMove = ikkuna.Event()
 	self.onHoverChange = ikkuna.Event()
+	self.onFocusChange = ikkuna.Event()
 end
 
 function Widget:update(delta)
