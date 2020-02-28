@@ -1,6 +1,10 @@
 local Widget = class('Widget')
+Widget.LastId = 0
 
 function Widget:initialize()
+	Widget.LastId = Widget.LastId + 1
+	self.id = ('Widget%d'):format(Widget.LastId)
+
 	self.children = {}
 	self.x = 0
 	self.y = 0
@@ -153,7 +157,12 @@ function Widget:setExplicitSize(width, height)
 end
 
 function Widget:addChild(child)
-	table.insert(self.children, child)
+	-- TODO: Use a set?
+	if not table.contains(self.children, child) then
+		table.insert(self.children, child)
+	else
+		print(('Widget %s already contains child widget %s'):format(self.id, child.id))
+	end
 
 	-- TODO: Layout update if present
 end

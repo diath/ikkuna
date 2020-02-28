@@ -13,6 +13,7 @@ ikkuna.TextAlign.Center = 3
 
 -- Util
 require('util.math')
+require('util.table')
 
 -- Base
 require('gui.event')
