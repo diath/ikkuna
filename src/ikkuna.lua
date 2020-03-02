@@ -23,3 +23,5 @@ require('gui.widget')
 -- Widgets
 require('widgets.checkbox')
 require('widgets.progressbar')
+require('widgets.radiobox')
+require('widgets.radiogroup')
