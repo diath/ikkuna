@@ -166,7 +166,22 @@ function Lexer:readString(quote)
 end
 
 function Lexer:readNumber()
-	return Token:new(Token.Type.Number, self:readWhile(Lexer.isDigit))
+	local state = {}
+
+	local function parse(char)
+		if char == '.' then
+			if state['float'] then
+				return false
+			end
+
+			state['float'] = true
+			return true
+		end
+
+		return Lexer.isDigit(char)
+	end
+
+	return Token:new(Token.Type.Number, tonumber(self:readWhile(parse)))
 end
 
 function Lexer:readIdentifier()

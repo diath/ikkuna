@@ -26,7 +26,7 @@ function Token:toString()
 	local name = Token.Names[self.type]
 	if name then
 		if self.type == Token.Type.Number then
-			return ('Token(type=%d, name=%s, value=%d)'):format(self.type, name, self.value)
+			return ('Token(type=%d, name=%s, value=%0.2f)'):format(self.type, name, self.value)
 		else
 			return ('Token(type=%d, name=%s, value="%s")'):format(self.type, name, self.value)
 		end
