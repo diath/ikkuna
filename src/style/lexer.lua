@@ -2,7 +2,8 @@ local Lexer = class('StyleLexer')
 local Token = ikkuna.StyleToken
 
 Lexer.Whitespace = {' ', '\n', '\t'}
-Lexer.Punctuation = {'{', '}', ':', ';'}
+Lexer.Punctuation = {'{', '}', ';'}
+Lexer.Symbols = {':'}
 Lexer.StringQuotes = {"'", '"'}
 
 Lexer.Comment = '/'
@@ -59,6 +60,10 @@ function Lexer:readNext()
 
 	if Lexer.isPunctuation(char) then
 		return self:readPunctuation()
+	end
+
+	if Lexer.isSymbol(char) then
+		return self:readSymbol()
 	end
 
 	return Token:new()
@@ -192,6 +197,10 @@ function Lexer:readPunctuation()
 	return Token:new(Token.Type.Punctuation, self:readWhile(Lexer.isPunctuation))
 end
 
+function Lexer:readSymbol()
+	return Token:new(Token.Type.Symbol, self:readWhile(Lexer.isSymbol))
+end
+
 function Lexer.isWhitespace(value)
 	return table.contains(Lexer.Whitespace, value)
 end
@@ -216,6 +225,10 @@ end
 
 function Lexer.isPunctuation(value)
 	return table.contains(Lexer.Punctuation, value)
+end
+
+function Lexer.isSymbol(value)
+	return table.contains(Lexer.Symbols, value)
 end
 
 ikkuna.StyleLexer = Lexer

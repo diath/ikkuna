@@ -11,6 +11,10 @@ ikkuna.TextAlign.Left = 1
 ikkuna.TextAlign.Right = 2
 ikkuna.TextAlign.Center = 3
 
+ikkuna.StyleState = {}
+ikkuna.StyleState.Normal = 1
+ikkuna.StyleState.Hover = 2
+
 -- Util
 require('util.math')
 require('util.table')
@@ -19,6 +23,7 @@ require('util.table')
 require('style.stream')
 require('style.token')
 require('style.lexer')
+require('style.parser')
 
 -- Base
 require('gui.event')
