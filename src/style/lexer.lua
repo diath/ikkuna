@@ -3,7 +3,7 @@ local Token = ikkuna.StyleToken
 
 Lexer.Whitespace = {' ', '\n', '\t'}
 Lexer.Punctuation = {'{', '}', ';'}
-Lexer.Symbols = {':'}
+Lexer.Symbols = {':', '$'}
 Lexer.StringQuotes = {"'", '"'}
 
 Lexer.Comment = '/'

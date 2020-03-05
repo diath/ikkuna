@@ -7,8 +7,8 @@ function Stream:initialize()
 	self.size = 0
 
 	self.position = 1
-	self.line = 0
-	self.column = 0
+	self.line = 1
+	self.column = 1
 end
 
 function Stream:loadFile(path)
@@ -41,8 +41,8 @@ end
 
 function Stream:reset()
 	self.position = 1
-	self.line = 0
-	self.column = 0
+	self.line = 1
+	self.column = 1
 end
 
 function Stream:next()
