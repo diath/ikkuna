@@ -24,6 +24,7 @@ require('style.stream')
 require('style.token')
 require('style.lexer')
 require('style.parser')
+require('style.styles')
 
 -- Base
 require('gui.event')

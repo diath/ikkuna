@@ -1,6 +1,9 @@
 local Display = class('Display')
 
 function Display:initialize()
+	local styles = ikkuna.Styles:new()
+	styles:loadFile('src/res/theme.css')
+
 	self.root = ikkuna.Widget:new()
 
 	local width, height = love.graphics.getDimensions()
