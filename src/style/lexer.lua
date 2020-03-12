@@ -59,7 +59,7 @@ function Lexer:readNext()
 	end
 
 	if Lexer.isPunctuation(char) then
-		return self:readPunctuation()
+		return Token:new(Token.Type.Punctuation, char)
 	end
 
 	if Lexer.isSymbol(char) then
@@ -191,10 +191,6 @@ end
 
 function Lexer:readIdentifier()
 	return Token:new(Token.Type.Identifier, self:readWhile(Lexer.isIdentifier))
-end
-
-function Lexer:readPunctuation()
-	return Token:new(Token.Type.Punctuation, self:readWhile(Lexer.isPunctuation))
 end
 
 function Lexer:readSymbol()
