@@ -5,6 +5,8 @@ function Parser:initialize(lexer)
 	self.lexer = lexer
 	self.variables = {}
 
+	self.functions = {}
+
 	self:nextToken()
 end
 
@@ -22,6 +24,7 @@ function Parser:parse()
 			self.lexer.stream:warning(('Unknown top level style node (expected an identifier or "$"), found %s.'):format(
 				self.token:toString()
 			))
+			return styles
 		end
 	end
 
@@ -32,12 +35,20 @@ function Parser:nextToken()
 	self.token = self.lexer:next()
 end
 
-function Parser:checkToken(type, value)
+function Parser:checkToken(types, value)
 	if not value then
-		return self.token.type == type
+		if type(types) == 'table' then
+			for _, type in pairs(types) do
+				if self.token.type == type then
+					return true
+				end
+			end
+		end
+
+		return self.token.type == types
 	end
 
-	return self.token.type == type and self.token.value == value
+	return self.token.type == types and self.token.value == value
 end
 
 function Parser:parseNameValuePair()
@@ -59,6 +70,51 @@ function Parser:parseNameValuePair()
 		else
 			self.lexer.stream:warning('Expected an identifier.')
 			return
+		end
+	elseif self:checkToken(Token.Type.Identifier) then
+		local functionName = self.token.value
+		self:nextToken()
+
+		if not self:checkToken(Token.Type.Punctuation, '(') then
+			self.lexer.stream:warning('Expected "(".')
+			return
+		end
+		self:nextToken()
+
+		if self:checkToken(Token.Type.Punctuation, ')') then
+			if self.functions[functionName] then
+				value = self.functions[functionName]()
+			else
+				self.lexer.stream:warning(('Unknown function "%s".'):format(functionName))
+			end
+		else
+			local params = {}
+			if not self:checkToken({Token.Type.Number, Token.Type.String}) then
+				self.lexer.stream:warning('Expected a value.')
+				return
+			end
+
+			table.insert(params, self.token.value)
+			self:nextToken()
+
+			while self:checkToken(Token.Type.Punctuation, ',') do
+				self:nextToken()
+
+				if not self:checkToken({Token.Type.Number, Token.Type.String}) then
+					self.lexer.stream:warning('Expected a value.')
+					return
+				end
+
+				table.insert(params, self.token.value)
+				self:nextToken()
+			end
+			self:nextToken()
+
+			if self.functions[functionName] then
+				value = self.functions[functionName](unpack(params))
+			else
+				self.lexer.stream:warning(('Unknown function "%s".'):format(functionName))
+			end
 		end
 	end
 

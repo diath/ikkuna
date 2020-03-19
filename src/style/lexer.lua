@@ -2,7 +2,7 @@ local Lexer = class('StyleLexer')
 local Token = ikkuna.StyleToken
 
 Lexer.Whitespace = {' ', '\n', '\t'}
-Lexer.Punctuation = {'{', '}', ';'}
+Lexer.Punctuation = {'{', '}', '(', ')', ',', ';'}
 Lexer.Symbols = {':', '$'}
 Lexer.StringQuotes = {"'", '"'}
 
@@ -59,7 +59,9 @@ function Lexer:readNext()
 	end
 
 	if Lexer.isPunctuation(char) then
-		return Token:new(Token.Type.Punctuation, char)
+		local token = Token:new(Token.Type.Punctuation, char)
+		self.stream:next()
+		return token
 	end
 
 	if Lexer.isSymbol(char) then
