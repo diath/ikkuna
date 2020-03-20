@@ -62,7 +62,16 @@ function Parser:parseNameValuePair()
 	self:nextToken()
 
 	local value = self.token.value
-	if self:checkToken(Token.Type.Symbol, '$') then
+	if self:checkToken(Token.Type.Keyword) then
+		if self.token.value == 'true' then
+			value = true
+		elseif self.token.value == 'false' then
+			value = false
+		else
+			self.lexer.stream:warning('Unknown keyword value.')
+			return
+		end
+	elseif self:checkToken(Token.Type.Symbol, '$') then
 		self:nextToken()
 
 		if self:checkToken(Token.Type.Identifier) then

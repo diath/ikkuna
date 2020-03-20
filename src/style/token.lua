@@ -7,6 +7,7 @@ Token.Type.Number = 3
 Token.Type.Identifier = 4
 Token.Type.Punctuation = 5
 Token.Type.Symbol = 6
+Token.Type.Keyword = 7
 
 Token.Names = {}
 Token.Names[Token.Type.Unknown] = 'Unknown'
@@ -15,6 +16,7 @@ Token.Names[Token.Type.Number] = 'Number'
 Token.Names[Token.Type.Identifier] = 'Identifier'
 Token.Names[Token.Type.Punctuation] = 'Punctuation'
 Token.Names[Token.Type.Symbol] = 'Symbol'
+Token.Names[Token.Type.Keyword] = 'Keyword'
 
 function Token:initialize(type, value)
 	local type = type or Token.Type.Unknown

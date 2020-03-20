@@ -5,6 +5,7 @@ Lexer.Whitespace = {' ', '\n', '\t'}
 Lexer.Punctuation = {'{', '}', '(', ')', ',', ';'}
 Lexer.Symbols = {':', '$'}
 Lexer.StringQuotes = {"'", '"'}
+Lexer.Keywords = {'true', 'false'}
 
 Lexer.Comment = '/'
 Lexer.CommentMultiline = '*'
@@ -192,7 +193,12 @@ function Lexer:readNumber()
 end
 
 function Lexer:readIdentifier()
-	return Token:new(Token.Type.Identifier, self:readWhile(Lexer.isIdentifier))
+	local value = self:readWhile(Lexer.isIdentifier)
+	if Lexer.isKeyword(value) then
+		return Token:new(Token.Type.Keyword, value)
+	end
+
+	return Token:new(Token.Type.Identifier, value)
 end
 
 function Lexer:readSymbol()
@@ -219,6 +225,10 @@ end
 
 function Lexer.isIdentifier(value)
 	return Lexer.isIdentifierStart(value) or Lexer.isDigit(value)
+end
+
+function Lexer.isKeyword(value)
+	return table.contains(Lexer.Keywords, value)
 end
 
 function Lexer.isPunctuation(value)
