@@ -6,6 +6,10 @@ function Parser:initialize(lexer)
 	self.variables = {}
 
 	self.functions = {}
+	self.functions['rgba'] = Parser.funcrgba
+
+	-- Function aliases
+	self.functions['rgb'] = self.functions['rgba']
 
 	self:nextToken()
 end
@@ -195,6 +199,20 @@ function Parser:parseStyleNode()
 
 	self:nextToken()
 	return style
+end
+
+function Parser.funcrgba(r, g, b, a)
+	local r = (r and r or 255) / 255
+	local g = (g and g or 255) / 255
+	local b = (b and b or 255) / 255
+	local a = (a and a or 255) / 255
+
+	return {
+		r = r,
+		g = g,
+		b = b,
+		a = a,
+	}
 end
 
 ikkuna.StyleParser = Parser
