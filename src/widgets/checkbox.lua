@@ -4,6 +4,7 @@ function CheckBox:initialize()
 	ikkuna.Widget.initialize(self)
 	self.textOffset.x = 20
 	self.checked = false
+	self.draggable = false
 
 	self.onCheckChange = ikkuna.Event()
 end

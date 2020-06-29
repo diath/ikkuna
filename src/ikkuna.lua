@@ -38,8 +38,10 @@ require('gui.display')
 require('gui.widget')
 
 -- Widgets
+require('widgets.button')
 require('widgets.checkbox')
 require('widgets.progressbar')
+require('widgets.pushbutton')
 require('widgets.radiobox')
 require('widgets.radiogroup')
 require('widgets.label')
