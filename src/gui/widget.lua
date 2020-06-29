@@ -25,7 +25,7 @@ function Widget:initialize()
 	self.textString = ''
 	self.textPosition = {x = 0, y = 0}
 	self.textOffset = {x = 0, y = 0}
-	self.textAlign = ikkuna.TextAlign.Left
+	self.textAlign = {horizontal = ikkuna.TextAlign.Horizontal.Left, vertical = ikkuna.TextAlign.Vertical.Top}
 	self.textColor = {r = 1, g = 1, b = 1, a = 1}
 
 	self.onResize = ikkuna.Event()
@@ -209,14 +209,21 @@ function Widget:calculateTextPosition()
 	local width = self.text:getWidth()
 	local height = self.text:getHeight()
 
-	if self.textAlign == ikkuna.TextAlign.Left then
+	if self.textAlign.horizontal == ikkuna.TextAlign.Horizontal.Left then
 		self.textPosition.x = math.floor(self.x + self.textOffset.x)
-	elseif self.textAlign == ikkuna.TextAlign.Right then
-		self.textPosition.x = math.floor((self.x + self.width) - width + self.textOffset.x)
-	elseif self.textAlign == ikkuna.TextAlign.Center then
+	elseif self.textAlign.horizontal == ikkuna.TextAlign.Horizontal.Right then
+		self.textPosition.x = math.floor(self.x + self.width - width + self.textOffset.x)
+	elseif self.textAlign.horizontal == ikkuna.TextAlign.Horizontal.Center then
 		self.textPosition.x = math.floor(self.x + self.width / 2 - width / 2 + self.textOffset.x)
 	end
-	self.textPosition.y = math.floor(self.y + self.textOffset.y)
+
+	if self.textAlign.vertical == ikkuna.TextAlign.Vertical.Top then
+		self.textPosition.y = math.floor(self.y + self.textOffset.y)
+	elseif self.textAlign.vertical == ikkuna.TextAlign.Vertical.Bottom then
+		self.textPosition.y = math.floor(self.y + self.height - height + self.textOffset.y)
+	elseif self.textAlign.vertical == ikkuna.TextAlign.Vertical.Center then
+		self.textPosition.y = math.floor(self.y + self.height / 2 - height / 2 + self.textOffset.y)
+	end
 
 	self.isTextDirty = false
 end
