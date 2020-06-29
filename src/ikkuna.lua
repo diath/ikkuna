@@ -15,6 +15,12 @@ ikkuna.StyleState = {}
 ikkuna.StyleState.Normal = 1
 ikkuna.StyleState.Hover = 2
 
+ikkuna.Mouse = {}
+ikkuna.Mouse.Button = {}
+ikkuna.Mouse.Button.Primary = 1
+ikkuna.Mouse.Button.Secondary = 2
+ikkuna.Mouse.Button.Middle = 3
+
 -- Util
 require('util.math')
 require('util.table')
