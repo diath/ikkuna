@@ -7,9 +7,14 @@ ikkuna.font = love.graphics.newFont('res/Verdana.ttf')
 
 -- Const
 ikkuna.TextAlign = {}
-ikkuna.TextAlign.Left = 1
-ikkuna.TextAlign.Right = 2
-ikkuna.TextAlign.Center = 3
+ikkuna.TextAlign.Horizontal = {}
+ikkuna.TextAlign.Horizontal.Left = 1
+ikkuna.TextAlign.Horizontal.Right = 2
+ikkuna.TextAlign.Horizontal.Center = 3
+ikkuna.TextAlign.Vertical = {}
+ikkuna.TextAlign.Vertical.Top = 1
+ikkuna.TextAlign.Vertical.Bottom = 2
+ikkuna.TextAlign.Vertical.Center = 3
 
 ikkuna.StyleState = {}
 ikkuna.StyleState.Normal = 1
