@@ -77,32 +77,34 @@ end
 function Widget:onMousePressed(x, y, button, touch, presses)
 	local child = self:getChildAt(x, y)
 	if child then
-		return child:onMousePressed(x, y)
+		return child:onMousePressed(x, y, button, touch, presses)
 	end
 
-	if self.draggable then
-		if self.onDragStart:emit(self, x, y) then
-			self.dragging = true
-			self.dragOffset.x = x - self.x
-			self.dragOffset.y = y - self.y
+	if button == ikkuna.Mouse.Button.Primary then
+		if self.draggable then
+			if self.onDragStart:emit(self, x, y) then
+				self.dragging = true
+				self.dragOffset.x = x - self.x
+				self.dragOffset.y = y - self.y
+				return true
+			end
+		end
+
+		if presses == 2 then
+			return self.onDoubleClick:emit(self, x, y, button, touch, presses)
+		end
+
+		if self.onClick:emit(self, x, y, button, touch, presses) then
+			self.pressed = true
 			return true
 		end
-	end
-
-	if presses == 2 then
-		return self.onDoubleClick:emit(self, x, y, button, touch, presses)
-	end
-
-	if self.onClick:emit(self, x, y, button, touch, presses) then
-		self.pressed = true
-		return true
 	end
 
 	return false
 end
 
 function Widget:onMouseReleased(x, y, button, touch, presses)
-	if self.dragging then
+	if button == ikkuna.Mouse.Button.Primary and self.dragging then
 		self.dragging = false
 		return self.onDragEnd:emit(self, x, y)
 	end
@@ -112,7 +114,7 @@ function Widget:onMouseReleased(x, y, button, touch, presses)
 		return child:onMouseReleased(x, y, button, touch, presses)
 	end
 
-	if self.pressed then
+	if button == ikkuna.Mouse.Button.Primary and self.pressed then
 		self.pressed = false
 	end
 
