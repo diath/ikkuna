@@ -12,6 +12,8 @@ function Widget:initialize()
 	self.width = 100
 	self.height = 100
 
+	self.pressed = false
+
 	self.draggable = true
 	self.dragging = false
 	self.dragOffset = {x = 0, y = 0}
@@ -212,7 +214,7 @@ function Widget:calculateTextPosition()
 	elseif self.textAlign == ikkuna.TextAlign.Right then
 		self.textPosition.x = math.floor((self.x + self.width) - width + self.textOffset.x)
 	elseif self.textAlign == ikkuna.TextAlign.Center then
-		self.textPosition.x = math.floor((self.x + self.width) / 2 - (width / 2) + self.textOffset.x)
+		self.textPosition.x = math.floor(self.x + self.width / 2 - width / 2 + self.textOffset.x)
 	end
 	self.textPosition.y = math.floor(self.y + self.textOffset.y)
 
