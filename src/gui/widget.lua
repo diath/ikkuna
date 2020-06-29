@@ -86,6 +86,11 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 				self.dragging = true
 				self.dragOffset.x = x - self.x
 				self.dragOffset.y = y - self.y
+
+				for _, child in pairs(self.children) do
+					child.dragOffset.x = x - child.x
+					child.dragOffset.y = y - child.y
+				end
 				return true
 			end
 		end
@@ -130,6 +135,12 @@ function Widget:onMouseMoved(x, y, dx, dy, touch)
 
 			-- TODO: setPosition() & onPositionChanged event instead?
 			self.isTextDirty = true
+
+			for _, child in pairs(self.children) do
+				child.x = x - child.dragOffset.x
+				child.y = y - child.dragOffset.y
+				child.isTextDirty = true
+			end
 		end
 
 		return result
