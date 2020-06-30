@@ -10,7 +10,7 @@ function Display:initialize()
 	self.root:setExplicitSize(width, height)
 
 	local child = ikkuna.Widget:new()
-	child:setExplicitSize(100, 100)
+	child:setExplicitSize(100, 150)
 	child.onClick:connect(function() print('onClick()') return true end)
 	child.onDoubleClick:connect(function() print('onDoubleClick()') return true end)
 	child.onDragStart:connect(function() print('onDragStart()') return true end)
@@ -21,8 +21,7 @@ function Display:initialize()
 	self.root:addChild(child)
 
 	local button = ikkuna.Button:new()
-	button.x = 15
-	button.y = 10
+	button:setPosition(15, 10)
 	button:setExplicitSize(70, 25)
 	button:setText('Click')
 	button.onClick:connect(function() print('Button:onClick()') return true end)
@@ -30,14 +29,19 @@ function Display:initialize()
 	child:addChild(button)
 
 	local pushButton = ikkuna.PushButton:new()
-	pushButton.x = 15
-	pushButton.y = 45
+	pushButton:setPosition(15, 45)
 	pushButton:setExplicitSize(70, 25)
 	pushButton:setText('Click')
 	pushButton.onClick:connect(function() print('PushButton:onClick()') return true end)
 	pushButton.onDoubleClick:connect(function() print('PushButton:onDoubleClick()') return true end)
 	pushButton.onPushChange:connect(function(widget, state) print('PushButton:onPushChange()') return true end)
 	child:addChild(pushButton)
+
+	local comboBox = ikkuna.ComboBox:new({'Yes', 'Maybe', {'No', {something = 'something'}}})
+	comboBox:setPosition(15, 80)
+	comboBox:setExplicitSize(70, 25)
+	comboBox.onValueChange:connect(function(widget, selectedIndex, option) print('ComboBox:onValueChange()', option.label, option.data) return true end)
+	child:addChild(comboBox)
 
 	self.draggingWidget = nil
 	self.hoveredWidget = nil

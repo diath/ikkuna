@@ -76,6 +76,30 @@ function Widget:onKeyReleased(key, code)
 	return false
 end
 
+function Widget:setPosition(x, y)
+	self.x = x
+	self.y = y
+end
+
+function Widget:setDragOffset(x, y)
+	self.dragOffset.x = x - self.x
+	self.dragOffset.y = y - self.y
+
+	for _, child in pairs(self.children) do
+		child:setDragOffset(x, y)
+	end
+end
+
+function Widget:drag(x, y)
+	self.x = x - self.dragOffset.x
+	self.y = y - self.dragOffset.y
+	self.isTextDirty = true
+
+	for _, child in pairs(self.children) do
+		child:drag(x, y)
+	end
+end
+
 function Widget:onMousePressed(x, y, button, touch, presses)
 	local child = self:getChildAt(x, y)
 	if child then
@@ -86,13 +110,8 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 		if self.draggable then
 			if self.onDragStart:emit(self, x, y) then
 				self.dragging = true
-				self.dragOffset.x = x - self.x
-				self.dragOffset.y = y - self.y
 
-				for _, child in pairs(self.children) do
-					child.dragOffset.x = x - child.x
-					child.dragOffset.y = y - child.y
-				end
+				self:setDragOffset(x, y)
 				return true
 			end
 		end
@@ -132,17 +151,8 @@ function Widget:onMouseMoved(x, y, dx, dy, touch)
 	if self.dragging then
 		local result = self.onDragMove:emit(self, x, y)
 		if result then
-			self.x = x - self.dragOffset.x
-			self.y = y - self.dragOffset.y
-
 			-- TODO: setPosition() & onPositionChanged event instead?
-			self.isTextDirty = true
-
-			for _, child in pairs(self.children) do
-				child.x = x - child.dragOffset.x
-				child.y = y - child.dragOffset.y
-				child.isTextDirty = true
-			end
+			self:drag(x, y)
 		end
 
 		return result
