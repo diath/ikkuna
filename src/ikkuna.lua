@@ -45,6 +45,7 @@ require('gui.widget')
 -- Widgets
 require('widgets.button')
 require('widgets.checkbox')
+require('widgets.combobox')
 require('widgets.progressbar')
 require('widgets.pushbutton')
 require('widgets.radiobox')
