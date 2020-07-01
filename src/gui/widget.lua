@@ -131,6 +131,7 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 
 		if self.onClick:emit(self, x, y, button, touch, presses) then
 			self.pressed = true
+			self.pressTimer:reset()
 			self.pressedButton = button
 			return true
 		end
