@@ -43,6 +43,12 @@ function Display:initialize()
 	comboBox.onValueChange:connect(function(widget, selectedIndex, option) print('ComboBox:onValueChange()', option.label, option.data) return true end)
 	child:addChild(comboBox)
 
+	local spinBox = ikkuna.SpinBox:new(0, 50)
+	spinBox:setPosition(40, 115)
+	spinBox:setExplicitSize(35, 25)
+	spinBox.onValueChange:connect(function(widget, value) print('SpinBox:onValueChange()', value) return true end)
+	child:addChild(spinBox)
+
 	self.draggingWidget = nil
 	self.hoveredWidget = nil
 	self.focusedWidget = nil
