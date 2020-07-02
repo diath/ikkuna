@@ -23,7 +23,7 @@ function SpinBox:initialize(min, max)
 	decButton:setExplicitSize(10, self.height / 2)
 	decButton:setText('v')
 	decButton.onClick:connect(function() self:decrease() print('SpinBox.decButton:onClick()') return true end)
-	decButton.onPress:connect(function(pressedButton) self:decrease() print('SpinBox.decButton:onPress()') return true end)
+	decButton.onPress:connect(function() self:decrease() print('SpinBox.decButton:onPress()') return true end)
 	self:addChild(decButton)
 end
 
