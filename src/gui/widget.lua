@@ -1,5 +1,6 @@
 local Widget = class('Widget')
 Widget.LastId = 0
+Widget.PressInterval = 0.25
 
 function Widget:initialize()
 	Widget.LastId = Widget.LastId + 1
@@ -13,6 +14,8 @@ function Widget:initialize()
 	self.height = 100
 
 	self.pressed = false
+	self.pressedButton = nil
+	self.pressTimer = ikkuna.Timer()
 
 	self.draggable = true
 	self.dragging = false
@@ -30,6 +33,7 @@ function Widget:initialize()
 
 	self.onResize = ikkuna.Event()
 	self.onClick = ikkuna.Event()
+	self.onPress = ikkuna.Event()
 	self.onDoubleClick = ikkuna.Event()
 	self.onDragStart = ikkuna.Event()
 	self.onDragMove = ikkuna.Event()
@@ -44,6 +48,11 @@ function Widget:update(delta)
 		if child:isVisible() then
 			child:update(delta)
 		end
+	end
+
+	if self.pressed and self.pressTimer:elapsed() >= Widget.PressInterval then
+		self.onPress:emit(self, self.pressedButton)
+		self.pressTimer:reset()
 	end
 
 	if self.isTextDirty then
@@ -122,6 +131,7 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 
 		if self.onClick:emit(self, x, y, button, touch, presses) then
 			self.pressed = true
+			self.pressedButton = button
 			return true
 		end
 	end

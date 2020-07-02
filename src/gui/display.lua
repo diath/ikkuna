@@ -35,6 +35,7 @@ function Display:initialize()
 	pushButton.onClick:connect(function() print('PushButton:onClick()') return true end)
 	pushButton.onDoubleClick:connect(function() print('PushButton:onDoubleClick()') return true end)
 	pushButton.onPushChange:connect(function(widget, state) print('PushButton:onPushChange()') return true end)
+	pushButton.onPress:connect(function() print('PushButton:onPress()') return true end)
 	child:addChild(pushButton)
 
 	local comboBox = ikkuna.ComboBox:new({'Yes', 'Maybe', {'No', {something = 'something'}}})

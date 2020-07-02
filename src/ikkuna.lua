@@ -29,6 +29,7 @@ ikkuna.Mouse.Button.Middle = 3
 -- Util
 require('util.math')
 require('util.table')
+require('util.timer')
 
 -- Style
 require('style.stream')
