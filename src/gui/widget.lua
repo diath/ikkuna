@@ -14,7 +14,6 @@ function Widget:initialize()
 	self.height = 100
 
 	self.pressed = false
-	self.pressedButton = nil
 	self.pressTimer = ikkuna.Timer()
 
 	self.draggable = true
@@ -51,7 +50,7 @@ function Widget:update(delta)
 	end
 
 	if self.pressed and self.pressTimer:elapsed() >= Widget.PressInterval then
-		self.onPress:emit(self, self.pressedButton)
+		self.onPress:emit(self)
 		self.pressTimer:reset()
 	end
 
@@ -128,7 +127,6 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 		if self.onClick:emit(self, x, y, button, touch, presses) then
 			self.pressed = true
 			self.pressTimer:reset()
-			self.pressedButton = button
 			return presses % 2 == 0 and self.onDoubleClick:emit(self, x, y, button, touch, presses) or true
 		end
 	end
