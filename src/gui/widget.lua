@@ -125,16 +125,11 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 			end
 		end
 
-		local event = self.onClick
-		if presses % 2 == 0 then
-			event = self.onDoubleClick
-		end
-
-		if event:emit(self, x, y, button, touch, presses) then
+		if self.onClick:emit(self, x, y, button, touch, presses) then
 			self.pressed = true
 			self.pressTimer:reset()
 			self.pressedButton = button
-			return true
+			return presses % 2 == 0 and self.onDoubleClick:emit(self, x, y, button, touch, presses) or true
 		end
 	end
 
