@@ -20,7 +20,7 @@ function Widget:initialize()
 	self.dragging = false
 	self.dragOffset = {x = 0, y = 0}
 
-	self.focusable = true
+	self.focusable = false
 
 	self.isTextDirty = false
 	self.text = nil
@@ -74,6 +74,10 @@ function Widget:draw()
 		love.graphics.setColor(color.r, color.g, color.b, color.a)
 		love.graphics.draw(self.text, self.textPosition.x, self.textPosition.y)
 	end
+end
+
+function Widget:onTextInput(text)
+	return false
 end
 
 function Widget:onKeyPressed(key, code, repeated)

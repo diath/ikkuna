@@ -14,6 +14,14 @@ function love.draw()
 	display:draw()
 end
 
+function love.textinput(text)
+	if display:onTextInput(text) then
+		return
+	end
+
+	-- The event was not handled by the UI, process it normally.
+end
+
 function love.keypressed(key, code, repeated)
 	if display:onKeyPressed(key, code, repeated) then
 		return

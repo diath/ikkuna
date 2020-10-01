@@ -29,6 +29,7 @@ function Event:disconnect(fn)
 		for index, callback in pairs(self.callbacks) do
 			if callback.fn == fn then
 				position = index
+				break
 			end
 		end
 	end
