@@ -10,7 +10,7 @@ function Display:initialize()
 	self.root:setExplicitSize(width, height)
 
 	local child = ikkuna.Widget:new()
-	child:setExplicitSize(100, 150)
+	child:setExplicitSize(100, 200)
 	child.onClick:connect(function() print('onClick()') return true end)
 	child.onDoubleClick:connect(function() print('onDoubleClick()') return true end)
 	child.onDragStart:connect(function() print('onDragStart()') return true end)
@@ -50,6 +50,12 @@ function Display:initialize()
 	spinBox.onValueChange:connect(function(widget, value) print('SpinBox:onValueChange()', value) return true end)
 	child:addChild(spinBox)
 
+	local textInput = ikkuna.TextInput:new()
+	textInput:setPosition(15, 150)
+	textInput:setExplicitSize(70, 25)
+	textInput.onFocusChange:connect(function(widget, value) print('TextInput:onFocusChange()', value) return true end)
+	child:addChild(textInput)
+
 	self.draggingWidget = nil
 	self.hoveredWidget = nil
 	self.focusedWidget = nil
@@ -67,7 +73,15 @@ function Display:onResize(width, height)
 	self.root:setExplicitSize(width, height)
 end
 
+function Display:onTextInput(text)
+	return self.focusedWidget and self.focusedWidget:onTextInput(text) or false
+end
+
 function Display:onKeyPressed(key, code, repeated)
+	if self.focusedWidget then
+		return self.focusedWidget:onKeyPressed(key, code, repeated)
+	end
+
 	return self.root:onKeyPressed(key, code, repeated)
 end
 
@@ -77,30 +91,33 @@ end
 
 function Display:onMousePressed(x, y, button, touch, presses)
 	local widget = self.root:getChildAt(x, y)
-	if widget then
-		local result = widget:onMousePressed(x, y, button, touch, presses)
-		if result then
-			if widget.dragging then
-				self.draggingWidget = widget
-			end
-
-			if widget ~= self.focusedWidget then
-				if self.focusedWidget then
-					self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
-					self.focusedWidget = nil
-				end
-
-				if widget.focusable then
-					self.focusedWidget = widget
-					self.focusedWidget.onFocusChange:emit(self.focusedWidget, true)
-				end
-			end
-		end
-
-		return result
+	while widget and #widget.children > 0 do
+		widget = widget:getChildAt(x, y)
 	end
 
-	return false
+	local result = widget and widget:onMousePressed(x, y, button, touch, presses) or false
+	if result then
+		if widget.dragging then
+			self.draggingWidget = widget
+		end
+
+		if widget ~= self.focusedWidget then
+			if self.focusedWidget then
+				self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
+				self.focusedWidget = nil
+			end
+
+			if widget.focusable then
+				self.focusedWidget = widget
+				self.focusedWidget.onFocusChange:emit(self.focusedWidget, true)
+			end
+		end
+	elseif self.focusedWidget ~= nil then
+		self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
+		self.focusedWidget = nil
+	end
+
+	return result
 end
 
 function Display:onMouseReleased(x, y, button, touch, presses)
