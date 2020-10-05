@@ -57,7 +57,7 @@ function TextInput:onTextInput(text)
 	end
 
 	self.buffer = ('%s%s%s'):format(self.buffer:sub(1, self.cursorPosition), text, self.buffer:sub(self.cursorPosition + 1))
-	self.cursorPosition = self.cursorPosition + 1
+	self:setCursorPosition(self.cursorPosition + 1)
 
 	self:updateText()
 
@@ -78,6 +78,7 @@ function TextInput:onKeyPressed(key, code, repeated)
 	elseif key == 'delete' then
 		if #self.buffer > 0 then
 			self.buffer = ('%s%s'):format(self:getFrontBuffer(), self:getBackBuffer():sub(2))
+			self:setCursorPosition(self.cursorPosition)
 			self:updateText()
 		end
 	elseif key == 'left' then
