@@ -10,7 +10,7 @@ function Display:initialize()
 	self.root:setExplicitSize(width, height)
 
 	local child = ikkuna.Widget:new()
-	child:setExplicitSize(100, 200)
+	child:setExplicitSize(100, 210)
 	child.onClick:connect(function() print('onClick()') return true end)
 	child.onDoubleClick:connect(function() print('onDoubleClick()') return true end)
 	child.onDragStart:connect(function() print('onDragStart()') return true end)
@@ -55,6 +55,13 @@ function Display:initialize()
 	textInput:setExplicitSize(70, 25)
 	textInput.onFocusChange:connect(function(widget, value) print('TextInput:onFocusChange()', value) return true end)
 	child:addChild(textInput)
+
+	local button = ikkuna.Button:new()
+	button:setPosition(15, 180)
+	button:setExplicitSize(70, 25)
+	button:setText('Mask')
+	button.onClick:connect(function() textInput:setMasked(not textInput.masked) return true end)
+	child:addChild(button)
 
 	self.draggingWidget = nil
 	self.hoveredWidget = nil

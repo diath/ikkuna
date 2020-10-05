@@ -4,6 +4,7 @@ local display = nil
 
 function love.load()
 	display = ikkuna.Display:new()
+	love.keyboard.setKeyRepeat(true)
 end
 
 function love.update(delta)
