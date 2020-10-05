@@ -92,7 +92,7 @@ function TextInput:onKeyPressed(key, code, repeated)
 		local clipboard = love.system.getClipboardText():gsub('\n', '')
 		if #clipboard > 0 then
 			self.buffer = ('%s%s%s'):format(self:getFrontBuffer(), clipboard, self:getBackBuffer())
-			self.cursorPosition = self.cursorPosition + #clipboard
+			self:setCursorPosition(self.cursorPosition + #clipboard)
 			self:updateText()
 		end
 	end
