@@ -48,7 +48,7 @@ end
 
 function TextInput:onTextInput(text)
 	if not self.editable then
-		return true
+		return false
 	end
 
 	local code = string.byte(text)
@@ -56,7 +56,7 @@ function TextInput:onTextInput(text)
 		return false
 	end
 
-	self.buffer = ('%s%s%s'):format(self.buffer:sub(1, self.cursorPosition ), text, self.buffer:sub(self.cursorPosition + 1))
+	self.buffer = ('%s%s%s'):format(self.buffer:sub(1, self.cursorPosition), text, self.buffer:sub(self.cursorPosition + 1))
 	self.cursorPosition = self.cursorPosition + 1
 
 	self:updateText()
@@ -66,39 +66,35 @@ end
 
 function TextInput:onKeyPressed(key, code, repeated)
 	if not self.editable then
-		return true
+		return false
 	end
 
 	if key == 'backspace' then
-		if #self.buffer > 0 then
-			self.buffer = ('%s%s'):format(self.buffer:sub(1, self.cursorPosition - 1), self.buffer:sub(self.cursorPosition + 1))
-			self.cursorPosition = math.max(0, self.cursorPosition - 1)
+		if #self.buffer > 0 and self.cursorPosition > 0 then
+			self.buffer = ('%s%s'):format(self:getFrontBuffer():sub(1, -2), self:getBackBuffer())
+			self:setCursorPosition(math.max(0, self.cursorPosition - 1))
 			self:updateText()
 		end
 	elseif key == 'delete' then
 		if #self.buffer > 0 then
-			self.buffer = ('%s%s'):format(self.buffer:sub(1, self.cursorPosition), self.buffer:sub(self.cursorPosition + 2))
+			self.buffer = ('%s%s'):format(self:getFrontBuffer(), self:getBackBuffer():sub(2))
 			self:updateText()
 		end
 	elseif key == 'left' then
-		self.cursorPosition = math.max(0, self.cursorPosition - 1)
-		self.cursorVisible = true
-		self.cursorTime = 0
+		self:setCursorPosition(math.max(0, self.cursorPosition - 1))
 	elseif key == 'right' then
-		self.cursorPosition = math.min(#self.buffer, self.cursorPosition + 1)
-		self.cursorVisible = true
-		self.cursorTime = 0
+		self:setCursorPosition(math.min(#self.buffer, self.cursorPosition + 1))
 	elseif key == 'home' then
-		self.cursorPosition = 0
-		self.cursorVisible = true
-		self.cursorTime = 0
+		self:setCursorPosition(0)
 	elseif key == 'end' then
-		self.cursorPosition = #self.buffer
-		self.cursorVisible = true
-		self.cursorTime = 0
-	elseif key == 'v' and (love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')) then
-		self.buffer = ('%s%s%s'):format(self.buffer:sub(1, self.cursorPosition ), love.system.getClipboardText():gsub('\n', ''), self.buffer:sub(self.cursorPosition + 1))
-		self:updateText()
+		self:setCursorPosition(#self.buffer)
+	elseif (key == 'v' and ikkuna.isControlPressed()) or (key == 'insert' and ikkuna.isShiftPressed()) then
+		local clipboard = love.system.getClipboardText():gsub('\n', '')
+		if #clipboard > 0 then
+			self.buffer = ('%s%s%s'):format(self:getFrontBuffer(), clipboard, self:getBackBuffer())
+			self.cursorPosition = self.cursorPosition + #clipboard
+			self:updateText()
+		end
 	end
 
 	return true
@@ -115,6 +111,22 @@ function TextInput:updateText()
 	else
 		self:setText(self.buffer)
 	end
+end
+
+function TextInput:getFrontBuffer()
+	-- Returns a copy of the buffer in front of the cursor.
+	return self.buffer:sub(1, self.cursorPosition)
+end
+
+function TextInput:getBackBuffer()
+	-- Returns a copy of the buffer after the cursor.
+	return self.buffer:sub(self.cursorPosition + 1)
+end
+
+function TextInput:setCursorPosition(position)
+	self.cursorPosition = position
+	self.cursorVisible = true
+	self.cursorTime= 0
 end
 
 function TextInput:setMasked(masked)

@@ -26,6 +26,14 @@ ikkuna.Mouse.Button.Primary = 1
 ikkuna.Mouse.Button.Secondary = 2
 ikkuna.Mouse.Button.Middle = 3
 
+function ikkuna.isControlPressed()
+	return love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')
+end
+
+function ikkuna.isShiftPressed()
+	return love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
+end
+
 -- Util
 require('util.math')
 require('util.table')
