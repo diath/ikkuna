@@ -129,7 +129,9 @@ end
 
 function Display:onMouseReleased(x, y, button, touch, presses)
 	if self.draggingWidget then
-		return self.draggingWidget:onMouseReleased(x, y, button, touch, presses)
+		local ret = self.draggingWidget:onMouseReleased(x, y, button, touch, presses)
+		self.draggingWidget = nil
+		return ret
 	end
 
 	local widget = self.root:getChildAt(x, y)
