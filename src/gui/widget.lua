@@ -6,6 +6,7 @@ function Widget:initialize()
 	Widget.LastId = Widget.LastId + 1
 	self.id = ('Widget%d'):format(Widget.LastId)
 
+	self.parent = nil
 	self.children = {}
 	self.x = 0
 	self.y = 0
@@ -103,8 +104,14 @@ function Widget:setDragOffset(x, y)
 end
 
 function Widget:drag(x, y)
-	self.x = x - self.dragOffset.x
-	self.y = y - self.dragOffset.y
+	if self:hasParent() then
+		self.x = math.clamp(self.parent.x, x - self.dragOffset.x, self.parent.x + self.parent.width - self.width)
+		self.y = math.clamp(self.parent.y, y - self.dragOffset.y, self.parent.y + self.parent.height - self.height)
+	else
+		self.x = x - self.dragOffset.x
+		self.y = y - self.dragOffset.y
+	end
+
 	self.isTextDirty = true
 
 	for _, child in pairs(self.children) do
@@ -193,6 +200,7 @@ end
 function Widget:addChild(child)
 	-- TODO: Use a set?
 	if not table.contains(self.children, child) then
+		child.parent = self
 		table.insert(self.children, child)
 	else
 		print(('Widget %s already contains child widget %s'):format(self.id, child.id))
@@ -260,6 +268,27 @@ function Widget:getChildAt(x, y)
 	end
 
 	return nil
+end
+
+function Widget:hasParent()
+	return self.parent ~= nil
+end
+
+function Widget:getParent()
+	return self.parent
+end
+
+function Widget:getTopParent()
+	local parent = self:getParent()
+	if not parent then
+		return nil
+	end
+
+	while parent:hasParent() do
+		parent = parent:getParent()
+	end
+
+	return parent
 end
 
 ikkuna.Widget = Widget

@@ -10,7 +10,7 @@ function Display:initialize()
 	self.root:setExplicitSize(width, height)
 
 	local child = ikkuna.Widget:new()
-	child:setExplicitSize(100, 210)
+	child:setExplicitSize(100, 240)
 	child.onClick:connect(function() print('onClick()') return true end)
 	child.onDoubleClick:connect(function() print('onDoubleClick()') return true end)
 	child.onDragStart:connect(function() print('onDragStart()') return true end)
@@ -56,12 +56,19 @@ function Display:initialize()
 	textInput.onFocusChange:connect(function(widget, value) print('TextInput:onFocusChange()', value) return true end)
 	child:addChild(textInput)
 
-	local button = ikkuna.Button:new()
-	button:setPosition(15, 180)
-	button:setExplicitSize(70, 25)
-	button:setText('Mask')
-	button.onClick:connect(function() textInput:setMasked(not textInput.masked) return true end)
-	child:addChild(button)
+	local maskButton = ikkuna.Button:new()
+	maskButton:setPosition(15, 180)
+	maskButton:setExplicitSize(70, 25)
+	maskButton:setText('Mask')
+	maskButton.onClick:connect(function() textInput:setMasked(not textInput.masked) return true end)
+	child:addChild(maskButton)
+
+	local draggableButton = ikkuna.Button:new()
+	draggableButton:setPosition(15, 210)
+	draggableButton:setExplicitSize(70, 25)
+	draggableButton:setText('Drag Me')
+	draggableButton.draggable = true
+	child:addChild(draggableButton)
 
 	self.draggingWidget = nil
 	self.focusedWidget = nil

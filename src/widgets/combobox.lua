@@ -27,13 +27,13 @@ function ComboBox:initialize(options)
 	local leftButton = ikkuna.Button:new()
 	leftButton:setExplicitSize(10, 25)
 	leftButton:setText('<')
-	leftButton.onClick:connect(function() self:selectPrevious() print('ComboBox.leftButton:onClick()') return true end)
+	leftButton.onClick:connect(function() self:selectPrevious() return true end)
 	self:addChild(leftButton)
 
 	local rightButton = ikkuna.Button:new()
 	rightButton:setExplicitSize(10, 25)
 	rightButton:setText('>')
-	rightButton.onClick:connect(function() self:selectNext() print('ComboBox.rightButton:onClick()') return true end)
+	rightButton.onClick:connect(function() self:selectNext() return true end)
 	self:addChild(rightButton)
 end
 
