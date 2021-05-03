@@ -32,7 +32,7 @@ function TextInput:draw()
 	if self.cursorVisible then
 		local width = 0
 		if #self.buffer > 0 and self.cursorPosition > 0 then
-			width = ikkuna.font:getWidth(self.buffer:sub(1, self.cursorPosition))
+			width = ikkuna.font:getWidth((self.masked and self:getMaskedText() or self.buffer):sub(1, self.cursorPosition))
 		end
 
 		local height = ikkuna.font:getHeight()
@@ -102,16 +102,11 @@ function TextInput:onKeyPressed(key, code, repeated)
 end
 
 function TextInput:updateText()
-	if self.masked then
-		local mask = ''
-		for i = 1, #self.buffer do
-			mask = ('%s%s'):format(mask, self.maskCharacter)
-		end
+	self:setText(self.masked and self:getMaskedText() or self.buffer)
+end
 
-		self:setText(mask)
-	else
-		self:setText(self.buffer)
-	end
+function TextInput:getMaskedText()
+	return self.buffer:gsub('.', self.maskCharacter)
 end
 
 function TextInput:getFrontBuffer()
@@ -127,7 +122,7 @@ end
 function TextInput:setCursorPosition(position)
 	self.cursorPosition = position
 	self.cursorVisible = true
-	self.cursorTime= 0
+	self.cursorTime = 0
 end
 
 function TextInput:setMasked(masked)
