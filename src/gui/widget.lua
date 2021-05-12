@@ -263,8 +263,12 @@ end
 function Widget:getChildAt(x, y)
 	for _, child in pairs(self.children) do
 		if child:isVisible() and child:contains(x, y) then
-			return child
+			return child:getChildAt(x, y)
 		end
+	end
+
+	if self:contains(x, y) then
+		return self
 	end
 
 	return nil
