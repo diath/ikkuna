@@ -35,6 +35,7 @@ function Widget:initialize()
 	self.onClick = ikkuna.Event()
 	self.onPress = ikkuna.Event()
 	self.onDoubleClick = ikkuna.Event()
+	self.onMouseWheel = ikkuna.Event()
 	self.onDragStart = ikkuna.Event()
 	self.onDragMove = ikkuna.Event()
 	self.onDragEnd = ikkuna.Event()
@@ -175,6 +176,10 @@ function Widget:onMouseMoved(x, y, dx, dy, touch)
 	end
 
 	return self.onMouseMove:emit(self, x, y, dx, dy, touch)
+end
+
+function Widget:onWheelMoved(dx, dy)
+	return self.onMouseWheel:emit(dx, dy)
 end
 
 function Widget:setHovered(hovered)

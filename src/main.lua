@@ -63,6 +63,14 @@ function love.mousemoved(x, y, dx, dy, touch)
 	-- The event was not handled by the UI, process it normally.
 end
 
+function love.wheelmoved(x, y)
+	if display:onWheelMoved(x, y) then
+		return
+	end
+
+	-- The event was not handled by the UI, process it normally.
+end
+
 function love.resize(width, height)
 	display:onResize(width, height)
 end
