@@ -183,4 +183,12 @@ function Display:onMouseMoved(x, y, dx, dy, touch)
 	return false
 end
 
+function Display:onWheelMoved(dx, dy)
+	if self.hoveredWidget then
+		return self.hoveredWidget:onWheelMoved(dx, dy)
+	end
+
+	return false
+end
+
 ikkuna.Display = Display

@@ -15,16 +15,38 @@ function SpinBox:initialize(min, max)
 	local incButton = ikkuna.Button:new()
 	incButton:setExplicitSize(10, self.height / 2)
 	incButton:setText('^')
-	incButton.onClick:connect(function() self:increase() return true end)
-	incButton.onPress:connect(function(pressedButton) self:increase() return true end)
+	incButton.onClick:connect(function()
+		self:increase()
+		return true
+	end)
+	incButton.onPress:connect(function(pressedButton)
+		self:increase()
+		return true
+	end)
 	self:addChild(incButton)
 
 	local decButton = ikkuna.Button:new()
 	decButton:setExplicitSize(10, self.height / 2)
 	decButton:setText('v')
-	decButton.onClick:connect(function() self:decrease() return true end)
-	decButton.onPress:connect(function() self:decrease() return true end)
+	decButton.onClick:connect(function()
+		self:decrease()
+		return true
+	end)
+	decButton.onPress:connect(function(pressedButton)
+		self:decrease()
+		return true
+	end)
 	self:addChild(decButton)
+
+	self.onMouseWheel:connect(function(dx, dy)
+		if dy < 0 then
+			self:decrease()
+		elseif dy > 0 then
+			self:increase()
+		end
+
+		return true
+	end)
 end
 
 function SpinBox:setExplicitSize(width, height)
