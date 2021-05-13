@@ -16,14 +16,6 @@ function HorizontalLayout:setFitParent(fit)
 	self:update()
 end
 
-function HorizontalLayout:update()
-	if not self.updatesEnabled then
-		return
-	end
-
-	self:updateInternal()
-end
-
 function HorizontalLayout:updateInternal()
 	-- TODO: Take padding and margins into account
 	if self.fitParent then

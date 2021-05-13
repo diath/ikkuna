@@ -16,14 +16,6 @@ function VerticalLayout:setFitParent(fit)
 	self:update()
 end
 
-function VerticalLayout:update()
-	if not self.updatesEnabled then
-		return
-	end
-
-	self:updateInternal()
-end
-
 function VerticalLayout:updateInternal()
 	-- TODO: Take padding and margins into account
 	if self.fitParent then
