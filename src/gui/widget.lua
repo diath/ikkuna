@@ -200,6 +200,8 @@ function Widget:setExplicitSize(width, height)
 	self.height = height
 
 	self.onResize:emit(width, height)
+
+	-- TODO: Emit child geometry update on the parent to update the layout
 end
 
 function Widget:addChild(child)
@@ -211,7 +213,17 @@ function Widget:addChild(child)
 		print(('Widget %s already contains child widget %s'):format(self.id, child.id))
 	end
 
-	-- TODO: Layout update if present
+	if self.layout then
+		self.layout:update()
+	end
+end
+
+function Widget:setLayout(layout)
+	self.layout = layout
+	if self.layout then
+		self.layout:setParent(self)
+		self.layout:update()
+	end
 end
 
 function Widget:isVisible()
