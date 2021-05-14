@@ -14,6 +14,10 @@ function Layout:update()
 		return
 	end
 
+	if not self.parent or #self.parent.children == 0 then
+		return
+	end
+
 	self:updateInternal()
 end
 

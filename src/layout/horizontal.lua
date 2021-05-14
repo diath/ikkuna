@@ -17,6 +17,10 @@ function HorizontalLayout:setFitParent(fit)
 end
 
 function HorizontalLayout:updateInternal()
+	if not self.parent or #self.parent.children == 0 then
+		return
+	end
+
 	-- TODO: Take padding and margins into account
 	if self.fitParent then
 		local parent = self.parent
