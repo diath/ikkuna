@@ -22,13 +22,13 @@ function HorizontalLayout:updateInternal()
 	end
 
 	-- TODO: Take padding and margins into account
-	if self.fitParent then
-		local parent = self.parent
+	local parent = self.parent
+	local position = 0
+	local height = parent.height
 
+	if self.fitParent then
 		local spacing = (#parent.children - 1) * self.childSpacing
 		local width = (parent.width - spacing) / #parent.children
-		local height = parent.height
-		local position = 0
 
 		for _, child in pairs(parent.children) do
 			child:setPosition(position, parent.y)
@@ -37,9 +37,6 @@ function HorizontalLayout:updateInternal()
 			position = position + width + self.childSpacing
 		end
 	else
-		local parent = self.parent
-		local height = parent.height
-		local position = 0
 		for _, child in pairs(self.parent.children) do
 			child:setPosition(position, parent.y)
 			child:setExplicitSize(child.width, height)

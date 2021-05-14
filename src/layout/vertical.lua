@@ -22,13 +22,13 @@ function VerticalLayout:updateInternal()
 	end
 
 	-- TODO: Take padding and margins into account
-	if self.fitParent then
-		local parent = self.parent
+	local parent = self.parent
+	local width = parent.width
+	local position = 0
 
+	if self.fitParent then
 		local spacing = (#parent.children - 1) * self.childSpacing
-		local width = parent.width
 		local height = (parent.height - spacing) / #parent.children
-		local position = 0
 
 		for _, child in pairs(parent.children) do
 			child:setPosition(parent.x, position)
@@ -37,9 +37,6 @@ function VerticalLayout:updateInternal()
 			position = position + height + self.childSpacing
 		end
 	else
-		local parent = self.parent
-		local width = parent.width
-		local position = 0
 		for _, child in pairs(self.parent.children) do
 			child:setPosition(parent.x, position)
 			child:setExplicitSize(width, child.height)
