@@ -105,28 +105,26 @@ function Display:onKeyReleased(key, code)
 end
 
 function Display:onMousePressed(x, y, button, touch, presses)
-	local widget = self.root:getChildAt(x, y)
-	while widget and #widget.children > 0 do
-		widget = widget:getChildAt(x, y)
-	end
-
-	local result = widget and widget:onMousePressed(x, y, button, touch, presses) or false
+	local result = self.root:onMousePressed(x, y, button, touch, presses)
 	if result then
-		if widget.dragging then
-			self.draggingWidget = widget
-		end
-
-		self.pressedWidget = widget
-
-		if widget ~= self.focusedWidget then
-			if self.focusedWidget then
-				self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
-				self.focusedWidget = nil
+		local widget = self.root:getChildAt(x, y, true)
+		if widget then
+			if widget.dragging then
+				self.draggingWidget = widget
 			end
 
-			if widget.focusable then
-				self.focusedWidget = widget
-				self.focusedWidget.onFocusChange:emit(self.focusedWidget, true)
+			self.pressedWidget = widget
+
+			if widget ~= self.focusedWidget then
+				if self.focusedWidget then
+					self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
+					self.focusedWidget = nil
+				end
+
+				if widget.focusable then
+					self.focusedWidget = widget
+					self.focusedWidget.onFocusChange:emit(self.focusedWidget, true)
+				end
 			end
 		end
 	elseif self.focusedWidget ~= nil then
