@@ -51,6 +51,11 @@ require('gui.event')
 require('gui.display')
 require('gui.widget')
 
+-- Layouts
+require('layout.layout')
+require('layout.horizontal')
+require('layout.vertical')
+
 -- Widgets
 require('widgets.button')
 require('widgets.checkbox')
