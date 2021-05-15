@@ -1,4 +1,4 @@
-local Label = class('Label', ikkuna.Widget)
+local Label = ikkuna.class('Label', ikkuna.Widget)
 
 function Label:initialize()
 	ikkuna.Widget.initialize(self)

@@ -1,4 +1,4 @@
-local CheckBox = class('CheckBox', ikkuna.Widget)
+local CheckBox = ikkuna.class('CheckBox', ikkuna.Widget)
 
 function CheckBox:initialize()
 	ikkuna.Widget.initialize(self)

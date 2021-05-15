@@ -1,4 +1,4 @@
-local Event = class('Event')
+local Event = ikkuna.class('Event')
 
 function Event:initialize()
 	self.callbacks = {}

@@ -1,4 +1,4 @@
-local Lexer = class('StyleLexer')
+local Lexer = ikkuna.class('StyleLexer')
 local Token = ikkuna.StyleToken
 
 Lexer.Whitespace = {' ', '\n', '\t'}

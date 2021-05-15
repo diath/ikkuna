@@ -1,4 +1,4 @@
-local ComboBox = class('ComboBox', ikkuna.Widget)
+local ComboBox = ikkuna.class('ComboBox', ikkuna.Widget)
 
 function ComboBox:initialize(options)
 	ikkuna.Widget.initialize(self)

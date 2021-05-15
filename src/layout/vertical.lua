@@ -1,4 +1,4 @@
-local VerticalLayout = class('VerticalLayout', ikkuna.Layout)
+local VerticalLayout = ikkuna.class('VerticalLayout', ikkuna.Layout)
 
 function VerticalLayout:initialize(options)
 	local options = options or {}

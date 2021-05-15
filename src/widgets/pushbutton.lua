@@ -1,4 +1,4 @@
-local PushButton = class('PushButton', ikkuna.Button)
+local PushButton = ikkuna.class('PushButton', ikkuna.Button)
 
 function PushButton:initialize()
 	ikkuna.Button.initialize(self)

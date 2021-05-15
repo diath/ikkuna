@@ -1,4 +1,4 @@
-local RadioGroup = class('RadioGroup')
+local RadioGroup = ikkuna.class('RadioGroup')
 
 function RadioGroup:initialize()
 	self.children = {}

@@ -1,4 +1,4 @@
-local RadioBox = class('RadioBox', ikkuna.Widget)
+local RadioBox = ikkuna.class('RadioBox', ikkuna.Widget)
 RadioBox.Segments = 20
 
 function RadioBox:initialize()

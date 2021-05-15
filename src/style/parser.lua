@@ -1,4 +1,4 @@
-local Parser = class('StyleParser')
+local Parser = ikkuna.class('StyleParser')
 local Token = ikkuna.StyleToken
 
 function Parser:initialize(lexer)

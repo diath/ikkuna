@@ -1,4 +1,4 @@
-local Stream = class('StyleStream')
+local Stream = ikkuna.class('StyleStream')
 
 function Stream:initialize()
 	self.path = ''

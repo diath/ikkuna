@@ -1,4 +1,4 @@
-local SpinBox = class('SpinBox', ikkuna.Widget)
+local SpinBox = ikkuna.class('SpinBox', ikkuna.Widget)
 
 function SpinBox:initialize(min, max)
 	ikkuna.Widget.initialize(self)

@@ -1,8 +1,6 @@
-if not class then
-	class = require('vendor.middleclass')
-end
-
 ikkuna = {}
+ikkuna.class = require('vendor.middleclass')
+
 ikkuna.font = love.graphics.newFont('res/Verdana.ttf')
 
 -- Const

@@ -1,4 +1,4 @@
-local ProgressBar = class('ProgressBar', ikkuna.Widget)
+local ProgressBar = ikkuna.class('ProgressBar', ikkuna.Widget)
 
 function ProgressBar:initialize()
 	ikkuna.Widget.initialize(self)

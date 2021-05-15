@@ -1,4 +1,4 @@
-local Token = class('StyleToken')
+local Token = ikkuna.class('StyleToken')
 
 Token.Type = {}
 Token.Type.Unknown = 1
