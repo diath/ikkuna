@@ -29,15 +29,15 @@ function HorizontalLayout:updateInternal()
 
 	if self.fitParent then
 		local spacing = (#parent.children - 1) * self.childSpacing
-		local toatlWidth = parent.width - parent.padding.left - parent.padding.right - spacing
+		local total = parent.width - parent.padding.left - parent.padding.right - spacing
 		for index, child in pairs(parent.children) do
-			toatlWidth = toatlWidth - child.margin.left
+			totalWidth = totalWidth - child.margin.left
 			if index < #parent.children then
-				toatlWidth = toatlWidth - child.margin.right
+				totalWidth = totalWidth - child.margin.right
 			end
 		end
 
-		local width = math.floor(toatlWidth / #parent.children)
+		local width = math.floor(totalWidth / #parent.children)
 
 		for _, child in pairs(parent.children) do
 			position = position + child.margin.left
