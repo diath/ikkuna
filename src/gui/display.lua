@@ -18,7 +18,7 @@ function Display:initialize()
 	child.onResize:connect(function() print('onResize()') end)
 	child.onHoverChange:connect(function(widget, hovered) return true end)
 	child:setLayout(ikkuna.VerticalLayout({fitParent = true}))
-	child:setExplicitSize(140, 200)
+	child:setExplicitSize(140, 300)
 	self.root:addChild(child)
 
 	local button = ikkuna.Button:new()
