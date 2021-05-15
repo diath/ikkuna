@@ -9,10 +9,17 @@ function Rect:initialize(args)
 	local left = args.left or all
 	local right = args.right or all
 
-	self.top = math.min(top, bottom)
-	self.bottom = math.max(top, bottom)
-	self.left = math.min(left, right)
-	self.right = math.max(left, right)
+	if args.raw then
+		self.top = top
+		self.bottom = bottom
+		self.left = left
+		self.right = right
+	else
+		self.top = math.min(top, bottom)
+		self.bottom = math.max(top, bottom)
+		self.left = math.min(left, right)
+		self.right = math.max(left, right)
+	end
 end
 
 function Rect:width()
