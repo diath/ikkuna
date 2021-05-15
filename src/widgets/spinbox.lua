@@ -23,6 +23,9 @@ function SpinBox:initialize(min, max)
 		self:increase()
 		return true
 	end)
+	incButton.onMouseWheel:connect(function(dx, dy)
+		return self:handleMouseWheel(dx, dy)
+	end)
 	self:addChild(incButton)
 
 	local decButton = ikkuna.Button:new()
@@ -36,16 +39,13 @@ function SpinBox:initialize(min, max)
 		self:decrease()
 		return true
 	end)
+	decButton.onMouseWheel:connect(function(dx, dy)
+		return self:handleMouseWheel(dx, dy)
+	end)
 	self:addChild(decButton)
 
 	self.onMouseWheel:connect(function(dx, dy)
-		if dy < 0 then
-			self:decrease()
-		elseif dy > 0 then
-			self:increase()
-		end
-
-		return true
+		return self:handleMouseWheel(dx, dy)
 	end)
 end
 
@@ -90,6 +90,16 @@ end
 
 function SpinBox:decrease()
 	return self:setValue(self.value - 1)
+end
+
+function SpinBox:handleMouseWheel(dx, dy)
+	if dy < 0 then
+		self:decrease()
+	elseif dy > 0 then
+		self:increase()
+	end
+
+	return true
 end
 
 ikkuna.SpinBox = SpinBox

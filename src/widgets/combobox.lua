@@ -31,6 +31,9 @@ function ComboBox:initialize(options)
 		self:selectPrevious()
 		return true
 	end)
+	leftButton.onMouseWheel:connect(function(dx, dy)
+		return self:handleMouseWheel(dx, dy)
+	end)
 	self:addChild(leftButton)
 
 	local rightButton = ikkuna.Button:new()
@@ -40,16 +43,13 @@ function ComboBox:initialize(options)
 		self:selectNext()
 		return true
 	end)
+	rightButton.onMouseWheel:connect(function(dx, dy)
+		return self:handleMouseWheel(dx, dy)
+	end)
 	self:addChild(rightButton)
 
 	self.onMouseWheel:connect(function(dx, dy)
-		if dy < 0 then
-			self:selectPrevious()
-		elseif dy > 0 then
-			self:selectNext()
-		end
-
-		return true
+		return self:handleMouseWheel(dx, dy)
 	end)
 end
 
@@ -103,6 +103,16 @@ end
 
 function ComboBox:selectNext()
 	self:selectByIndex(self.selectedIndex == #self.options and 1 or self.selectedIndex + 1)
+end
+
+function ComboBox:handleMouseWheel(dx, dy)
+	if dy < 0 then
+		self:selectPrevious()
+	elseif dy > 0 then
+		self:selectNext()
+	end
+
+	return true
 end
 
 ikkuna.ComboBox = ComboBox
