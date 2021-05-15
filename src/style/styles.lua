@@ -1,4 +1,4 @@
-local Styles = class('Styles')
+local Styles = ikkuna.class('Styles')
 
 function Styles:initialize()
 	self.styles = {}

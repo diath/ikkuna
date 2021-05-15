@@ -1,4 +1,4 @@
-local TextInput = class('TextInput', ikkuna.Widget)
+local TextInput = ikkuna.class('TextInput', ikkuna.Widget)
 
 function TextInput:initialize(options)
 	ikkuna.Widget.initialize(self)

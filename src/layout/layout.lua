@@ -1,4 +1,4 @@
-local Layout = class('Layout')
+local Layout = ikkuna.class('Layout')
 
 function Layout:initialize(parent)
 	self.parent = parent

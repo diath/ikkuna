@@ -1,4 +1,4 @@
-local Display = class('Display')
+local Display = ikkuna.class('Display')
 
 function Display:initialize()
 	local styles = ikkuna.Styles:new()

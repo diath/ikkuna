@@ -1,4 +1,4 @@
-local Timer = class('timer')
+local Timer = ikkuna.class('timer')
 
 function Timer:initialize()
 	self.time = love.timer.getTime()

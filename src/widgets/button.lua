@@ -1,4 +1,4 @@
-local Button = class('Button', ikkuna.Widget)
+local Button = ikkuna.class('Button', ikkuna.Widget)
 
 function Button:initialize()
 	ikkuna.Widget.initialize(self)

@@ -1,4 +1,4 @@
-local HorizontalLayout = class('HorizontalLayout', ikkuna.Layout)
+local HorizontalLayout = ikkuna.class('HorizontalLayout', ikkuna.Layout)
 
 function HorizontalLayout:initialize(options)
 	local options = options or {}

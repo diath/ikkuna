@@ -1,4 +1,4 @@
-local Widget = class('Widget')
+local Widget = ikkuna.class('Widget')
 Widget.LastId = 0
 Widget.PressInterval = 0.25
 
