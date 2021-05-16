@@ -1,10 +1,12 @@
 local VerticalLayout = ikkuna.class('VerticalLayout', ikkuna.Layout)
 
-function VerticalLayout:initialize(options)
-	local options = options or {}
-	self.updatesEnabled = options.updatesEnabled or true
-	self.fitParent = options.fitParent or false
-	self.childSpacing = options.childSpacing or 5
+function VerticalLayout:initialize(args)
+	ikkuna.Layout.initialize(self, args.parent)
+
+	local args = args or {}
+	self.updatesEnabled = args.updatesEnabled or true
+	self.fitParent = args.fitParent or false
+	self.childSpacing = args.childSpacing or 5
 end
 
 function VerticalLayout:setParent(parent)
@@ -21,26 +23,38 @@ function VerticalLayout:updateInternal()
 		return
 	end
 
-	-- TODO: Take padding and margins into account
 	local parent = self.parent
-	local width = parent.width
-	local position = 0
+	local position = parent.padding.top
+	local width = parent.width - parent.padding.left - parent.padding.right
 
 	if self.fitParent then
 		local spacing = (#parent.children - 1) * self.childSpacing
-		local height = (parent.height - spacing) / #parent.children
+		local totalHeight = parent.height - parent.padding.top - parent.padding.bottom - spacing
+		for index, child in pairs(parent.children) do
+			totalHeight = totalHeight - child.margin.top
+			if index < #parent.children then
+				totalHeight = totalHeight - child.margin.bottom
+			end
+		end
+
+		local height = math.floor(totalHeight / #parent.children)
 
 		for _, child in pairs(parent.children) do
-			child:setPosition(parent.x, position)
+			position = position + child.margin.top
+
+			child:setPosition(parent.x + parent.padding.left, position)
 			child:setExplicitSize(width, height)
 
-			position = position + height + self.childSpacing
+			position = position + height + self.childSpacing + child.margin.bottom
 		end
 	else
 		for _, child in pairs(self.parent.children) do
-			child:setPosition(parent.x, position)
+			position = position + child.margin.top
+
+			child:setPosition(parent.x + parent.padding.left, position)
 			child:setExplicitSize(width, child.height)
-			position = position + child.height + self.childSpacing
+
+			position = position + child.height + self.childSpacing + child.margin.bottom
 		end
 	end
 end

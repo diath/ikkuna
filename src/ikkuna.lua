@@ -36,6 +36,7 @@ end
 require('util.math')
 require('util.table')
 require('util.timer')
+require('util.rect')
 
 -- Style
 require('style.stream')

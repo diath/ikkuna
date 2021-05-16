@@ -14,6 +14,9 @@ function Widget:initialize()
 	self.width = 100
 	self.height = 100
 
+	self.padding = ikkuna.Rect({raw = true, all = 5})
+	self.margin = ikkuna.Rect({raw = true, all = 0})
+
 	self.pressed = false
 	self.pressTimer = ikkuna.Timer()
 

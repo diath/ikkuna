@@ -1,10 +1,12 @@
 local HorizontalLayout = ikkuna.class('HorizontalLayout', ikkuna.Layout)
 
-function HorizontalLayout:initialize(options)
-	local options = options or {}
-	self.updatesEnabled = options.updatesEnabled or true
-	self.fitParent = options.fitParent or false
-	self.childSpacing = options.childSpacing or 5
+function HorizontalLayout:initialize(args)
+	ikkuna.Layout.initialize(self, args.parent)
+
+	local args = args or {}
+	self.updatesEnabled = args.updatesEnabled or true
+	self.fitParent = args.fitParent or false
+	self.childSpacing = args.childSpacing or 5
 end
 
 function HorizontalLayout:setParent(parent)
@@ -21,26 +23,38 @@ function HorizontalLayout:updateInternal()
 		return
 	end
 
-	-- TODO: Take padding and margins into account
 	local parent = self.parent
-	local position = 0
-	local height = parent.height
+	local position = parent.padding.left
+	local height = parent.height - parent.padding.top - parent.padding.right
 
 	if self.fitParent then
 		local spacing = (#parent.children - 1) * self.childSpacing
-		local width = (parent.width - spacing) / #parent.children
+		local total = parent.width - parent.padding.left - parent.padding.right - spacing
+		for index, child in pairs(parent.children) do
+			totalWidth = totalWidth - child.margin.left
+			if index < #parent.children then
+				totalWidth = totalWidth - child.margin.right
+			end
+		end
+
+		local width = math.floor(totalWidth / #parent.children)
 
 		for _, child in pairs(parent.children) do
-			child:setPosition(position, parent.y)
+			position = position + child.margin.left
+
+			child:setPosition(position, parent.y + parent.padding.top)
 			child:setExplicitSize(width, height)
 
-			position = position + width + self.childSpacing
+			position = position + width + self.childSpacing + child.margin.right
 		end
 	else
 		for _, child in pairs(self.parent.children) do
-			child:setPosition(position, parent.y)
+			position = position + child.margin.left
+
+			child:setPosition(position, parent.y + parent.padding.top)
 			child:setExplicitSize(child.width, height)
-			position = position + child.width + self.childSpacing
+
+			position = position + child.width + self.childSpacing + child.margin.right
 		end
 	end
 end
