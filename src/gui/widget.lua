@@ -14,13 +14,15 @@ function Widget:initialize()
 	self.width = 100
 	self.height = 100
 
+	self.visible = true
+
 	self.padding = ikkuna.Rect({raw = true, all = 5})
 	self.margin = ikkuna.Rect({raw = true, all = 0})
 
 	self.pressed = false
 	self.pressTimer = ikkuna.Timer()
 
-	self.draggable = true
+	self.draggable = false
 	self.dragging = false
 	self.dragOffset = {x = 0, y = 0}
 
@@ -96,6 +98,12 @@ end
 function Widget:setPosition(x, y)
 	self.x = x
 	self.y = y
+
+	self:calculateTextPosition()
+
+	if self.layout then
+		self.layout:update()
+	end
 end
 
 function Widget:setDragOffset(x, y)
@@ -143,6 +151,10 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 			self.pressed = true
 			self.pressTimer:reset()
 			return presses % 2 == 0 and self.onDoubleClick:emit(self, x, y, button, touch, presses) or true
+		end
+	elseif button == ikkuna.Mouse.Button.Secondary then
+		if self.contextMenu then
+			self.contextMenu:show(x, y)
 		end
 	end
 
@@ -208,9 +220,14 @@ function Widget:setExplicitSize(width, height)
 end
 
 function Widget:addChild(child)
+	if not child then
+		return
+	end
+
 	-- TODO: Use a set?
 	if not table.contains(self.children, child) then
 		child.parent = self
+
 		table.insert(self.children, child)
 	else
 		print(('Widget %s already contains child widget %s'):format(self.id, child.id))
@@ -221,16 +238,56 @@ function Widget:addChild(child)
 	end
 end
 
+function Widget:removeChild(widget)
+	if not widget then
+		return false
+	end
+
+	for index, child in pairs(self.children) do
+		if child == widget then
+			table.remove(self.children, index)
+			return true
+		end
+	end
+
+	return false
+end
+
+function Widget:moveChildToBack(widget)
+	local found = true
+
+	for index, child in pairs(self.children) do
+		if child == widget then
+			table.remove(self.children, index)
+			found = true
+			break
+		end
+	end
+
+	if found then
+		self:addChild(child)
+	end
+
+	return found
+end
+
 function Widget:setLayout(layout)
 	self.layout = layout
 	if self.layout then
 		self.layout:setParent(self)
-		self.layout:update()
 	end
 end
 
 function Widget:isVisible()
-	return true
+	return self.visible
+end
+
+function Widget:show()
+	self.visible = true
+end
+
+function Widget:hide()
+	self.visible = false
 end
 
 function Widget:setText(text)
@@ -281,7 +338,8 @@ function Widget:contains(x, y)
 end
 
 function Widget:getChildAt(x, y)
-	for _, child in pairs(self.children) do
+	for index = #self.children, 1, -1 do
+		local child = self.children[index]
 		if child:isVisible() and child:contains(x, y) then
 			return child:getChildAt(x, y) or child
 		end

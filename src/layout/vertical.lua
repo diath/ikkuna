@@ -39,8 +39,8 @@ function VerticalLayout:updateInternal()
 		for _, child in pairs(parent.children) do
 			position = position + child.margin.top
 
-			child:setPosition(parent.x + parent.padding.left, position)
 			child:setExplicitSize(width, height)
+			child:setPosition(parent.x + parent.padding.left, position)
 
 			position = position + height + self.childSpacing + child.margin.bottom
 		end
@@ -49,8 +49,8 @@ function VerticalLayout:updateInternal()
 		for _, child in pairs(parent.children) do
 			position = position + child.margin.top
 
-			child:setPosition(parent.x + parent.padding.left, position)
 			child:setExplicitSize(width, child.height)
+			child:setPosition(parent.x + parent.padding.left, position)
 
 			position = position + child.height + self.childSpacing + child.margin.bottom
 			height = height + child.margin.top + child.height + child.margin.bottom + self.childSpacing

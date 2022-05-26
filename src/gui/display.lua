@@ -5,6 +5,7 @@ function Display:initialize()
 	styles:loadFile('src/res/theme.css')
 
 	self.root = ikkuna.Widget:new()
+	ikkuna.root = self.root
 
 	local width, height = love.graphics.getDimensions()
 	self.root:setExplicitSize(width, height)
@@ -26,6 +27,11 @@ function Display:initialize()
 	button.onClick:connect(function() print('Button:onClick()') return true end)
 	button.onDoubleClick:connect(function() print('Button:onDoubleClick()') return true end)
 	child:addChild(button)
+
+	local menu = ikkuna.ContextMenu:new()
+	menu:addOption('Foo', function() print('foo') end)
+	menu:addOption('Bar', function() print('bar') end)
+	button.contextMenu = menu
 
 	local pushButton = ikkuna.PushButton:new()
 	pushButton:setText('Click')
@@ -93,6 +99,10 @@ function Display:onKeyReleased(key, code)
 end
 
 function Display:onMousePressed(x, y, button, touch, presses)
+	if ikkuna.contextMenu and not ikkuna.contextMenu:contains(x, y) then
+		ikkuna.contextMenu:hide()
+	end
+
 	local result = self.root:onMousePressed(x, y, button, touch, presses)
 	if result then
 		local widget = self.root:getChildAt(x, y, true)

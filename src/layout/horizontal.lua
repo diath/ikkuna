@@ -39,8 +39,8 @@ function HorizontalLayout:updateInternal()
 		for _, child in pairs(parent.children) do
 			position = position + child.margin.left
 
-			child:setPosition(position, parent.y + parent.padding.top)
 			child:setExplicitSize(width, height)
+			child:setPosition(position, parent.y + parent.padding.top)
 
 			position = position + width + self.childSpacing + child.margin.right
 		end
@@ -49,8 +49,8 @@ function HorizontalLayout:updateInternal()
 		for _, child in pairs(parent.children) do
 			position = position + child.margin.left
 
-			child:setPosition(position, parent.y + parent.padding.top)
 			child:setExplicitSize(child.width, height)
+			child:setPosition(position, parent.y + parent.padding.top)
 
 			position = position + child.width + self.childSpacing + child.margin.right
 			width = width + child.margin.left + child.width + child.margin.right + self.childSpacing
