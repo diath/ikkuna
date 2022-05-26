@@ -1,16 +1,13 @@
 local VerticalLayout = ikkuna.class('VerticalLayout', ikkuna.Layout)
 
 function VerticalLayout:initialize(args)
-	ikkuna.Layout.initialize(self, args.parent)
+	ikkuna.Layout.initialize(self)
 
 	local args = args or {}
 	self.updatesEnabled = args.updatesEnabled or true
 	self.fitParent = args.fitParent or false
+	self.resizeParent = args.resizeParent or false
 	self.childSpacing = args.childSpacing or 5
-end
-
-function VerticalLayout:setParent(parent)
-	self.parent = parent
 end
 
 function VerticalLayout:setFitParent(fit)
@@ -24,7 +21,7 @@ function VerticalLayout:updateInternal()
 	end
 
 	local parent = self.parent
-	local position = parent.padding.top
+	local position = parent.y + parent.padding.top
 	local width = parent.width - parent.padding.left - parent.padding.right
 
 	if self.fitParent then
@@ -48,13 +45,19 @@ function VerticalLayout:updateInternal()
 			position = position + height + self.childSpacing + child.margin.bottom
 		end
 	else
-		for _, child in pairs(self.parent.children) do
+		local height = parent.padding.top
+		for _, child in pairs(parent.children) do
 			position = position + child.margin.top
 
 			child:setPosition(parent.x + parent.padding.left, position)
 			child:setExplicitSize(width, child.height)
 
 			position = position + child.height + self.childSpacing + child.margin.bottom
+			height = height + child.margin.top + child.height + child.margin.bottom + self.childSpacing
+		end
+
+		if self.resizeParent then
+			parent:setExplicitSize(parent.width, height)
 		end
 	end
 end
