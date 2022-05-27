@@ -1,12 +1,13 @@
 local Layout = ikkuna.class('Layout')
 
-function Layout:initialize(parent)
-	self.parent = parent
+function Layout:initialize()
+	self.parent = nil
 	self.updatesEnabled = true
 end
 
 function Layout:setParent(parent)
 	self.parent = parent
+	self:update()
 end
 
 function Layout:update()
