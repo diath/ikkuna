@@ -1,6 +1,6 @@
 local Slider = ikkuna.class('Slider', ikkuna.Widget)
 
-function Slider:initialize(min, max)
+function Slider:initialize(min, max, displayValueOnKnob)
 	ikkuna.Widget.initialize(self)
 
 	self.min = min or 0
@@ -10,6 +10,7 @@ function Slider:initialize(min, max)
 	end
 
 	self.value = self.min
+	self.displayValueOnKnob = displayValueOnKnob or false
 	self.onValueChange = ikkuna.Event()
 
 	local decButton = ikkuna.Button:new()
@@ -28,7 +29,7 @@ function Slider:initialize(min, max)
 
 	local knob = ikkuna.Button:new()
 	knob:setExplicitSize(10, self.height / 2)
-	knob:setText("")
+	knob:setText(displayValueOnKnob and self.value or "")
 	knob.draggable = true
 	knob.onDragMove:connect(function(knob, x, y, dx, dy)
 		if x - knob.dragOffset.x < decButton.x + decButton.width then
@@ -92,6 +93,7 @@ function Slider:setValue(value)
 		return false
 	end
 
+	self.children[3]:setText(self.displayValueOnKnob and value or "")
 	self.value = value
 	self.onValueChange:emit(self, self.value)
 	return true

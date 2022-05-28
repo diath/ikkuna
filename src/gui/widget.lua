@@ -291,6 +291,10 @@ function Widget:hide()
 end
 
 function Widget:setText(text)
+	if self.textString == text then
+		return
+	end
+
 	if not self.text then
 		-- TODO: Shared font resources?
 		self.text = love.graphics.newText(ikkuna.font)

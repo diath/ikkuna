@@ -19,7 +19,7 @@ function Display:initialize()
 	child.onResize:connect(function() print('onResize()') end)
 	child.onHoverChange:connect(function(widget, hovered) return true end)
 	child:setLayout(ikkuna.VerticalLayout({fitParent = true}))
-	child:setExplicitSize(140, 300)
+	child:setExplicitSize(140, 340)
 	self.root:addChild(child)
 
 	local button = ikkuna.Button:new()
@@ -66,6 +66,10 @@ function Display:initialize()
 	local slider = ikkuna.Slider:new(0, 5)
 	slider.onValueChange:connect(function(widget, value) print('Slider:onValueChange()', value) return true end)
 	child:addChild(slider)
+
+	local sliderWithValueOnKnob = ikkuna.Slider:new(5, 20, true)
+	sliderWithValueOnKnob.onValueChange:connect(function(widget, value) print('Slider:onValueChange()', value) return true end)
+	child:addChild(sliderWithValueOnKnob)
 
 	self.draggingWidget = nil
 	self.focusedWidget = nil
