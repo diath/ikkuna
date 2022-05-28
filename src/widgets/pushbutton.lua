@@ -23,7 +23,7 @@ function PushButton:draw()
 end
 
 function PushButton:onMouseReleased(x, y, button, touch, pressed)
-	if self.onPushChange:emit(self, not self.pushed) then
+	if self.pressed and self.onPushChange:emit(self, not self.pushed) then
 		self.pushed = not self.pushed
 	end
 
