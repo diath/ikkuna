@@ -101,6 +101,7 @@ end
 function Display:onMousePressed(x, y, button, touch, presses)
 	if ikkuna.contextMenu and not ikkuna.contextMenu:contains(x, y) then
 		ikkuna.contextMenu:hide()
+		ikkuna.contextMenu = nil
 	end
 
 	local result = self.root:onMousePressed(x, y, button, touch, presses)
