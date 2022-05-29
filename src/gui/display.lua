@@ -19,11 +19,11 @@ function Display:initialize()
 	child.onResize:connect(function() print('onResize()') end)
 	child.onHoverChange:connect(function(widget, hovered) return true end)
 	child:setLayout(ikkuna.VerticalLayout({fitParent = true}))
-	child:setExplicitSize(140, 300)
+	child:setExplicitSize(140, 340)
 	self.root:addChild(child)
 
 	local button = ikkuna.Button:new()
-	button:setText('Click')
+	button:setText('Click/Right Click')
 	button.onClick:connect(function() print('Button:onClick()') return true end)
 	button.onDoubleClick:connect(function() print('Button:onDoubleClick()') return true end)
 	child:addChild(button)
@@ -34,7 +34,7 @@ function Display:initialize()
 	button.contextMenu = menu
 
 	local pushButton = ikkuna.PushButton:new()
-	pushButton:setText('Click')
+	pushButton:setText('Push')
 	pushButton.onClick:connect(function() print('PushButton:onClick()') return true end)
 	pushButton.onDoubleClick:connect(function() print('PushButton:onDoubleClick()') return true end)
 	pushButton.onPushChange:connect(function(widget, state) print('PushButton:onPushChange()') return true end)
@@ -62,6 +62,14 @@ function Display:initialize()
 	draggableButton:setText('Drag Me')
 	draggableButton.draggable = true
 	child:addChild(draggableButton)
+
+	local slider = ikkuna.Slider:new(0, 5)
+	slider.onValueChange:connect(function(widget, value) print('Slider:onValueChange()', value) return true end)
+	child:addChild(slider)
+
+	local sliderWithValueOnKnob = ikkuna.Slider:new(5, 20, true)
+	sliderWithValueOnKnob.onValueChange:connect(function(widget, value) print('Slider:onValueChange()', value) return true end)
+	child:addChild(sliderWithValueOnKnob)
 
 	self.draggingWidget = nil
 	self.focusedWidget = nil
@@ -136,9 +144,10 @@ end
 
 function Display:onMouseReleased(x, y, button, touch, presses)
 	if self.draggingWidget then
-		local ret = self.draggingWidget:onMouseReleased(x, y, button, touch, presses)
+		self.draggingWidget:onMouseReleased(x, y, button, touch, presses)
 		self.draggingWidget = nil
-		return ret
+
+		return true
 	end
 
 	local widget = self.root:getChildAt(x, y)

@@ -181,7 +181,7 @@ end
 
 function Widget:onMouseMoved(x, y, dx, dy, touch)
 	if self.dragging then
-		local result = self.onDragMove:emit(self, x, y)
+		local result = self.onDragMove:emit(self, x, y, dx, dy)
 		if result then
 			-- TODO: setPosition() & onPositionChanged event instead?
 			self:drag(x, y)
@@ -291,6 +291,10 @@ function Widget:hide()
 end
 
 function Widget:setText(text)
+	if self.textString == text then
+		return
+	end
+
 	if not self.text then
 		-- TODO: Shared font resources?
 		self.text = love.graphics.newText(ikkuna.font)
