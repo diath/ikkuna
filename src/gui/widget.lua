@@ -7,6 +7,7 @@ function Widget:initialize()
 	self.id = ('Widget%d'):format(Widget.LastId)
 
 	self.parent = nil
+	self.tooltip = nil
 	self.children = {}
 	self.x = 0
 	self.y = 0
@@ -80,6 +81,10 @@ function Widget:draw()
 		local color = self.textColor
 		love.graphics.setColor(color.r, color.g, color.b, color.a)
 		love.graphics.draw(self.text, self.textPosition.x, self.textPosition.y)
+	end
+
+	if self.tooltip and self.tooltip.visible then
+		self.tooltip:draw()
 	end
 end
 
@@ -190,6 +195,10 @@ function Widget:onMouseMoved(x, y, dx, dy, touch)
 		return result
 	end
 
+	if self.tooltip then
+		self.tooltip:setPosition(x, y)
+	end
+
 	return self.onMouseMove:emit(self, x, y, dx, dy, touch)
 end
 
@@ -200,6 +209,14 @@ end
 function Widget:setHovered(hovered)
 	if self.hovered == hovered then
 		return false
+	end
+
+	if self.tooltip then
+		if hovered then
+			self.tooltip:show()
+		else
+			self.tooltip:hide()
+		end
 	end
 
 	if self.onHoverChange:emit(self, hovered) then

@@ -28,6 +28,11 @@ function Display:initialize()
 	button.onDoubleClick:connect(function() print('Button:onDoubleClick()') return true end)
 	child:addChild(button)
 
+	local btnTooltip = ikkuna.Tooltip:new()
+	btnTooltip.fitToText = true
+	btnTooltip:setText('Tooltip!')
+	button.tooltip = btnTooltip
+
 	local menu = ikkuna.ContextMenu:new()
 	menu:addOption('Foo', function() print('foo') end)
 	menu:addOption('Bar', function() print('bar') end)
