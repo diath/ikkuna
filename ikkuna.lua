@@ -1,5 +1,5 @@
 ikkuna = {}
-ikkuna.class = require('vendor.middleclass')
+ikkuna.class = require('src.vendor.middleclass')
 
 ikkuna.font = love.graphics.newFont('res/Verdana.ttf')
 
@@ -29,31 +29,31 @@ function ikkuna.isShiftPressed()
 end
 
 -- Util
-require('util.math')
-require('util.table')
-require('util.timer')
-require('util.rect')
+require('src.util.math')
+require('src.util.table')
+require('src.util.timer')
+require('src.util.rect')
 
 -- Base
-require('gui.event')
-require('gui.display')
-require('gui.widget')
+require('src.gui.event')
+require('src.gui.display')
+require('src.gui.widget')
 
 -- Layouts
-require('layout.layout')
-require('layout.horizontal')
-require('layout.vertical')
+require('src.layout.layout')
+require('src.layout.horizontal')
+require('src.layout.vertical')
 
 -- Widgets
-require('widgets.button')
-require('widgets.checkbox')
-require('widgets.combobox')
-require('widgets.contextmenu')
-require('widgets.label')
-require('widgets.progressbar')
-require('widgets.pushbutton')
-require('widgets.radiobox')
-require('widgets.radiogroup')
-require('widgets.slider')
-require('widgets.spinbox')
-require('widgets.textinput')
+require('src.widgets.button')
+require('src.widgets.checkbox')
+require('src.widgets.combobox')
+require('src.widgets.contextmenu')
+require('src.widgets.label')
+require('src.widgets.progressbar')
+require('src.widgets.pushbutton')
+require('src.widgets.radiobox')
+require('src.widgets.radiogroup')
+require('src.widgets.slider')
+require('src.widgets.spinbox')
+require('src.widgets.textinput')
