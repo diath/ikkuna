@@ -14,10 +14,6 @@ ikkuna.TextAlign.Vertical.Top = 1
 ikkuna.TextAlign.Vertical.Bottom = 2
 ikkuna.TextAlign.Vertical.Center = 3
 
-ikkuna.StyleState = {}
-ikkuna.StyleState.Normal = 1
-ikkuna.StyleState.Hover = 2
-
 ikkuna.Mouse = {}
 ikkuna.Mouse.Button = {}
 ikkuna.Mouse.Button.Primary = 1
@@ -37,13 +33,6 @@ require('util.math')
 require('util.table')
 require('util.timer')
 require('util.rect')
-
--- Style
-require('style.stream')
-require('style.token')
-require('style.lexer')
-require('style.parser')
-require('style.styles')
 
 -- Base
 require('gui.event')
