@@ -40,10 +40,8 @@ function Slider:initialize(min, max, displayValueOnKnob)
 			return false
 		end
 
-		return true
-	end)
-	knob.onDragEnd:connect(function(knob, x, y)
 		self:calculateValue()
+		return true
 	end)
 	self:addChild(knob)
 
@@ -103,7 +101,7 @@ function Slider:increase()
 	if not self:setValue(self.value + 1) then
 		return false
 	end
-	
+
 	self:calculateKnobPosition()
 	return true
 end
@@ -112,7 +110,7 @@ function Slider:decrease()
 	if not self:setValue(self.value - 1) then
 		return false
 	end
-	
+
 	self:calculateKnobPosition()
 	return true
 end
