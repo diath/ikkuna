@@ -85,11 +85,15 @@ function SpinBox:setValue(value)
 end
 
 function SpinBox:increase()
-	return self:setValue(self.value + 1)
+	local increment = ikkuna.isControlPressed() and 10 or 1
+	local newValue = math.min(self.max, self.value + increment)
+	return self:setValue(newValue)
 end
 
 function SpinBox:decrease()
-	return self:setValue(self.value - 1)
+	local decrement = ikkuna.isControlPressed() and 10 or 1
+	local newValue = math.max(self.min, self.value - decrement)
+	return self:setValue(newValue)
 end
 
 function SpinBox:handleMouseWheel(dx, dy)
