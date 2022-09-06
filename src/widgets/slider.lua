@@ -45,6 +45,19 @@ function Slider:initialize(min, max, displayValueOnKnob)
 	end)
 	self:addChild(knob)
 
+	local function onMouseWheel(dx, dy)
+		if dy < 0 then
+			self:decrease()
+		elseif dy > 0 then
+			self:increase()
+		end
+	end
+
+	self.onMouseWheel:connect(onMouseWheel)
+	decButton.onMouseWheel:connect(onMouseWheel)
+	incButton.onMouseWheel:connect(onMouseWheel)
+	knob.onMouseWheel:connect(onMouseWheel)
+
 	self.step = knob.width
 end
 
@@ -98,7 +111,9 @@ function Slider:setValue(value)
 end
 
 function Slider:increase()
-	if not self:setValue(self.value + 1) then
+	local increment = ikkuna.isControlPressed() and 10 or 1
+	local newValue = math.min(self.max, self.value + increment)
+	if not self:setValue(newValue) then
 		return false
 	end
 
@@ -107,7 +122,9 @@ function Slider:increase()
 end
 
 function Slider:decrease()
-	if not self:setValue(self.value - 1) then
+	local decrement = ikkuna.isControlPressed() and 10 or 1
+	local newValue = math.max(self.min, self.value - decrement)
+	if not self:setValue(newValue) then
 		return false
 	end
 
