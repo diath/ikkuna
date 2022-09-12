@@ -10,8 +10,12 @@ function ContextMenu:initialize()
 end
 
 function ContextMenu:draw()
+	self:drawAt(self.x, self.y)
+end
+
+function ContextMenu:drawAt(x, y)
 	love.graphics.setColor(0, 0, 0, 1)
-	love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+	love.graphics.rectangle('fill', x, y, self.width, self.height)
 
 	ikkuna.Widget.draw(self)
 end

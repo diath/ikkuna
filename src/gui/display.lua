@@ -68,6 +68,17 @@ function Display:initialize()
 	sliderWithValueOnKnob.onValueChange:connect(function(widget, value) print('Slider:onValueChange()', value) return true end)
 	child:addChild(sliderWithValueOnKnob)
 
+	local scrollArea = ikkuna.HorizontalScrollArea:new()
+	scrollArea.id = 'scrollArea'
+	for i = 1, 5 do
+		local button = ikkuna.Button:new()
+		button:setText(('Button #%d'):format(i))
+		scrollArea:addChild(button)
+	end
+	scrollArea:setPosition(200, 200)
+	scrollArea:setExplicitSize(200, 200)
+	self.root:addChild(scrollArea)
+
 	self.draggingWidget = nil
 	self.focusedWidget = nil
 	self.hoveredWidget = nil

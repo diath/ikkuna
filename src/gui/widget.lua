@@ -31,7 +31,7 @@ function Widget:initialize()
 	self.isTextDirty = false
 	self.text = nil
 	self.textString = ''
-	self.textPosition = {x = 0, y = 0}
+	self.relativeTextPosition = {x = 0, y = 0}
 	self.textOffset = {x = 0, y = 0}
 	self.textAlign = {horizontal = ikkuna.TextAlign.Horizontal.Left, vertical = ikkuna.TextAlign.Vertical.Top}
 	self.textColor = {r = 1, g = 1, b = 1, a = 1}
@@ -67,8 +67,12 @@ function Widget:update(delta)
 end
 
 function Widget:draw()
+	self:drawAt(self.x, self.y)
+end
+
+function Widget:drawAt(x, y)
 	love.graphics.setColor(1, 1, 1, 0.1)
-	love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+	love.graphics.rectangle('fill', x, y, self.width, self.height)
 
 	for _, child in pairs(self.children) do
 		if child:isVisible() then
@@ -76,10 +80,14 @@ function Widget:draw()
 		end
 	end
 
+	self:drawText(x, y)
+end
+
+function Widget:drawText(x, y)
 	if self.text then
 		local color = self.textColor
 		love.graphics.setColor(color.r, color.g, color.b, color.a)
-		love.graphics.draw(self.text, self.textPosition.x, self.textPosition.y)
+		love.graphics.draw(self.text, x + self.relativeTextPosition.x, y + self.relativeTextPosition.y)
 	end
 end
 
@@ -318,19 +326,19 @@ function Widget:calculateTextPosition()
 	local height = self.text:getHeight()
 
 	if self.textAlign.horizontal == ikkuna.TextAlign.Horizontal.Left then
-		self.textPosition.x = math.floor(self.x + self.textOffset.x)
+		self.relativeTextPosition.x = math.floor(self.textOffset.x)
 	elseif self.textAlign.horizontal == ikkuna.TextAlign.Horizontal.Right then
-		self.textPosition.x = math.floor(self.x + self.width - width + self.textOffset.x)
+		self.relativeTextPosition.x = math.floor(self.width - width + self.textOffset.x)
 	elseif self.textAlign.horizontal == ikkuna.TextAlign.Horizontal.Center then
-		self.textPosition.x = math.floor(self.x + self.width / 2 - width / 2 + self.textOffset.x)
+		self.relativeTextPosition.x = math.floor(self.width / 2 - width / 2 + self.textOffset.x)
 	end
 
 	if self.textAlign.vertical == ikkuna.TextAlign.Vertical.Top then
-		self.textPosition.y = math.floor(self.y + self.textOffset.y)
+		self.relativeTextPosition.y = math.floor(self.textOffset.y)
 	elseif self.textAlign.vertical == ikkuna.TextAlign.Vertical.Bottom then
-		self.textPosition.y = math.floor(self.y + self.height - height + self.textOffset.y)
+		self.relativeTextPosition.y = math.floor(self.height - height + self.textOffset.y)
 	elseif self.textAlign.vertical == ikkuna.TextAlign.Vertical.Center then
-		self.textPosition.y = math.floor(self.y + self.height / 2 - height / 2 + self.textOffset.y)
+		self.relativeTextPosition.y = math.floor(self.height / 2 - height / 2 + self.textOffset.y)
 	end
 
 	self.isTextDirty = false

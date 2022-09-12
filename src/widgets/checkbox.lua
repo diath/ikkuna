@@ -10,17 +10,21 @@ function CheckBox:initialize()
 end
 
 function CheckBox:draw()
+	self:drawAt(self.x, self.y)
+end
+
+function CheckBox:drawAt(x, y)
 	ikkuna.Widget.draw(self)
 
 	love.graphics.setColor(0, 0, 0, 1)
-	love.graphics.rectangle('line', self.x - 1, self.y - 1, 18, 18)
+	love.graphics.rectangle('line', x - 1, y - 1, 18, 18)
 
 	if self.checked then
 		love.graphics.setColor(0, 1, 0, 1)
 	else
 		love.graphics.setColor(1, 0, 0, 1)
 	end
-	love.graphics.rectangle('fill', self.x, self.y, 16, 16)
+	love.graphics.rectangle('fill', x, y, 16, 16)
 end
 
 function CheckBox:onMousePressed(x, y, button, touch, presses)

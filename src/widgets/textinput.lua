@@ -27,7 +27,11 @@ function TextInput:update(delta)
 end
 
 function TextInput:draw()
-	ikkuna.Widget.draw(self)
+	self:drawAt(self.x, self.y)
+end
+
+function TextInput:drawAt(x, y)
+	ikkuna.Widget.drawAt(self, x, y)
 
 	if self.cursorVisible then
 		local width = 0
@@ -38,7 +42,7 @@ function TextInput:draw()
 		local height = ikkuna.font:getHeight()
 
 		love.graphics.setColor(1, 1, 1)
-		love.graphics.line(self.x + width, self.y, self.x + width, self.y + height)
+		love.graphics.line(x + width, y, x + width, y + height)
 	end
 end
 

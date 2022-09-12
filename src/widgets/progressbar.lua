@@ -13,12 +13,16 @@ function ProgressBar:initialize()
 end
 
 function ProgressBar:draw()
+	self:drawAt(self.x, self.y)
+end
+
+function ProgressBar:drawAt(x, y)
 	ikkuna.Widget.draw(self)
 
 	if self.fillWidth ~= 0 then
 		local color = self.fillColor
 		love.graphics.setColor(color.r, color.g, color.b, color.a)
-		love.graphics.rectangle('fill', self.x + 1, self.y + 1, self.fillWidth, self.height - 2)
+		love.graphics.rectangle('fill', x + 1, y + 1, self.fillWidth, self.height - 2)
 	end
 end
 

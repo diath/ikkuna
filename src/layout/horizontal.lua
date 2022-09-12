@@ -62,4 +62,14 @@ function HorizontalLayout:updateInternal()
 	end
 end
 
+function HorizontalLayout:getTotalWidth()
+	local parent = self.parent
+	local width = parent.padding.left
+	for _, child in pairs(parent.children) do
+		width = width + child.margin.left + child.width + child.margin.right + self.childSpacing
+	end
+
+	return width
+end
+
 ikkuna.HorizontalLayout = HorizontalLayout

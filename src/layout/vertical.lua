@@ -62,4 +62,14 @@ function VerticalLayout:updateInternal()
 	end
 end
 
+function VerticalLayout:getTotalHeight()
+	local parent = self.parent
+	local height = parent.padding.top
+	for _, child in pairs(parent.children) do
+		height = height + child.margin.top + child.height + child.margin.bottom + self.childSpacing
+	end
+
+	return height
+end
+
 ikkuna.VerticalLayout = VerticalLayout

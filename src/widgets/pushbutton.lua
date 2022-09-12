@@ -8,18 +8,16 @@ function PushButton:initialize()
 end
 
 function PushButton:draw()
-	ikkuna.Widget.draw(self)
+	self:drawAt(self.x, self.y)
+end
 
+function PushButton:drawAt(x, y)
 	if self.pushed then
 		love.graphics.setColor(0.5, 0.5, 0.5, 0.5)
-		love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+		love.graphics.rectangle('fill', x, y, self.width, self.height)
 	end
 
-	if self.text then
-		local color = self.textColor
-		love.graphics.setColor(color.r, color.g, color.b, color.a)
-		love.graphics.draw(self.text, self.textPosition.x, self.textPosition.y)
-	end
+	self:drawText(x, y)
 end
 
 function PushButton:onMouseReleased(x, y, button, touch, pressed)
