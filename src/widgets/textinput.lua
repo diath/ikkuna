@@ -43,9 +43,10 @@ function TextInput:drawAt(x, y)
 		if self.cursorVisible and self.focused then
 			local cursorSpace = 2
 			local height = ikkuna.fontHeight
+			local x = x + self.frontBufferWidth + cursorSpace
 
 			love.graphics.setColor(1, 1, 1)
-			love.graphics.line(x + self.frontBufferWidth + cursorSpace, y + (self.height / 2 - height / 2), x + self.frontBufferWidth + cursorSpace, y + (self.height / 2 - height / 2) + height)
+			love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
 		end
 	else
 		local cursorWidth = 3
@@ -53,8 +54,10 @@ function TextInput:drawAt(x, y)
 
 		if self.cursorVisible and self.focused then
 			local height = ikkuna.fontHeight
+			local x = x + self.width - cursorWidth
+
 			love.graphics.setColor(1, 1, 1)
-			love.graphics.line(x + self.width - cursorWidth, y + (self.height / 2 - height / 2), x + self.width - cursorWidth, y + (self.height / 2 - height / 2) + height)
+			love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
 		end
 	end
 
@@ -146,6 +149,10 @@ function TextInput:setCursorPosition(position)
 	self.cursorPosition = position
 	self.cursorVisible = true
 	self.cursorTime = 0
+
+	local text = love.graphics.newText(ikkuna.font)
+	text:set(self:getFrontBuffer())
+	self.frontBufferWidth = text:getWidth()
 end
 
 function TextInput:setMasked(masked)
