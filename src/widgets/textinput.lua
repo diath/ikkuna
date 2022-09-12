@@ -40,7 +40,7 @@ function TextInput:drawAt(x, y)
 	if self.frontBufferWidth < self.width then
 		self:drawText(x, y)
 
-		if self.cursorVisible then
+		if self.cursorVisible and self.focused then
 			local cursorSpace = 2
 			local height = ikkuna.fontHeight
 
@@ -51,7 +51,7 @@ function TextInput:drawAt(x, y)
 		local cursorWidth = 3
 		self:drawText(x + self.width - self.frontBufferWidth - cursorWidth, y)
 
-		if self.cursorVisible then
+		if self.cursorVisible and self.focused then
 			local height = ikkuna.fontHeight
 			love.graphics.setColor(1, 1, 1)
 			love.graphics.line(x + self.width - cursorWidth, y + (self.height / 2 - height / 2), x + self.width - cursorWidth, y + (self.height / 2 - height / 2) + height)
