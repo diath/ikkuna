@@ -11,10 +11,6 @@ function RadioBox:initialize()
 	self.onCheckChange = ikkuna.Event()
 end
 
-function RadioBox:draw()
-	self:drawAt(self.x, self.y)
-end
-
 function RadioBox:drawAt(x, y)
 	ikkuna.Widget.draw(self)
 

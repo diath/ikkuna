@@ -29,10 +29,6 @@ function TextInput:update(delta)
 	end
 end
 
-function TextInput:draw()
-	self:drawAt(self.x, self.y)
-end
-
 function TextInput:drawAt(x, y)
 	love.graphics.setScissor(x, y, self.width, self.height)
 	self:drawBase(x, y)

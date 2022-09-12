@@ -7,10 +7,6 @@ function PushButton:initialize()
 	self.onPushChange = ikkuna.Event()
 end
 
-function PushButton:draw()
-	self:drawAt(self.x, self.y)
-end
-
 function PushButton:drawAt(x, y)
 	if self.pushed then
 		love.graphics.setColor(0.5, 0.5, 0.5, 0.5)

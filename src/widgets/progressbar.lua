@@ -12,10 +12,6 @@ function ProgressBar:initialize()
 	self.fillColor = {r = 0, g = 0, b = 1, a = 1}
 end
 
-function ProgressBar:draw()
-	self:drawAt(self.x, self.y)
-end
-
 function ProgressBar:drawAt(x, y)
 	ikkuna.Widget.draw(self)
 

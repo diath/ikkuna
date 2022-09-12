@@ -9,10 +9,6 @@ function CheckBox:initialize()
 	self.onCheckChange = ikkuna.Event()
 end
 
-function CheckBox:draw()
-	self:drawAt(self.x, self.y)
-end
-
 function CheckBox:drawAt(x, y)
 	ikkuna.Widget.draw(self)
 

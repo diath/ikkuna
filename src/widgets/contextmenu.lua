@@ -9,10 +9,6 @@ function ContextMenu:initialize()
 	self:setLayout(ikkuna.VerticalLayout:new({resizeParent = true}))
 end
 
-function ContextMenu:draw()
-	self:drawAt(self.x, self.y)
-end
-
 function ContextMenu:drawAt(x, y)
 	love.graphics.setColor(0, 0, 0, 1)
 	love.graphics.rectangle('fill', x, y, self.width, self.height)

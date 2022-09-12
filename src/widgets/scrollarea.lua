@@ -38,12 +38,12 @@ function ScrollArea:setExplicitSize(width, height)
 	ikkuna.Widget.setExplicitSize(self, width, height)
 end
 
-function ScrollArea:draw()
+function ScrollArea:drawAt(x, y)
 	love.graphics.setColor(1, 0, 0, 1)
-	love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
+	love.graphics.rectangle('line', x, y, self.width, self.height)
 	love.graphics.setColor(1, 1, 1, 1)
 
-	love.graphics.setScissor(self.x, self.y, self.width, self.height)
+	love.graphics.setScissor(x, y, self.width, self.height)
 
 	-- TODO: Only draw children that partially fall within the area.
 	for _, child in pairs(self.children) do
