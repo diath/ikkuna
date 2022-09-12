@@ -26,6 +26,7 @@ function Widget:initialize()
 	self.dragging = false
 	self.dragOffset = {x = 0, y = 0}
 
+	self.focused = false
 	self.focusable = false
 
 	self.isTextDirty = false

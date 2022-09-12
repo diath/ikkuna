@@ -60,18 +60,21 @@ function Display:onMousePressed(x, y, button, touch, presses)
 
 			if widget ~= self.focusedWidget then
 				if self.focusedWidget then
+					self.focusedWidget.focused = false
 					self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
 					self.focusedWidget = nil
 				end
 
 				if widget.focusable then
 					self.focusedWidget = widget
+					self.focusedWidget.focused = true
 					self.focusedWidget.onFocusChange:emit(self.focusedWidget, true)
 				end
 			end
 		end
 	elseif self.focusedWidget ~= nil then
 		self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
+		self.focusedWidget.focused = false
 		self.focusedWidget = nil
 	end
 
