@@ -4,6 +4,7 @@ function TextInput:initialize(options)
 	ikkuna.Widget.initialize(self)
 
 	self.focusable = true
+	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
 
 	self.editable = true
 	self.buffer = ''
@@ -14,6 +15,8 @@ function TextInput:initialize(options)
 
 	self.masked = false
 	self.maskCharacter = '*'
+
+	self.frontBufferWidth = 0
 end
 
 function TextInput:update(delta)
@@ -31,19 +34,31 @@ function TextInput:draw()
 end
 
 function TextInput:drawAt(x, y)
-	ikkuna.Widget.drawAt(self, x, y)
+	love.graphics.setScissor(x, y, self.width, self.height)
+	self:drawBase(x, y)
 
-	if self.cursorVisible then
-		local width = 0
-		if #self.buffer > 0 and self.cursorPosition > 0 then
-			width = ikkuna.font:getWidth((self.masked and self:getMaskedText() or self.buffer):sub(1, self.cursorPosition))
+	if self.frontBufferWidth < self.width then
+		self:drawText(x, y)
+
+		if self.cursorVisible then
+			local cursorSpace = 2
+			local height = ikkuna.fontHeight
+
+			love.graphics.setColor(1, 1, 1)
+			love.graphics.line(x + self.frontBufferWidth + cursorSpace, y + (self.height / 2 - height / 2), x + self.frontBufferWidth + cursorSpace, y + (self.height / 2 - height / 2) + height)
 		end
+	else
+		local cursorWidth = 3
+		self:drawText(x + self.width - self.frontBufferWidth - cursorWidth, y)
 
-		local height = ikkuna.font:getHeight()
-
-		love.graphics.setColor(1, 1, 1)
-		love.graphics.line(x + width, y, x + width, y + height)
+		if self.cursorVisible then
+			local height = ikkuna.fontHeight
+			love.graphics.setColor(1, 1, 1)
+			love.graphics.line(x + self.width - cursorWidth, y + (self.height / 2 - height / 2), x + self.width - cursorWidth, y + (self.height / 2 - height / 2) + height)
+		end
 	end
+
+	love.graphics.setScissor()
 end
 
 function TextInput:onMousePressed(x, y, button, touch, presses)
@@ -107,6 +122,10 @@ end
 
 function TextInput:updateText()
 	self:setText(self.masked and self:getMaskedText() or self.buffer)
+
+	local text = love.graphics.newText(ikkuna.font)
+	text:set(self:getFrontBuffer())
+	self.frontBufferWidth = text:getWidth()
 end
 
 function TextInput:getMaskedText()

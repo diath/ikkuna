@@ -2,6 +2,7 @@ ikkuna = {}
 ikkuna.class = require('src.vendor.middleclass')
 
 ikkuna.font = love.graphics.newFont('res/Verdana.ttf')
+ikkuna.fontHeight = ikkuna.font:getHeight()
 
 -- Const
 ikkuna.TextAlign = {}

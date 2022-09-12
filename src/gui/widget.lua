@@ -71,8 +71,7 @@ function Widget:draw()
 end
 
 function Widget:drawAt(x, y)
-	love.graphics.setColor(1, 1, 1, 0.1)
-	love.graphics.rectangle('fill', x, y, self.width, self.height)
+	self:drawBase(x, y)
 
 	for _, child in pairs(self.children) do
 		if child:isVisible() then
@@ -81,6 +80,11 @@ function Widget:drawAt(x, y)
 	end
 
 	self:drawText(x, y)
+end
+
+function Widget:drawBase(x, y)
+	love.graphics.setColor(1, 1, 1, 0.1)
+	love.graphics.rectangle('fill', x, y, self.width, self.height)
 end
 
 function Widget:drawText(x, y)
