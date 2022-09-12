@@ -60,13 +60,13 @@ function Display:initialize()
 	draggableButton.draggable = true
 	child:addChild(draggableButton)
 
-	local slider = ikkuna.Slider:new(0, 5)
-	slider.onValueChange:connect(function(widget, value) print('Slider:onValueChange()', value) return true end)
-	child:addChild(slider)
+	local scrollBar = ikkuna.ScrollBar:new(0, 5)
+	scrollBar.onValueChange:connect(function(widget, value) print('ScrollBar:onValueChange()', value) return true end)
+	child:addChild(scrollBar)
 
-	local sliderWithValueOnKnob = ikkuna.Slider:new(5, 20, true)
-	sliderWithValueOnKnob.onValueChange:connect(function(widget, value) print('Slider:onValueChange()', value) return true end)
-	child:addChild(sliderWithValueOnKnob)
+	local scrollBarWithValueOnKnob = ikkuna.ScrollBar:new(5, 20, true)
+	scrollBarWithValueOnKnob.onValueChange:connect(function(widget, value) print('ScrollBar:onValueChange()', value) return true end)
+	child:addChild(scrollBarWithValueOnKnob)
 
 	local scrollArea = ikkuna.HorizontalScrollArea:new()
 	scrollArea.id = 'scrollArea'

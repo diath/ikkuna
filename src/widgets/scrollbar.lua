@@ -1,6 +1,6 @@
-local Slider = ikkuna.class('Slider', ikkuna.Widget)
+local ScrollBar = ikkuna.class('ScrollBar', ikkuna.Widget)
 
-function Slider:initialize(min, max, displayValueOnKnob)
+function ScrollBar:initialize(min, max, displayValueOnKnob)
 	ikkuna.Widget.initialize(self)
 
 	self.min = min or 0
@@ -61,7 +61,7 @@ function Slider:initialize(min, max, displayValueOnKnob)
 	self.step = knob.width
 end
 
-function Slider:setExplicitSize(width, height)
+function ScrollBar:setExplicitSize(width, height)
 	ikkuna.Widget.setExplicitSize(self, width, height)
 
 	self.children[1].height = height
@@ -74,17 +74,17 @@ function Slider:setExplicitSize(width, height)
 	self:calculateChildrenPosition()
 end
 
-function Slider:setPosition(x, y)
+function ScrollBar:setPosition(x, y)
 	ikkuna.Widget.setPosition(self, x, y)
 
 	self:calculateChildrenPosition()
 end
 
-function Slider:calculateValue()
+function ScrollBar:calculateValue()
 	self:setValue(self.min + math.floor((self.children[3].x - self.children[1].x - self.children[1].width) / self.step))
 end
 
-function Slider:calculateChildrenPosition()
+function ScrollBar:calculateChildrenPosition()
 	self.children[1].x = self.x
 	self.children[1].y = self.y
 
@@ -94,12 +94,12 @@ function Slider:calculateChildrenPosition()
 	self:calculateKnobPosition()
 end
 
-function Slider:calculateKnobPosition()
+function ScrollBar:calculateKnobPosition()
 	self.children[3].x = self.children[1].x + self.children[1].width + self.step * (self.value - self.min)
 	self.children[3].y = self.y
 end
 
-function Slider:setValue(value)
+function ScrollBar:setValue(value)
 	if value < self.min or value > self.max then
 		return false
 	end
@@ -110,7 +110,7 @@ function Slider:setValue(value)
 	return true
 end
 
-function Slider:increase()
+function ScrollBar:increase()
 	local increment = ikkuna.isControlPressed() and 10 or 1
 	local newValue = math.min(self.max, self.value + increment)
 	if not self:setValue(newValue) then
@@ -121,7 +121,7 @@ function Slider:increase()
 	return true
 end
 
-function Slider:decrease()
+function ScrollBar:decrease()
 	local decrement = ikkuna.isControlPressed() and 10 or 1
 	local newValue = math.max(self.min, self.value - decrement)
 	if not self:setValue(newValue) then
@@ -132,4 +132,4 @@ function Slider:decrease()
 	return true
 end
 
-ikkuna.Slider = Slider
+ikkuna.ScrollBar = ScrollBar
