@@ -17,37 +17,37 @@ function SpinBox:initialize(args)
 
 	self.onValueChange = ikkuna.Event()
 
-	local incButton = ikkuna.Button:new()
-	incButton:setExplicitSize(10, self.height / 2)
-	incButton:setText('^')
-	incButton.onClick:connect(function()
+	self.incButton = ikkuna.Button:new()
+	self.incButton:setExplicitSize(10, self.height / 2)
+	self.incButton:setText('^')
+	self.incButton.onClick:connect(function()
 		self:increase()
 		return true
 	end)
-	incButton.onPress:connect(function(pressedButton)
+	self.incButton.onPress:connect(function(pressedButton)
 		self:increase()
 		return true
 	end)
-	incButton.onMouseWheel:connect(function(dx, dy)
+	self.incButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
-	self:addChild(incButton)
+	self:addChild(self.incButton)
 
-	local decButton = ikkuna.Button:new()
-	decButton:setExplicitSize(10, self.height / 2)
-	decButton:setText('v')
-	decButton.onClick:connect(function()
+	self.decButton = ikkuna.Button:new()
+	self.decButton:setExplicitSize(10, self.height / 2)
+	self.decButton:setText('v')
+	self.decButton.onClick:connect(function()
 		self:decrease()
 		return true
 	end)
-	decButton.onPress:connect(function(pressedButton)
+	self.decButton.onPress:connect(function(pressedButton)
 		self:decrease()
 		return true
 	end)
-	decButton.onMouseWheel:connect(function(dx, dy)
+	self.decButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
-	self:addChild(decButton)
+	self:addChild(self.decButton)
 
 	self.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
@@ -80,8 +80,8 @@ end
 function SpinBox:setExplicitSize(width, height)
 	ikkuna.Widget.setExplicitSize(self, width, height)
 
-	self.children[1].height = height / 2
-	self.children[2].height = height / 2
+	self.incButton.height = height / 2
+	self.decButton.height = height / 2
 
 	self:calculateChildrenPosition()
 end
@@ -93,11 +93,11 @@ function SpinBox:setPosition(x, y)
 end
 
 function SpinBox:calculateChildrenPosition()
-	self.children[1].x = self.x + self.width - self.children[1].width
-	self.children[1].y = self.y
+	self.incButton.x = self.x + self.width - self.incButton.width
+	self.incButton.y = self.y
 
-	self.children[2].x = self.x + self.width - self.children[2].width
-	self.children[2].y = self.y + self.height - self.children[1].height
+	self.decButton.x = self.x + self.width - self.decButton.width
+	self.decButton.y = self.y + self.height - self.incButton.height
 end
 
 function SpinBox:setValue(value)

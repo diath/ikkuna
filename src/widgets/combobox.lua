@@ -15,29 +15,29 @@ function ComboBox:initialize(args)
 		self:selectByIndex(1)
 	end
 
-	local leftButton = ikkuna.Button:new()
-	leftButton:setExplicitSize(10, 25)
-	leftButton:setText('<')
-	leftButton.onClick:connect(function()
+	self.prevButton = ikkuna.Button:new()
+	self.prevButton:setExplicitSize(10, 25)
+	self.prevButton:setText('<')
+	self.prevButton.onClick:connect(function()
 		self:selectPrevious()
 		return true
 	end)
-	leftButton.onMouseWheel:connect(function(dx, dy)
+	self.prevButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
-	self:addChild(leftButton)
+	self:addChild(self.prevButton)
 
-	local rightButton = ikkuna.Button:new()
-	rightButton:setExplicitSize(10, 25)
-	rightButton:setText('>')
-	rightButton.onClick:connect(function()
+	self.nextButton = ikkuna.Button:new()
+	self.nextButton:setExplicitSize(10, 25)
+	self.nextButton:setText('>')
+	self.nextButton.onClick:connect(function()
 		self:selectNext()
 		return true
 	end)
-	rightButton.onMouseWheel:connect(function(dx, dy)
+	self.nextButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
-	self:addChild(rightButton)
+	self:addChild(self.nextButton)
 
 	self.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
@@ -77,11 +77,11 @@ function ComboBox:addOption(label, data)
 end
 
 function ComboBox:calculateChildrenPosition()
-	self.children[1].x = self.x
-	self.children[1].y = self.y
+	self.prevButton.x = self.x
+	self.prevButton.y = self.y
 
-	self.children[2].x = self.x + self.width - self.children[2].width
-	self.children[2].y = self.y
+	self.nextButton.x = self.x + self.width - self.nextButton.width
+	self.nextButton.y = self.y
 end
 
 function ComboBox:selectByIndex(index)
