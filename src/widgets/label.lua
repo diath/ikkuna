@@ -1,7 +1,7 @@
 local Label = ikkuna.class('Label', ikkuna.Widget)
 
-function Label:initialize()
-	ikkuna.Widget.initialize(self)
+function Label:initialize(args)
+	ikkuna.Widget.initialize(self, args)
 
 	self.draggable = false
 	self.focusable = false

@@ -2,7 +2,7 @@ local Widget = ikkuna.class('Widget')
 Widget.LastId = 0
 Widget.PressInterval = 0.25
 
-function Widget:initialize()
+function Widget:initialize(args)
 	Widget.LastId = Widget.LastId + 1
 	self.id = ('Widget%d'):format(Widget.LastId)
 
@@ -48,6 +48,158 @@ function Widget:initialize()
 	self.onMouseMove = ikkuna.Event()
 	self.onHoverChange = ikkuna.Event()
 	self.onFocusChange = ikkuna.Event()
+
+	if args then
+		self:parseArgs(args)
+	end
+end
+
+function Widget:parseArgs(args)
+	if type(args) ~= 'table' then
+		return
+	end
+
+	-- ID
+	if args.id then
+		self.id = args.id
+	end
+
+	-- Size
+	if args.size then
+		if type(args.size) == 'number' then
+			self:setExplicitSize(args.size, args.size)
+		elseif type(args.size) == 'table' then
+			self:setExplicitSize(args.size.width, args.size.height)
+		end
+	end
+
+	-- Position
+	if args.position then
+		if type(args.position) == 'number' then
+			self:setPosition(args.position, args.position)
+		elseif type(args.position) == 'table' then
+			self:setPosition(args.position.x, args.position.y)
+		end
+	end
+
+	-- Layout
+	if args.layout then
+		if type(args.layout) == 'table' then
+			local layout = args.layout
+			if layout.type == 'horizontal' then
+				self:setLayout(ikkuna.HorizontalLayout:new(layout.args))
+			elseif layout.type == 'vertical' then
+				self:setLayout(ikkuna.VerticalLayout:new(layout.args))
+			end
+		elseif type(args.layout) == 'string' then
+			if args.layout == 'horizontal' then
+				self:setLayout(ikkuna.HorizontalLayout:new())
+			elseif args.layout == 'vertical' then
+				self:setLayout(ikkuna.VerticalLayout:new())
+			end
+		end
+	end
+
+	-- State
+	if args.draggable then
+		self.draggable = args.draggable
+	end
+
+	if args.focusable then
+		self.focusable = args.focusable
+	end
+
+	if args.visible then
+		self.visible = args.visible
+	end
+
+	-- Padding and margin
+	if args.padding then
+		if type(args.padding) == 'number' then
+			self.padding = ikkuna.Rect({all = args.padding, raw = true})
+		end
+	end
+
+	if args.margin then
+		if type(args.margin) == 'number' then
+			self.margin = ikkuna.Rect({all = args.margin, raw = true})
+		end
+	end
+
+	-- Events
+	if args.events then
+		local function parseEvents(event, field)
+			if not field then
+				return
+			end
+
+			if type(field) == 'function' then
+				event:connect(field)
+			elseif type(field) == 'table' then
+				for _, func in pairs(field) do
+					event:connect(func)
+				end
+			end
+		end
+
+		parseEvents(self.onResize, args.events.onResize)
+		parseEvents(self.onClick, args.events.onClick)
+		parseEvents(self.onPress, args.events.onPress)
+		parseEvents(self.onDoubleClick, args.events.onDoubleClick)
+		parseEvents(self.onMouseWheel, args.events.onMouseWheel)
+		parseEvents(self.onDragStart, args.events.onDragStart)
+		parseEvents(self.onDragMove, args.events.onDragMove)
+		parseEvents(self.onDragEnd, args.events.onDragEnd)
+		parseEvents(self.onMouseMove, args.events.onMouseMove)
+		parseEvents(self.onHoverChange, args.events.onHoverChange)
+		parseEvents(self.onFocusChange, args.events.onFocusChange)
+	end
+
+	-- Text
+	if args.text then
+		if type(args.text) == 'string' then
+			self:setText(args.text)
+		elseif type(args.text) == 'table' then
+			local text = args.text
+			if text.label then
+				self:setText(text.label)
+			end
+
+			if text.offset then
+				self:setTextOffset(text.offset.x, text.offset.y)
+			end
+
+			if text.align then
+				if type(text.align.horizontal) == 'number' then
+					self:setTextAlign({horizontal = text.align.horizontal})
+				elseif type(text.align.horizontal) == 'string' then
+					if text.align.horizontal == 'left' then
+						self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Left})
+					elseif text.align.horizontal == 'center' then
+						self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center})
+					elseif text.align.horizontal == 'right' then
+						self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Right})
+					end
+				end
+
+				if type(text.align.vertical) == 'number' then
+					self:setTextAlign({vertical = text.align.vertical})
+				elseif type(text.align.vertical) == 'string' then
+					if text.align.vertical == 'top' then
+						self:setTextAlign({vertical = ikkuna.TextAlign.Vertical.Top})
+					elseif text.align.vertical == 'center' then
+						self:setTextAlign({vertical = ikkuna.TextAlign.Vertical.Center})
+					elseif text.align.vertical == 'bottom' then
+						self:setTextAlign({vertical = ikkuna.TextAlign.Vertical.Bottom})
+					end
+				end
+			end
+
+			if text.color then
+				self.textColor = ikkuna.parseColor(text.color)
+			end
+		end
+	end
 end
 
 function Widget:update(delta)
@@ -315,6 +467,25 @@ function Widget:setText(text)
 
 	self.text:set(text)
 	self.textString = text
+	self.isTextDirty = true
+end
+
+function Widget:setTextOffset(x, y)
+	self.textOffset.x = x
+	self.textOffset.y = y
+
+	self.isTextDirty = true
+end
+
+function Widget:setTextAlign(align)
+	if align.horizontal then
+		self.textAlign.horizontal = align.horizontal
+	end
+
+	if align.vertical then
+		self.textAlign.vertical = align.vertical
+	end
+
 	self.isTextDirty = true
 end
 

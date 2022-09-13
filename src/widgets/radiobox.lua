@@ -1,8 +1,8 @@
 local RadioBox = ikkuna.class('RadioBox', ikkuna.Widget)
 RadioBox.Segments = 20
 
-function RadioBox:initialize()
-	ikkuna.Widget.initialize(self)
+function RadioBox:initialize(args)
+	ikkuna.Widget.initialize(self, args)
 
 	self.draggable = false
 	self.textOffset.x = 20

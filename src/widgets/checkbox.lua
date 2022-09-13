@@ -1,7 +1,8 @@
 local CheckBox = ikkuna.class('CheckBox', ikkuna.Widget)
 
-function CheckBox:initialize()
-	ikkuna.Widget.initialize(self)
+function CheckBox:initialize(args)
+	ikkuna.Widget.initialize(self, args)
+
 	self.textOffset.x = 20
 	self.checked = false
 	self.draggable = false

@@ -1,24 +1,15 @@
 local ComboBox = ikkuna.class('ComboBox', ikkuna.Widget)
 
-function ComboBox:initialize(options)
-	ikkuna.Widget.initialize(self)
-
-	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
-	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
+function ComboBox:initialize(args)
 	self.selectedIndex = 0
 	self.options = {}
 
-	self.onValueChange = ikkuna.Event()
+	ikkuna.Widget.initialize(self, args)
 
-	if options ~= nil then
-		for _, option in pairs(options) do
-			if type(option) == 'table' then
-				self:addOption(option[1], option[2] or nil)
-			else
-				self:addOption(option, nil)
-			end
-		end
-	end
+	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
+	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
+
+	self.onValueChange = ikkuna.Event()
 
 	if #self.options > 0 then
 		self:selectByIndex(1)
@@ -51,6 +42,22 @@ function ComboBox:initialize(options)
 	self.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
+end
+
+function ComboBox:parseArgs(args)
+	if not args then
+		return
+	end
+
+	if args.options then
+		for _, option in pairs(args.options) do
+			if type(option) == 'table' then
+				self:addOption(option[1], option[2] or nil)
+			else
+				self:addOption(option, nil)
+			end
+		end
+	end
 end
 
 function ComboBox:setExplicitSize(width, height)

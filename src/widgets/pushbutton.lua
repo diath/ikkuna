@@ -1,7 +1,8 @@
 local PushButton = ikkuna.class('PushButton', ikkuna.Button)
 
-function PushButton:initialize()
-	ikkuna.Button.initialize(self)
+function PushButton:initialize(args)
+	ikkuna.Button.initialize(self, args)
+
 	self.pushed = false
 
 	self.onPushChange = ikkuna.Event()

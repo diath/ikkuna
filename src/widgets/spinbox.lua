@@ -1,13 +1,18 @@
 local SpinBox = ikkuna.class('SpinBox', ikkuna.Widget)
 
-function SpinBox:initialize(min, max)
-	ikkuna.Widget.initialize(self)
+function SpinBox:initialize(args)
+	self.min = 0
+	self.max = 0
+	self.value = self.min
+
+	-- NOTE: Used to update the value and children properly post-initialization.
+	self.needUpdateValue = false
+
+	ikkuna.Widget.initialize(self, args)
 
 	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
 	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
-	self.min = min or 0
-	self.max = max or 0
-	self.value = self.min
+
 	self:setText(self.value)
 
 	self.onValueChange = ikkuna.Event()
@@ -47,6 +52,29 @@ function SpinBox:initialize(min, max)
 	self.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
+end
+
+function SpinBox:parseArgs(args)
+	if not args then
+		return
+	end
+
+	if args.min then
+		self:setMin(args.min)
+	end
+
+	if args.max then
+		self:setMax(args.max)
+	end
+end
+
+function SpinBox:update(delta)
+	if self.needUpdateValue then
+		self:setValue(math.clamp(self.min, self.value, self.max))
+		self:calculateChildrenPosition()
+
+		self.needUpdateValue = false
+	end
 end
 
 function SpinBox:setExplicitSize(width, height)
@@ -104,6 +132,25 @@ function SpinBox:handleMouseWheel(dx, dy)
 	end
 
 	return true
+end
+
+function SpinBox:setMin(min)
+	self.min = min
+
+	if self.value < self.min then
+		self.needUpdateValue = true
+	end
+end
+
+function SpinBox:setMax(max)
+	self.max = max
+	if self.max < self.min then
+		self.max = self.min + 1
+	end
+
+	if self.value > self.max then
+		self.needUpdateValue = true
+	end
 end
 
 ikkuna.SpinBox = SpinBox

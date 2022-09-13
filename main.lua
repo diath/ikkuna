@@ -37,11 +37,11 @@ function love.load()
 	pushButton.onPress:connect(function() print('PushButton:onPress()') return true end)
 	child:addChild(pushButton)
 
-	local comboBox = ikkuna.ComboBox:new({'Yes', 'Maybe', {'No', {something = 'something'}}})
+	local comboBox = ikkuna.ComboBox:new({options = {'Yes', 'Maybe', {'No', {something = 'something'}}}})
 	comboBox.onValueChange:connect(function(widget, selectedIndex, option) print('ComboBox:onValueChange()', option.label, option.data) return true end)
 	child:addChild(comboBox)
 
-	local spinBox = ikkuna.SpinBox:new(0, 50)
+	local spinBox = ikkuna.SpinBox:new({min = 0, max = 50})
 	spinBox.onValueChange:connect(function(widget, value) print('SpinBox:onValueChange()', value) return true end)
 	child:addChild(spinBox)
 
@@ -59,11 +59,11 @@ function love.load()
 	draggableButton.draggable = true
 	child:addChild(draggableButton)
 
-	local scrollBar = ikkuna.ScrollBar:new(0, 5)
+	local scrollBar = ikkuna.ScrollBar:new({min = 0, max = 5})
 	scrollBar.onValueChange:connect(function(widget, value) print('ScrollBar:onValueChange()', value) return true end)
 	child:addChild(scrollBar)
 
-	local scrollBarWithValueOnKnob = ikkuna.ScrollBar:new(5, 20, true)
+	local scrollBarWithValueOnKnob = ikkuna.ScrollBar:new({min = 5, max = 20, displayValue = true})
 	scrollBarWithValueOnKnob.onValueChange:connect(function(widget, value) print('ScrollBar:onValueChange()', value) return true end)
 	child:addChild(scrollBarWithValueOnKnob)
 

@@ -4,8 +4,8 @@ local VerticalScrollArea = ikkuna.class('VerticalScrollArea', ScrollArea)
 
 local ScrollStep = 10
 
-function ScrollArea:initialize()
-	ikkuna.Widget.initialize(self)
+function ScrollArea:initialize(args)
+	ikkuna.Widget.initialize(self, args)
 
 	self.draggable = false
 
@@ -14,8 +14,8 @@ function ScrollArea:initialize()
 	self.offset.y = 0
 end
 
-function HorizontalScrollArea:initialize()
-	ikkuna.ScrollArea.initialize(self)
+function HorizontalScrollArea:initialize(args)
+	ikkuna.ScrollArea.initialize(self, args)
 
 	self:setLayout(ikkuna.HorizontalLayout:new())
 
@@ -24,8 +24,8 @@ function HorizontalScrollArea:initialize()
 	end)
 end
 
-function VerticalScrollArea:initialize()
-	ikkuna.ScrollArea.initialize(self)
+function VerticalScrollArea:initialize(args)
+	ikkuna.ScrollArea.initialize(self, args)
 
 	self:setLayout(ikkuna.VerticalLayout:new())
 

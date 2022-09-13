@@ -1,19 +1,12 @@
 local ContextMenu = ikkuna.class('ContextMenu', ikkuna.Widget)
 
-function ContextMenu:initialize()
-	ikkuna.Widget.initialize(self)
+function ContextMenu:initialize(args)
+	ikkuna.Widget.initialize(self, args)
 
 	self.draggable = false
 	self.focusable = false
 
 	self:setLayout(ikkuna.VerticalLayout:new({resizeParent = true}))
-end
-
-function ContextMenu:drawAt(x, y)
-	love.graphics.setColor(0, 0, 0, 1)
-	love.graphics.rectangle('fill', x, y, self.width, self.height)
-
-	ikkuna.Widget.draw(self)
 end
 
 function ContextMenu:addOption(name, callback)

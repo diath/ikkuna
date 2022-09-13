@@ -1,7 +1,7 @@
 local TextInput = ikkuna.class('TextInput', ikkuna.Widget)
 
-function TextInput:initialize(options)
-	ikkuna.Widget.initialize(self)
+function TextInput:initialize(args)
+	ikkuna.Widget.initialize(self, args)
 
 	self.focusable = true
 	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center

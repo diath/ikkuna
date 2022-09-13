@@ -1,7 +1,7 @@
 local ProgressBar = ikkuna.class('ProgressBar', ikkuna.Widget)
 
-function ProgressBar:initialize()
-	ikkuna.Widget.initialize(self)
+function ProgressBar:initialize(args)
+	ikkuna.Widget.initialize(self, args)
 
 	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
 

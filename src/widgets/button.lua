@@ -1,7 +1,7 @@
 local Button = ikkuna.class('Button', ikkuna.Widget)
 
-function Button:initialize()
-	ikkuna.Widget.initialize(self)
+function Button:initialize(args)
+	ikkuna.Widget.initialize(self, args)
 
 	self.draggable = false
 	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
