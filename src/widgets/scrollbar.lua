@@ -133,6 +133,10 @@ function ScrollBar:setValue(value)
 		return false
 	end
 
+	if self.value == value then
+		return false
+	end
+
 	self.children[3]:setText(self.displayValue and value or '')
 	self.value = value
 	self.onValueChange:emit(self, self.value)

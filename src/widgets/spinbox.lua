@@ -105,6 +105,10 @@ function SpinBox:setValue(value)
 		return false
 	end
 
+	if self.value == value then
+		return false
+	end
+
 	self.value = value
 	self:setText(self.value)
 	self.onValueChange:emit(self, self.value)

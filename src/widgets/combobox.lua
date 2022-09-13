@@ -89,6 +89,10 @@ function ComboBox:selectByIndex(index)
 		return false
 	end
 
+	if self.selectedIndex == index then
+		return false
+	end
+
 	self.selectedIndex = index
 	self:setText(self.options[self.selectedIndex].label)
 	self.onValueChange:emit(self, self.selectedIndex, self.options[self.selectedIndex])
