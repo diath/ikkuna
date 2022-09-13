@@ -1,7 +1,7 @@
 ikkuna = {}
 ikkuna.class = require('src.vendor.middleclass')
 
-ikkuna.font = love.graphics.newFont('res/Verdana.ttf')
+ikkuna.font = love.graphics.newFont('res/Verdana.ttf', 12)
 ikkuna.fontHeight = ikkuna.font:getHeight()
 
 -- Const
