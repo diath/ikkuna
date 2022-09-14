@@ -15,6 +15,10 @@ ikkuna.TextAlign.Vertical.Top = 1
 ikkuna.TextAlign.Vertical.Bottom = 2
 ikkuna.TextAlign.Vertical.Center = 3
 
+ikkuna.ScrollBarOrientation = {}
+ikkuna.ScrollBarOrientation.Horizontal = 1
+ikkuna.ScrollBarOrientation.Vertical = 2
+
 ikkuna.Mouse = {}
 ikkuna.Mouse.Button = {}
 ikkuna.Mouse.Button.Primary = 1

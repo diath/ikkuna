@@ -5,54 +5,74 @@ function ScrollBar:initialize(args)
 	self.max = 1
 	self.value = self.min
 	self.displayValue = false
+	self.orientation = ikkuna.ScrollBarOrientation.Horizontal
 
 	-- NOTE: Used to update the value and children properly post-initialization.
 	self.needUpdateValue = false
 
-	ikkuna.Widget.initialize(self, args)
-
 	self.onValueChange = ikkuna.Event()
 
 	self.decButton = ikkuna.Button:new()
-	self.decButton:setExplicitSize(10, self.height / 2)
+	self.decButton:setExplicitSize(20, 20)
 	self.decButton:setText('<')
 	self.decButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.decButton.onClick:connect(function() self:decrease() return true end)
 	self.decButton.onPress:connect(function() self:decrease() return true end)
-	self:addChild(self.decButton)
 
 	self.incButton = ikkuna.Button:new()
-	self.incButton:setExplicitSize(10, self.height / 2)
+	self.incButton:setExplicitSize(20, 20)
 	self.incButton:setText('>')
 	self.incButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.incButton.onClick:connect(function() self:increase() return true end)
 	self.incButton.onPress:connect(function() self:increase() return true end)
-	self:addChild(self.incButton)
 
 	self.knob = ikkuna.Button:new()
-	self.knob:setExplicitSize(10, self.height / 2)
+	self.knob:setExplicitSize(20, 20)
 	self.knob:setText(self.displayValue and self.value or '')
 	self.knob:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.knob.draggable = true
 	self.knob.onDragMove:connect(function(knob, x, y, dx, dy)
-		if x - knob.dragOffset.x < self.decButton.x + self.decButton.width then
-			return false
-		end
+		if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
+			if x - knob.dragOffset.x < self.decButton.x + self.decButton.width then
+				return false
+			end
 
-		if x - knob.dragOffset.x + knob.width > self.incButton.x then
-			return false
+			if x - knob.dragOffset.x + knob.width > self.incButton.x then
+				return false
+			end
+		elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
+			if y - knob.dragOffset.y < self.decButton.y + self.decButton.height then
+				return false
+			end
+
+			if y - knob.dragOffset.y + knob.height > self.incButton.y then
+				return false
+			end
 		end
 
 		self:calculateValue()
 		return true
 	end)
+
+	ikkuna.Widget.initialize(self, args)
+
+	self:addChild(self.decButton)
+	self:addChild(self.incButton)
 	self:addChild(self.knob)
 
 	local function onMouseWheel(dx, dy)
-		if dy < 0 then
-			self:decrease()
-		elseif dy > 0 then
-			self:increase()
+		if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
+			if dy < 0 then
+				self:decrease()
+			elseif dy > 0 then
+				self:increase()
+			end
+		elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
+			if dy < 0 then
+				self:increase()
+			elseif dy > 0 then
+				self:decrease()
+			end
 		end
 	end
 
@@ -82,6 +102,10 @@ function ScrollBar:parseArgs(args)
 	if args.displayValue then
 		self:setDisplayValue(args.displayValue)
 	end
+
+	if args.orientation then
+		self:setOrientation(args.orientation)
+	end
 end
 
 function ScrollBar:update(delta)
@@ -96,12 +120,22 @@ end
 function ScrollBar:setExplicitSize(width, height)
 	ikkuna.Widget.setExplicitSize(self, width, height)
 
-	self.decButton:setExplicitSize(self.decButton.width, height)
-	self.incButton:setExplicitSize(self.incButton.width, height)
+	if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
+		self.decButton:setExplicitSize(self.decButton.width, height)
+		self.incButton:setExplicitSize(self.incButton.width, height)
 
-	self.knob:setExplicitSize((self.width - self.decButton.width - self.incButton.width) / math.max(1, (self.max - self.min + 1)), height)
+		self.knob:setExplicitSize((self.width - self.decButton.width - self.incButton.width) / math.max(1, (self.max - self.min + 1)), height)
 
-	self.step = self.knob.width
+		self.step = self.knob.width
+	elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
+		self.decButton:setExplicitSize(width, self.decButton.height)
+		self.incButton:setExplicitSize(width, self.incButton.height)
+
+		self.knob:setExplicitSize(width, (self.height - self.decButton.height - self.incButton.height) / math.max(1, (self.max - self.min + 1)))
+
+		self.step = self.knob.height
+	end
+
 	self:calculateChildrenPosition()
 end
 
@@ -116,14 +150,23 @@ function ScrollBar:calculateValue()
 end
 
 function ScrollBar:calculateChildrenPosition()
-	self.decButton:setPosition(self.x, self.y)
-	self.incButton:setPosition(self.x + self.width - self.decButton.width, self.y)
+	if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
+		self.decButton:setPosition(self.x, self.y)
+		self.incButton:setPosition(self.x + self.width - self.incButton.width, self.y)
+	elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
+		self.decButton:setPosition(self.x, self.y)
+		self.incButton:setPosition(self.x, self.y + self.height - self.incButton.height)
+	end
 
 	self:calculateKnobPosition()
 end
 
 function ScrollBar:calculateKnobPosition()
-	self.knob:setPosition(self.decButton.x + self.decButton.width + self.step * (self.value - self.min), self.y)
+	if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
+		self.knob:setPosition(self.decButton.x + self.decButton.width + self.step * (self.value - self.min), self.y)
+	elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
+		self.knob:setPosition(self.x, self.decButton.y + self.decButton.height + self.step * (self.value - self.min))
+	end
 end
 
 function ScrollBar:setValue(value)
@@ -184,6 +227,19 @@ end
 
 function ScrollBar:setDisplayValue(display)
 	self.displayValue = display
+	self.needUpdateValue = true
+end
+
+function ScrollBar:setOrientation(orientation)
+	self.orientation = orientation
+
+	if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
+		self.decButton:setText('<')
+		self.incButton:setText('>')
+	elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
+		self.decButton:setText('^')
+		self.incButton:setText('V')
+	end
 
 	self.needUpdateValue = true
 end
