@@ -114,6 +114,8 @@ function ScrollBar:parseArgs(args)
 end
 
 function ScrollBar:update(delta)
+	ikkuna.Widget.update(self, delta)
+
 	if self.needUpdateValue then
 		self:setValue(math.clamp(self.min, self.value, self.max))
 		self:calculateChildrenPosition()

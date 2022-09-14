@@ -69,6 +69,8 @@ function SpinBox:parseArgs(args)
 end
 
 function SpinBox:update(delta)
+	ikkuna.Widget.update(self, delta)
+
 	if self.needUpdateValue then
 		self:setValue(math.clamp(self.min, self.value, self.max))
 		self:calculateChildrenPosition()
