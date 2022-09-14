@@ -430,7 +430,7 @@ function Widget:moveChildToBack(widget)
 	end
 
 	if found then
-		self:addChild(child)
+		self:addChild(widget)
 	end
 
 	return found
