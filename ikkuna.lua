@@ -21,6 +21,9 @@ ikkuna.Mouse.Button.Primary = 1
 ikkuna.Mouse.Button.Secondary = 2
 ikkuna.Mouse.Button.Middle = 3
 
+ikkuna.ScrollAreaScrollStep = 10
+ikkuna.RadioBoxCircleSegments = 20
+
 function ikkuna.isControlPressed()
 	return love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')
 end

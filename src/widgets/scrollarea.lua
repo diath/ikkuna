@@ -2,8 +2,6 @@ local ScrollArea = ikkuna.class('ScrollArea', ikkuna.Widget)
 local HorizontalScrollArea = ikkuna.class('HorizontalScrollArea', ScrollArea)
 local VerticalScrollArea = ikkuna.class('VerticalScrollArea', ScrollArea)
 
-local ScrollStep = 10
-
 function ScrollArea:initialize(args)
 	ikkuna.Widget.initialize(self, args)
 
@@ -20,7 +18,7 @@ function HorizontalScrollArea:initialize(args)
 	self:setLayout(ikkuna.HorizontalLayout:new())
 
 	self.onMouseWheel:connect(function (dx, dy)
-		self:setHorizontalOffset(self.offset.x + (dy * ScrollStep))
+		self:setHorizontalOffset(self.offset.x + (dy * ikkuna.ScrollAreaScrollStep))
 	end)
 end
 
@@ -30,7 +28,7 @@ function VerticalScrollArea:initialize(args)
 	self:setLayout(ikkuna.VerticalLayout:new())
 
 	self.onMouseWheel:connect(function (dx, dy)
-		self:setVerticalOffset(self.offset.y + (dy * ScrollStep))
+		self:setVerticalOffset(self.offset.y + (dy * ikkuna.ScrollAreaScrollStep))
 	end)
 end
 
