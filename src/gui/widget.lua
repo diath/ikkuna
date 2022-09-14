@@ -15,6 +15,7 @@ function Widget:initialize(args)
 	self.height = 100
 
 	self.visible = true
+	self.phantom = false
 
 	self.padding = ikkuna.Rect({raw = true, all = 5})
 	self.margin = ikkuna.Rect({raw = true, all = 0})
@@ -111,6 +112,10 @@ function Widget:parseArgs(args)
 
 	if args.visible then
 		self.visible = args.visible
+	end
+
+	if args.phantom then
+		self.phantom = args.phantom
 	end
 
 	-- Padding and margin
@@ -455,6 +460,14 @@ function Widget:hide()
 	self.visible = false
 end
 
+function Widget:isPhantom()
+	return self.phantom
+end
+
+function Widget:setPhantom(phantom)
+	self.phantom = phantom
+end
+
 function Widget:setText(text)
 	if self.textString == text then
 		return
@@ -529,7 +542,14 @@ function Widget:getChildAt(x, y)
 	for index = #self.children, 1, -1 do
 		local child = self.children[index]
 		if child:isVisible() and child:contains(x, y) then
-			return child:getChildAt(x, y) or child
+			local subChild = child:getChildAt(x, y)
+			if subChild then
+				return subChild
+			end
+
+			if not child:isPhantom() then
+				return child
+			end
 		end
 	end
 

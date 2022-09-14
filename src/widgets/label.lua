@@ -5,6 +5,7 @@ function Label:initialize(args)
 
 	self.draggable = false
 	self.focusable = false
+	self.phantom = true
 end
 
 ikkuna.Label = Label
