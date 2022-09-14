@@ -6,6 +6,7 @@ function ScrollBar:initialize(args)
 	self.value = self.min
 	self.displayValue = false
 	self.orientation = ikkuna.ScrollBarOrientation.Horizontal
+	self.format = '|value|'
 
 	-- NOTE: Used to update the value and children properly post-initialization.
 	self.needUpdateValue = false
@@ -106,6 +107,10 @@ function ScrollBar:parseArgs(args)
 	if args.orientation then
 		self:setOrientation(args.orientation)
 	end
+
+	if args.format then
+		self:setFormat(args.format)
+	end
 end
 
 function ScrollBar:update(delta)
@@ -178,8 +183,22 @@ function ScrollBar:setValue(value)
 		return false
 	end
 
-	self.knob:setText(self.displayValue and value or '')
 	self.value = value
+
+	if self.displayValue then
+		local text = self.format
+		text = text:gsub('|min|', self.min)
+		text = text:gsub('|max|', self.max)
+		text = text:gsub('|value|', self.value)
+
+		local ratio = (self.value - self.min) / (self.max - self.min)
+		text = text:gsub('|percent|', ('%.02f%%%%'):format(ratio * 100))
+
+		self.knob:setText(text)
+	else
+		self.knob:setText('')
+	end
+
 	self.onValueChange:emit(self, self.value)
 	return true
 end
@@ -241,6 +260,11 @@ function ScrollBar:setOrientation(orientation)
 		self.incButton:setText('V')
 	end
 
+	self.needUpdateValue = true
+end
+
+function ScrollBar:setFormat(format)
+	self.format = format
 	self.needUpdateValue = true
 end
 
