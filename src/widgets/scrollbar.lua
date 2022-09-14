@@ -16,6 +16,7 @@ function ScrollBar:initialize(args)
 	self.decButton = ikkuna.Button:new()
 	self.decButton:setExplicitSize(10, self.height / 2)
 	self.decButton:setText('<')
+	self.decButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.decButton.onClick:connect(function() self:decrease() return true end)
 	self.decButton.onPress:connect(function() self:decrease() return true end)
 	self:addChild(self.decButton)
@@ -23,6 +24,7 @@ function ScrollBar:initialize(args)
 	self.incButton = ikkuna.Button:new()
 	self.incButton:setExplicitSize(10, self.height / 2)
 	self.incButton:setText('>')
+	self.incButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.incButton.onClick:connect(function() self:increase() return true end)
 	self.incButton.onPress:connect(function() self:increase() return true end)
 	self:addChild(self.incButton)
@@ -30,6 +32,7 @@ function ScrollBar:initialize(args)
 	self.knob = ikkuna.Button:new()
 	self.knob:setExplicitSize(10, self.height / 2)
 	self.knob:setText(self.displayValue and self.value or '')
+	self.knob:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.knob.draggable = true
 	self.knob.onDragMove:connect(function(knob, x, y, dx, dy)
 		if x - knob.dragOffset.x < self.decButton.x + self.decButton.width then
@@ -93,11 +96,10 @@ end
 function ScrollBar:setExplicitSize(width, height)
 	ikkuna.Widget.setExplicitSize(self, width, height)
 
-	self.decButton.height = height
-	self.incButton.height = height
+	self.decButton:setExplicitSize(self.decButton.width, height)
+	self.incButton:setExplicitSize(self.incButton.width, height)
 
-	self.knob.width = (self.width - self.decButton.width - self.incButton.width) / math.max(1, (self.max - self.min + 1))
-	self.knob.height = height
+	self.knob:setExplicitSize((self.width - self.decButton.width - self.incButton.width) / math.max(1, (self.max - self.min + 1)), height)
 
 	self.step = self.knob.width
 	self:calculateChildrenPosition()
@@ -114,18 +116,14 @@ function ScrollBar:calculateValue()
 end
 
 function ScrollBar:calculateChildrenPosition()
-	self.decButton.x = self.x
-	self.decButton.y = self.y
-
-	self.incButton.x = self.x + self.width - self.decButton.width
-	self.incButton.y = self.y
+	self.decButton:setPosition(self.x, self.y)
+	self.incButton:setPosition(self.x + self.width - self.decButton.width, self.y)
 
 	self:calculateKnobPosition()
 end
 
 function ScrollBar:calculateKnobPosition()
-	self.knob.x = self.decButton.x + self.decButton.width + self.step * (self.value - self.min)
-	self.knob.y = self.y
+	self.knob:setPosition(self.decButton.x + self.decButton.width + self.step * (self.value - self.min), self.y)
 end
 
 function ScrollBar:setValue(value)

@@ -18,6 +18,7 @@ function ComboBox:initialize(args)
 	self.prevButton = ikkuna.Button:new()
 	self.prevButton:setExplicitSize(10, 25)
 	self.prevButton:setText('<')
+	self.prevButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.prevButton.onClick:connect(function()
 		self:selectPrevious()
 		return true
@@ -30,6 +31,7 @@ function ComboBox:initialize(args)
 	self.nextButton = ikkuna.Button:new()
 	self.nextButton:setExplicitSize(10, 25)
 	self.nextButton:setText('>')
+	self.nextButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.nextButton.onClick:connect(function()
 		self:selectNext()
 		return true
@@ -63,6 +65,9 @@ end
 function ComboBox:setExplicitSize(width, height)
 	ikkuna.Widget.setExplicitSize(self, width, height)
 
+	self.prevButton:setExplicitSize(self.prevButton.width, height)
+	self.nextButton:setExplicitSize(self.nextButton.width, height)
+
 	self:calculateChildrenPosition()
 end
 
@@ -77,11 +82,8 @@ function ComboBox:addOption(label, data)
 end
 
 function ComboBox:calculateChildrenPosition()
-	self.prevButton.x = self.x
-	self.prevButton.y = self.y
-
-	self.nextButton.x = self.x + self.width - self.nextButton.width
-	self.nextButton.y = self.y
+	self.prevButton:setPosition(self.x, self.y)
+	self.nextButton:setPosition(self.x + self.width - self.nextButton.width, self.y)
 end
 
 function ComboBox:selectByIndex(index)

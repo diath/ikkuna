@@ -10,9 +10,7 @@ function SpinBox:initialize(args)
 
 	ikkuna.Widget.initialize(self, args)
 
-	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
-	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
-
+	self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self:setText(self.value)
 
 	self.onValueChange = ikkuna.Event()
@@ -20,6 +18,7 @@ function SpinBox:initialize(args)
 	self.incButton = ikkuna.Button:new()
 	self.incButton:setExplicitSize(10, self.height / 2)
 	self.incButton:setText('^')
+	self.incButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.incButton.onClick:connect(function()
 		self:increase()
 		return true
@@ -36,6 +35,7 @@ function SpinBox:initialize(args)
 	self.decButton = ikkuna.Button:new()
 	self.decButton:setExplicitSize(10, self.height / 2)
 	self.decButton:setText('v')
+	self.decButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.decButton.onClick:connect(function()
 		self:decrease()
 		return true
@@ -80,8 +80,8 @@ end
 function SpinBox:setExplicitSize(width, height)
 	ikkuna.Widget.setExplicitSize(self, width, height)
 
-	self.incButton.height = height / 2
-	self.decButton.height = height / 2
+	self.incButton:setExplicitSize(self.incButton.width, height / 2)
+	self.decButton:setExplicitSize(self.decButton.width, height / 2)
 
 	self:calculateChildrenPosition()
 end
@@ -93,11 +93,8 @@ function SpinBox:setPosition(x, y)
 end
 
 function SpinBox:calculateChildrenPosition()
-	self.incButton.x = self.x + self.width - self.incButton.width
-	self.incButton.y = self.y
-
-	self.decButton.x = self.x + self.width - self.decButton.width
-	self.decButton.y = self.y + self.height - self.incButton.height
+	self.incButton:setPosition(self.x + self.width - self.incButton.width, self.y)
+	self.decButton:setPosition(self.x + self.width - self.decButton.width, self.y + self.height - self.incButton.height)
 end
 
 function SpinBox:setValue(value)
