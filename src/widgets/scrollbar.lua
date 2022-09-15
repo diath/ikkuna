@@ -3,7 +3,7 @@ local ScrollBar = ikkuna.class('ScrollBar', ikkuna.Widget)
 function ScrollBar:initialize(args)
 	self.min = 0
 	self.max = 1
-	self.value = self.min
+	self.value = 0
 	self.displayValue = false
 	self.orientation = ikkuna.ScrollBarOrientation.Horizontal
 	self.format = '|value|'
@@ -82,7 +82,7 @@ function ScrollBar:initialize(args)
 	self.incButton.onMouseWheel:connect(onMouseWheel)
 	self.knob.onMouseWheel:connect(onMouseWheel)
 
-	self.step = self.knob.width
+	self.step = math.ceil(self.knob.width)
 end
 
 function ScrollBar:parseArgs(args)
@@ -131,16 +131,16 @@ function ScrollBar:setExplicitSize(width, height)
 		self.decButton:setExplicitSize(self.decButton.width, height)
 		self.incButton:setExplicitSize(self.incButton.width, height)
 
-		self.knob:setExplicitSize((self.width - self.decButton.width - self.incButton.width) / math.max(1, (self.max - self.min + 1)), height)
+		self.knob:setExplicitSize(math.max(ikkuna.ScrollBarMinKnobSize, (self.width - self.decButton.width - self.incButton.width) / math.max(1, (self.max - self.min + 1))), height)
 
-		self.step = self.knob.width
+		self.step = math.ceil(self.knob.width)
 	elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
 		self.decButton:setExplicitSize(width, self.decButton.height)
 		self.incButton:setExplicitSize(width, self.incButton.height)
 
-		self.knob:setExplicitSize(width, (self.height - self.decButton.height - self.incButton.height) / math.max(1, (self.max - self.min + 1)))
+		self.knob:setExplicitSize(width, math.max(ikkuna.ScrollBarMinKnobSize, (self.height - self.decButton.height - self.incButton.height) / math.max(1, (self.max - self.min + 1))))
 
-		self.step = self.knob.height
+		self.step = math.ceil(self.knob.height)
 	end
 
 	self:calculateChildrenPosition()
@@ -153,7 +153,15 @@ function ScrollBar:setPosition(x, y)
 end
 
 function ScrollBar:calculateValue()
-	self:setValue(self.min + math.floor((self.knob.x - self.decButton.x - self.decButton.width) / self.step))
+	if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
+		local width = self.width - self.decButton.width - self.incButton.width - self.knob.width
+		local percent = (self.knob.x - self.x - self.decButton.width) / width
+		self:setValue(math.ceil(percent * self:getRange()))
+	elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
+		local height = self.height - self.decButton.height - self.incButton.height - self.knob.height
+		local percent = (self.knob.y - self.y - self.decButton.height) / height
+		self:setValue(math.ceil(percent * self:getRange()))
+	end
 end
 
 function ScrollBar:calculateChildrenPosition()
@@ -170,9 +178,13 @@ end
 
 function ScrollBar:calculateKnobPosition()
 	if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
-		self.knob:setPosition(self.decButton.x + self.decButton.width + self.step * (self.value - self.min), self.y)
+		local percent = (self.value - self.min) / (self.max - self.min)
+		local width = self.width - self.decButton.width - self.incButton.width - self.knob.width
+		self.knob:setPosition(self.decButton.x + self.decButton.width + (percent * width), self.y)
 	elseif self.orientation == ikkuna.ScrollBarOrientation.Vertical then
-		self.knob:setPosition(self.x, self.decButton.y + self.decButton.height + self.step * (self.value - self.min))
+		local percent = (self.value - self.min) / (self.max - self.min)
+		local height = self.height - self.decButton.height - self.incButton.height - self.knob.height
+		self.knob:setPosition(self.x, self.decButton.y + self.decButton.height + (percent * height))
 	end
 end
 
@@ -206,7 +218,13 @@ function ScrollBar:setValue(value)
 end
 
 function ScrollBar:increase()
-	local increment = ikkuna.isControlPressed() and 10 or 1
+	local increment = 1
+	if ikkuna.isControlPressed() then
+		increment = 10
+	elseif self:getRange() > 100 then
+		increment = self.step
+	end
+
 	local newValue = math.min(self.max, self.value + increment)
 	if not self:setValue(newValue) then
 		return false
@@ -217,7 +235,13 @@ function ScrollBar:increase()
 end
 
 function ScrollBar:decrease()
-	local decrement = ikkuna.isControlPressed() and 10 or 1
+	local decrement = 1
+	if ikkuna.isControlPressed() then
+		decrement = 10
+	elseif self:getRange() > 100 then
+		decrement = self.step
+	end
+
 	local newValue = math.max(self.min, self.value - decrement)
 	if not self:setValue(newValue) then
 		return false
@@ -244,6 +268,10 @@ function ScrollBar:setMax(max)
 	if self.value > self.max then
 		self.needUpdateValue = true
 	end
+end
+
+function ScrollBar:getRange()
+	return self.max - self.min
 end
 
 function ScrollBar:setDisplayValue(display)

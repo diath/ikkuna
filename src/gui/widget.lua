@@ -253,7 +253,7 @@ function Widget:drawText(x, y)
 	if self.text then
 		local color = self.textColor
 		love.graphics.setColor(color.r, color.g, color.b, color.a)
-		love.graphics.draw(self.text, x + self.relativeTextPosition.x, y + self.relativeTextPosition.y)
+		love.graphics.draw(self.text, math.ceil(x + self.relativeTextPosition.x), math.ceil(y + self.relativeTextPosition.y))
 	end
 end
 
