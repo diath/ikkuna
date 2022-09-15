@@ -8,6 +8,10 @@ function Widget:initialize(args)
 
 	self.parent = nil
 	self.children = {}
+
+	-- NOTE: We use a set in addition to children array for O(1) lookup to check if a widget is already a known child.
+	self.knownChildren = ikkuna.Set()
+
 	self.x = 0
 	self.y = 0
 
@@ -391,21 +395,24 @@ end
 
 function Widget:addChild(child)
 	if not child then
-		return
+		return false
 	end
 
-	-- TODO: Use a set?
-	if not table.contains(self.children, child) then
-		child.parent = self
-
-		table.insert(self.children, child)
-	else
+	if self.knownChildren:contains(child) then
 		print(('Widget %s already contains child widget %s'):format(self.id, child.id))
+		return false
 	end
+
+	child.parent = self
+
+	table.insert(self.children, child)
+	self.knownChildren:add(child)
 
 	if self.layout then
 		self.layout:update()
 	end
+
+	return true
 end
 
 function Widget:removeChild(widget)
@@ -416,6 +423,7 @@ function Widget:removeChild(widget)
 	for index, child in pairs(self.children) do
 		if child == widget then
 			table.remove(self.children, index)
+			self.knownChildren:remove(child)
 			return true
 		end
 	end
