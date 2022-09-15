@@ -11,7 +11,7 @@ function RadioBox:initialize(args)
 end
 
 function RadioBox:drawAt(x, y)
-	ikkuna.Widget.draw(self)
+	self:drawBase(x, y)
 
 	love.graphics.setColor(0, 0, 0, 1)
 	love.graphics.circle('line', x + 5, y + 5, 5, ikkuna.RadioBoxCircleSegments)
@@ -22,6 +22,8 @@ function RadioBox:drawAt(x, y)
 		love.graphics.setColor(1, 0, 0, 1)
 	end
 	love.graphics.circle('fill', x + 6, y + 6, 4, ikkuna.RadioBoxCircleSegments)
+
+	self:drawText(x, y)
 end
 
 ikkuna.RadioBox = RadioBox
