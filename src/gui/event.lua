@@ -39,6 +39,10 @@ function Event:disconnect(fn)
 	end
 end
 
+function Event:clear()
+	self.callbacks = {}
+end
+
 function Event:emit(...)
 	local result = true
 	for _, callback in pairs(self.callbacks) do
