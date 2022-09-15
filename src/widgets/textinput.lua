@@ -123,12 +123,16 @@ function TextInput:updateText()
 	self:setText(self.masked and self:getMaskedText() or self.buffer)
 
 	local text = love.graphics.newText(ikkuna.font)
-	text:set(self:getFrontBuffer())
+	text:set(self.masked and self:getMaskedFrontBuffer() or self:getFrontBuffer())
 	self.frontBufferWidth = text:getWidth()
 end
 
 function TextInput:getMaskedText()
 	return self.buffer:gsub('.', self.maskCharacter)
+end
+
+function TextInput:getMaskedFrontBuffer()
+	return self:getMaskedText():sub(1, self.cursorPosition)
 end
 
 function TextInput:getFrontBuffer()
