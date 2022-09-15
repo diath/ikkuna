@@ -95,6 +95,7 @@ require('src.util.math')
 require('src.util.table')
 require('src.util.timer')
 require('src.util.rect')
+require('src.util.set')
 
 -- Base
 require('src.gui.event')
