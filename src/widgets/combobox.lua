@@ -23,6 +23,10 @@ function ComboBox:initialize(args)
 		self:selectPrevious()
 		return true
 	end)
+	self.prevButton.onPress:connect(function()
+		self:selectPrevious()
+		return true
+	end)
 	self.prevButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
@@ -33,6 +37,10 @@ function ComboBox:initialize(args)
 	self.nextButton:setText('>')
 	self.nextButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.nextButton.onClick:connect(function()
+		self:selectNext()
+		return true
+	end)
+	self.nextButton.onPress:connect(function()
 		self:selectNext()
 		return true
 	end)
