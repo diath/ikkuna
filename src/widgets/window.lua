@@ -1,10 +1,6 @@
 local Window = ikkuna.class('Window', ikkuna.Widget)
 
 function Window:initialize(args)
-	ikkuna.Widget.initialize(self, args)
-
-	self.draggable = true
-
 	-- Title bar
 	self.titleBarVisible = true
 
@@ -31,11 +27,43 @@ function Window:initialize(args)
 	self.statusTime = 0
 	self.statusTimeout = -1
 
+	ikkuna.Widget.initialize(self, args)
+
+	self.draggable = true
+
 	self:addChild(self.titleLabel)
 	self:addChild(self.closeButton)
 	self:addChild(self.statusLabel)
 
 	self:calculateChildrenPositionAndSize()
+end
+
+function Window:parseArgs(args)
+	if not args then
+		return
+	end
+
+	ikkuna.Widget.parseArgs(self, args)
+
+	if args.titleBarVisible ~= nil then
+		if args.titleBarVisible then
+			self:showTitleBar()
+		else
+			self:hideTitleBar()
+		end
+	end
+
+	if args.title then
+		self:setTitle(args.title)
+	end
+
+	if args.statusBarVisible ~= nil then
+		if args.statusBarVisible then
+			self:showStatusBar()
+		else
+			self:hideStatusBar()
+		end
+	end
 end
 
 function Window:update(delta)
