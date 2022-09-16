@@ -27,26 +27,31 @@ function VerticalLayout:updateInternal()
 	if self.fitParent then
 		local spacing = (#parent.children - 1) * self.childSpacing
 		local totalHeight = parent.height - parent.padding.top - parent.padding.bottom - spacing
-		for index, child in pairs(parent.children) do
-			totalHeight = totalHeight - child.margin.top
-			if index < #parent.children then
-				totalHeight = totalHeight - child.margin.bottom
+		local children = parent:getVisibleChildren()
+		for index, child in pairs(children) do
+			if child:isVisible() then
+				totalHeight = totalHeight - child.margin.top
+				if index < #children then
+					totalHeight = totalHeight - child.margin.bottom
+				end
 			end
 		end
 
-		local height = math.floor(totalHeight / #parent.children)
+		local height = math.floor(totalHeight / #children)
 
-		for _, child in pairs(parent.children) do
-			position = position + child.margin.top
+		for _, child in pairs(children) do
+			if child:isVisible() then
+				position = position + child.margin.top
 
-			child:setExplicitSize(width, height)
-			child:setPosition(parent.x + parent.padding.left, position)
+				child:setExplicitSize(width, height)
+				child:setPosition(parent.x + parent.padding.left, position)
 
-			position = position + height + self.childSpacing + child.margin.bottom
+				position = position + height + self.childSpacing + child.margin.bottom
+			end
 		end
 	else
 		local height = parent.padding.top
-		for _, child in pairs(parent.children) do
+		parent:forEachVisibleChild(function(child)
 			position = position + child.margin.top
 
 			child:setExplicitSize(width, child.height)
@@ -54,7 +59,7 @@ function VerticalLayout:updateInternal()
 
 			position = position + child.height + self.childSpacing + child.margin.bottom
 			height = height + child.margin.top + child.height + child.margin.bottom + self.childSpacing
-		end
+		end)
 
 		if self.resizeParent then
 			parent:setExplicitSize(parent.width, height)
@@ -65,9 +70,9 @@ end
 function VerticalLayout:getTotalHeight()
 	local parent = self.parent
 	local height = parent.padding.top
-	for _, child in pairs(parent.children) do
+	parent:forEachVisibleChild(function(child)
 		height = height + child.margin.top + child.height + child.margin.bottom + self.childSpacing
-	end
+	end)
 
 	return height
 end

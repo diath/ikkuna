@@ -467,12 +467,39 @@ function Widget:isVisible()
 	return self.visible
 end
 
+function Widget:getVisibleChildren()
+	local children = {}
+	for _, child in pairs(self.children) do
+		if child:isVisible() then
+			table.insert(children, child)
+		end
+	end
+
+	return children
+end
+
+function Widget:forEachVisibleChild(fn)
+	for _, child in pairs(self.children) do
+		if child:isVisible() then
+			fn(child)
+		end
+	end
+end
+
 function Widget:show()
 	self.visible = true
+
+	if self.parent and self.parent.layout then
+		self.parent.layout:update()
+	end
 end
 
 function Widget:hide()
 	self.visible = false
+
+	if self.parent and self.parent.layout then
+		self.parent.layout:update()
+	end
 end
 
 function Widget:isPhantom()

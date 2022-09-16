@@ -26,17 +26,18 @@ function HorizontalLayout:updateInternal()
 
 	if self.fitParent then
 		local spacing = (#parent.children - 1) * self.childSpacing
-		local total = parent.width - parent.padding.left - parent.padding.right - spacing
-		for index, child in pairs(parent.children) do
+		local totalWidth = parent.width - parent.padding.left - parent.padding.right - spacing
+		local children = parent:getVisibleChildren()
+		for index, child in pairs(children) do
 			totalWidth = totalWidth - child.margin.left
 			if index < #parent.children then
 				totalWidth = totalWidth - child.margin.right
 			end
 		end
 
-		local width = math.floor(totalWidth / #parent.children)
+		local width = math.floor(totalWidth / #children)
 
-		for _, child in pairs(parent.children) do
+		for _, child in pairs(children) do
 			position = position + child.margin.left
 
 			child:setExplicitSize(width, height)
@@ -46,7 +47,7 @@ function HorizontalLayout:updateInternal()
 		end
 	else
 		local width = parent.padding.left
-		for _, child in pairs(parent.children) do
+		parent:forEachVisibleChild(function(child)
 			position = position + child.margin.left
 
 			child:setExplicitSize(child.width, height)
@@ -54,7 +55,7 @@ function HorizontalLayout:updateInternal()
 
 			position = position + child.width + self.childSpacing + child.margin.right
 			width = width + child.margin.left + child.width + child.margin.right + self.childSpacing
-		end
+		end)
 
 		if self.resizeParent then
 			parent:setExplicitSize(width, parent.height)
@@ -65,9 +66,9 @@ end
 function HorizontalLayout:getTotalWidth()
 	local parent = self.parent
 	local width = parent.padding.left
-	for _, child in pairs(parent.children) do
+	parent:forEachVisibleChild(function(child)
 		width = width + child.margin.left + child.width + child.margin.right + self.childSpacing
-	end
+	end)
 
 	return width
 end
