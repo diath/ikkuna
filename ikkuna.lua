@@ -29,6 +29,7 @@ ikkuna.Mouse.Button.Primary = 1
 ikkuna.Mouse.Button.Secondary = 2
 ikkuna.Mouse.Button.Middle = 3
 
+ikkuna.Debug = false
 ikkuna.ScrollAreaScrollStep = 10
 ikkuna.ScrollBarMinKnobSize = 20
 ikkuna.RadioBoxCircleSegments = 20

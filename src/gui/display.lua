@@ -39,7 +39,7 @@ function Display:onKeyPressed(key, code, repeated)
 end
 
 function Display:onKeyReleased(key, code)
-	return self.root:onKeyReleased(key, code, repeated)
+	return self.root:onKeyReleased(key, code)
 end
 
 function Display:onMousePressed(x, y, button, touch, presses)

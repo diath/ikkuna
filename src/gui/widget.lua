@@ -247,6 +247,13 @@ end
 function Widget:drawBase(x, y)
 	love.graphics.setColor(1, 1, 1, 0.1)
 	love.graphics.rectangle('fill', x, y, self.width, self.height)
+	love.graphics.setColor(1, 1, 1, 1)
+
+	if ikkuna.Debug then
+		love.graphics.setColor(1, 0, 0, 1)
+		love.graphics.rectangle('line', x, y, self.width, self.height)
+		love.graphics.setColor(1, 1, 1, 1)
+	end
 end
 
 function Widget:drawText(x, y)
