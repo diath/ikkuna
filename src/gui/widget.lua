@@ -43,6 +43,7 @@ function Widget:initialize(args)
 	self.textOffset = {x = 0, y = 0}
 	self.textAlign = {horizontal = ikkuna.TextAlign.Horizontal.Left, vertical = ikkuna.TextAlign.Vertical.Top}
 	self.textColor = {r = 1, g = 1, b = 1, a = 1}
+	self.resizeToText = false
 
 	self.onResize = ikkuna.Event()
 	self.onClick = ikkuna.Event()
@@ -210,6 +211,10 @@ function Widget:parseArgs(args)
 				self.textColor = ikkuna.parseColor(text.color)
 			end
 		end
+	end
+
+	if args.resizeToText ~= nil then
+		self.resizeToText = args.resizeToText
 	end
 
 	-- Misc
@@ -530,6 +535,11 @@ function Widget:setText(text)
 	self.text:set(text)
 	self.textString = text
 	self.isTextDirty = true
+
+	if self.resizeToText then
+		local width, height = self.text:getDimensions()
+		self:setExplicitSize(width + self.padding.left + self.padding.right, height + self.padding.top + self.padding.bottom)
+	end
 end
 
 function Widget:setTextOffset(x, y)

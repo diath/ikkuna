@@ -11,6 +11,7 @@ function Display:initialize()
 	self.baseTooltip = ikkuna.Widget:new({
 		visible = false,
 		phantom = true,
+		resizeToText = true,
 		text = {
 			align = {
 				horizontal = 'center',
