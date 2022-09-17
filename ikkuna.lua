@@ -33,6 +33,7 @@ ikkuna.Debug = false
 ikkuna.ScrollAreaScrollStep = 10
 ikkuna.ScrollBarMinKnobSize = 20
 ikkuna.RadioBoxCircleSegments = 20
+ikkuna.TooltipOffset = {x = 10, y = 10}
 
 function ikkuna.isControlPressed()
 	return love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')

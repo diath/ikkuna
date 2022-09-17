@@ -34,6 +34,8 @@ function Widget:initialize(args)
 	self.focused = false
 	self.focusable = false
 
+	self.tooltip = nil
+
 	self.isTextDirty = false
 	self.text = nil
 	self.textString = ''
@@ -106,19 +108,19 @@ function Widget:parseArgs(args)
 	end
 
 	-- State
-	if args.draggable then
+	if args.draggable ~= nil then
 		self.draggable = args.draggable
 	end
 
-	if args.focusable then
+	if args.focusable ~= nil then
 		self.focusable = args.focusable
 	end
 
-	if args.visible then
+	if args.visible ~= nil then
 		self.visible = args.visible
 	end
 
-	if args.phantom then
+	if args.phantom ~= nil then
 		self.phantom = args.phantom
 	end
 
@@ -208,6 +210,11 @@ function Widget:parseArgs(args)
 				self.textColor = ikkuna.parseColor(text.color)
 			end
 		end
+	end
+
+	-- Misc
+	if args.tooltip then
+		self.tooltip = args.tooltip
 	end
 end
 

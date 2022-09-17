@@ -7,6 +7,20 @@ function Display:initialize()
 	local width, height = love.graphics.getDimensions()
 	self.root:setExplicitSize(width, height)
 
+	self.tooltip = nil
+	self.baseTooltip = ikkuna.Widget:new({
+		visible = false,
+		phantom = true,
+		text = {
+			align = {
+				horizontal = 'center',
+				vertical = 'center',
+			},
+		},
+	})
+
+	self.root:addChild(self.baseTooltip)
+
 	self.draggingWidget = nil
 	self.focusedWidget = nil
 	self.hoveredWidget = nil
@@ -108,8 +122,26 @@ function Display:onMouseMoved(x, y, dx, dy, touch)
 		return self.draggingWidget:onMouseMoved(x, y, dx, dy, touch)
 	end
 
+	if self.baseTooltip:isVisible() then
+		self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+	end
+
+	if self.tooltip and self.tooltip:isVisible() then
+		self.tooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+	end
+
 	local widget = self.root:getChildAt(x, y)
 	if self.hoveredWidget and (not widget or widget ~= self.hoveredWidget) then
+		if self.baseTooltip:isVisible() then
+			self.baseTooltip:hide()
+		end
+
+		if self.tooltip and self.tooltip:isVisible() then
+			self.tooltip:hide()
+			self.root:removeChild(self.tooltip)
+			self.tooltip = nil
+		end
+
 		self.hoveredWidget:setHovered(false)
 		self.hoveredWidget = nil
 	end
@@ -118,6 +150,19 @@ function Display:onMouseMoved(x, y, dx, dy, touch)
 		if widget:onMouseMoved(x, y, dx, dy, touch) then
 			local result = widget:setHovered(true)
 			if result then
+				if widget.tooltip then
+					if type(widget.tooltip) == 'string' then
+						self.baseTooltip:setText(widget.tooltip)
+						self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+						self.baseTooltip:show()
+					else
+						self.tooltip = widget.tooltip
+						self.tooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+						self.tooltip:show()
+						self.root:addChild(widget.tooltip)
+					end
+				end
+
 				self.hoveredWidget = widget
 			end
 
