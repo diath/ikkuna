@@ -60,6 +60,17 @@ return {
 			borderSize = 1,
 		},
 	},
+	['PushButton'] = {
+		normal = {
+			color = {red = 187, green = 192, blue = 202},
+			border = {red = 69, green = 74, blue = 87},
+			background = {red = 42, green = 46, blue = 58},
+			borderSize = 1,
+		},
+		hovered = {
+			background = {red = 57, green = 61, blue = 74},
+		},
+	},
 	['RadioBox'] = {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},

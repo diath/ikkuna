@@ -10,6 +10,9 @@ function PushButton:initialize(args)
 end
 
 function PushButton:drawAt(x, y)
+	self:drawBase(x, y)
+
+	-- TODO: This should be style based?
 	if self.pushed then
 		love.graphics.setColor(0.5, 0.5, 0.5, 0.5)
 		love.graphics.rectangle('fill', x, y, self.width, self.height)
