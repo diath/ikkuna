@@ -6,77 +6,94 @@ function love.load()
 	love.keyboard.setKeyRepeat(true)
 	display = ikkuna.Display:new()
 
-	local child = ikkuna.Widget:new()
-	child.onClick:connect(function() print('onClick()') return true end)
-	child.onDoubleClick:connect(function() print('onDoubleClick()') return true end)
-	child.onDragStart:connect(function() print('onDragStart()') return true end)
-	child.onDragMove:connect(function() print('onDragMove()') return true end)
-	child.onDragEnd:connect(function() print('onDragEnd()') return true end)
-	child.onResize:connect(function() print('onResize()') end)
-	child.onHoverChange:connect(function(widget, hovered) return true end)
-	child:setLayout(ikkuna.VerticalLayout({fitParent = true}))
-	child:setExplicitSize(140, 340)
-	display.root:addChild(child)
+	local window = ikkuna.Window:new({
+		title = 'TabBar Test',
+		size = {width = 640, height = 480},
+		position = {x = 200, y = 25},
+	})
 
-	local button = ikkuna.Button:new()
-	button:setText('Click/Right Click')
-	button.onClick:connect(function() print('Button:onClick()') return true end)
-	button.onDoubleClick:connect(function() print('Button:onDoubleClick()') return true end)
-	child:addChild(button)
+	local content = ikkuna.Widget:new({layout = 'vertical'})
 
-	local menu = ikkuna.ContextMenu:new()
-	menu:addOption('Foo', function() print('foo') end)
-	menu:addOption('Bar', function() print('bar') end)
-	button.contextMenu = menu
+	local tabBar = ikkuna.TabBar:new({
+		size = {width = 0, height = 45},
+	})
 
-	local pushButton = ikkuna.PushButton:new()
-	pushButton:setText('Push')
-	pushButton.onClick:connect(function() print('PushButton:onClick()') return true end)
-	pushButton.onDoubleClick:connect(function() print('PushButton:onDoubleClick()') return true end)
-	pushButton.onPushChange:connect(function(widget, state) print('PushButton:onPushChange()') return true end)
-	pushButton.onPress:connect(function() print('PushButton:onPress()') return true end)
-	child:addChild(pushButton)
+	local widgets = ikkuna.Widget:new({layout = {type = 'vertical', args = {resizeParent = true}}, children = {
+		{type = 'Widget', args = {
+			size = {width = 0, height = 30},
+			padding = 0,
+			layout = {type = 'horizontal', args = {fitParent = true}},
+			children = {
+				{type = 'Button', args = {
+					text = 'Button',
+				}},
+				{type = 'PushButton', args = {
+					text = 'Push Button',
+				}},
+				{type = 'Button', args = {
+					text = 'Disabled', disabled = true,
+				}},
+			}
+		}},
+		{type = 'ComboBox', args = {
+			options = {'One', 'Two', 'Three', 'Four'},
+		}},
+		{type = 'ProgressBar', args = {
+			min = 0, max = 100, value = 50, format = '|value|/|max| (|percent|)',
+		}},
+		{type = 'SpinBox', args = {
+			min = 0, max = 100, value = 50,
+		}},
+		{type = 'TextInput', args = {
+		}},
+		{type = 'CheckBox', args = {
+			text = 'Check Box',
+		}},
+		{type = 'Widget', args = {
+			size = {width = 0, height = 30},
+			padding = 0,
+			layout = {type = 'horizontal', args = {fitParent = true}},
+			children = {
+				{type = 'RadioBox', args = {
+					id = 'radio1',
+					text = 'Choose me!',
+				}},
+				{type = 'RadioBox', args = {
+					id = 'radio2',
+					text = 'No, choose me!',
+				}},
+				{type = 'RadioBox', args = {
+					id = 'radio3',
+					text = 'Choose me, choose me!',
+				}},
+			}
+		}},
+	}})
 
-	local comboBox = ikkuna.ComboBox:new({options = {'Yes', 'Maybe', {'No', {something = 'something'}}}})
-	comboBox.onValueChange:connect(function(widget, selectedIndex, option) print('ComboBox:onValueChange()', option.label, option.data) return true end)
-	child:addChild(comboBox)
+	local radioGroup = ikkuna.RadioGroup:new()
+	radioGroup:addChild(widgets:getChild('radio1', true))
+	radioGroup:addChild(widgets:getChild('radio2', true))
+	radioGroup:addChild(widgets:getChild('radio3', true))
 
-	local spinBox = ikkuna.SpinBox:new({min = 0, max = 50})
-	spinBox.onValueChange:connect(function(widget, value) print('SpinBox:onValueChange()', value) return true end)
-	child:addChild(spinBox)
+	tabBar:addTab('Widgets', widgets)
 
-	local textInput = ikkuna.TextInput:new()
-	textInput.onFocusChange:connect(function(widget, value) print('TextInput:onFocusChange()', value) return true end)
-	child:addChild(textInput)
+	local layouts = ikkuna.Widget:new({layout = 'vertical', tooltip = 'Test tooltip!'})
+	layouts:addChild(ikkuna.Button:new({text = 'Layouts', size = {width = 50, height = 20}}))
+	tabBar:addTab('Layouts', layouts)
 
-	local maskButton = ikkuna.Button:new()
-	maskButton:setText('Mask')
-	maskButton.onClick:connect(function() textInput:setMasked(not textInput.masked) return true end)
-	child:addChild(maskButton)
+	local tabContent = ikkuna.Widget:new({
+		size = {width = 0, height = 380},
+		layout = 'vertical',
+	})
+	tabBar:setContentWidget(tabContent)
 
-	local draggableButton = ikkuna.Button:new()
-	draggableButton:setText('Drag Me')
-	draggableButton.draggable = true
-	child:addChild(draggableButton)
+	content:addChild(tabBar)
+	content:addChild(tabContent)
 
-	local scrollBar = ikkuna.ScrollBar:new({min = 0, max = 5})
-	scrollBar.onValueChange:connect(function(widget, value) print('ScrollBar:onValueChange()', value) return true end)
-	child:addChild(scrollBar)
+	window:setContentWidget(content)
+	window:showCentered()
 
-	local scrollBarWithValueOnKnob = ikkuna.ScrollBar:new({min = 5, max = 20, displayValue = true})
-	scrollBarWithValueOnKnob.onValueChange:connect(function(widget, value) print('ScrollBar:onValueChange()', value) return true end)
-	child:addChild(scrollBarWithValueOnKnob)
-
-	local scrollArea = ikkuna.HorizontalScrollArea:new()
-	scrollArea.id = 'scrollArea'
-	for i = 1, 5 do
-		local button = ikkuna.Button:new()
-		button:setText(('Button #%d'):format(i))
-		scrollArea:addChild(button)
-	end
-	scrollArea:setPosition(200, 200)
-	scrollArea:setExplicitSize(200, 200)
-	display.root:addChild(scrollArea)
+	display.root:addChild(window)
 end
 
 function love.update(delta)
