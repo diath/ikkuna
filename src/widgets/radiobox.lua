@@ -2,6 +2,7 @@ local RadioBox = ikkuna.class('RadioBox', ikkuna.Widget)
 
 function RadioBox:initialize(args)
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.RadioBox
 
 	self.draggable = false
 	self.textOffset.x = 20

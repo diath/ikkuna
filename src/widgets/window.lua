@@ -4,7 +4,7 @@ function Window:initialize(args)
 	-- Title bar
 	self.titleBarVisible = true
 
-	self.titleLabel = ikkuna.Label:new()
+	self.titleLabel = ikkuna.Label:new({style = 'WindowTitleBar'})
 	self.titleLabel:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.titleLabel:setExplicitSize(100, 20)
 	self.titleLabel:setPhantom(true)
@@ -19,7 +19,7 @@ function Window:initialize(args)
 	-- Status bar
 	self.statusBarVisible = true
 
-	self.statusLabel = ikkuna.Label:new()
+	self.statusLabel = ikkuna.Label:new({style = 'WindowStatusBar'})
 	self.statusLabel:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.statusLabel:setExplicitSize(100, 20)
 	self.statusLabel:setPhantom(true)
@@ -28,6 +28,7 @@ function Window:initialize(args)
 	self.statusTimeout = -1
 
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.Window
 
 	self.draggable = true
 
@@ -67,7 +68,7 @@ function Window:parseArgs(args)
 end
 
 function Window:update(delta)
-	ikkuna.Widget.update(self)
+	ikkuna.Widget.update(self, delta)
 
 	if self.statusTimeout ~= -1 then
 		self.statusTime = self.statusTime + delta
@@ -97,6 +98,14 @@ function Window:drawAt(x, y)
 	if self.statusBarVisible then
 		self.statusLabel:draw()
 	end
+end
+
+function Window:showCentered()
+	local x = ikkuna.Width / 2 - self.width / 2
+	local y = ikkuna.Height / 2 - self.height / 2
+
+	self:setPosition(x, y)
+	self:show()
 end
 
 function Window:setTitle(title)

@@ -56,6 +56,7 @@ function ScrollBar:initialize(args)
 	end)
 
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.ScrollBar
 
 	self:addChild(self.decButton)
 	self:addChild(self.incButton)

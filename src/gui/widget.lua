@@ -5,6 +5,7 @@ Widget.PressInterval = 0.25
 function Widget:initialize(args)
 	Widget.LastId = Widget.LastId + 1
 	self.id = ('Widget%d'):format(Widget.LastId)
+	self.type = ikkuna.WidgetType.Widget
 
 	self.parent = nil
 	self.children = {}
@@ -20,6 +21,10 @@ function Widget:initialize(args)
 
 	self.visible = true
 	self.phantom = false
+	self.hovered = false
+	self.disabled = false
+
+	self.style = nil
 
 	self.padding = ikkuna.Rect({raw = true, all = 5})
 	self.margin = ikkuna.Rect({raw = true, all = 0})
@@ -79,6 +84,8 @@ function Widget:parseArgs(args)
 		elseif type(args.size) == 'table' then
 			self:setExplicitSize(args.size.width, args.size.height)
 		end
+	elseif self.preferredSize then
+		self:setExplicitSize(self.preferredSize.width, self.preferredSize.height)
 	end
 
 	-- Position
@@ -221,6 +228,53 @@ function Widget:parseArgs(args)
 	if args.tooltip then
 		self.tooltip = args.tooltip
 	end
+
+	if args.style then
+		self.style = args.style
+	end
+
+	if args.children then
+		for _, child in pairs(args.children) do
+			local widgetType = nil
+			if child.type == 'Widget' then
+				widgetType = ikkuna.Widget
+			elseif child.type == 'Button' then
+				widgetType = ikkuna.Button
+			elseif child.type == 'CheckBox' then
+				widgetType = ikkuna.CheckBox
+			elseif child.type == 'ComboBox' then
+				widgetType = ikkuna.ComboBox
+			elseif child.type == 'ContextMenu' then
+				widgetType = ikkuna.ContextMenu
+			elseif child.type == 'Label' then
+				widgetType = ikkuna.Label
+			elseif child.type == 'ProgressBar' then
+				widgetType = ikkuna.ProgressBar
+			elseif child.type == 'PushButton' then
+				widgetType = ikkuna.PushButton
+			elseif child.type == 'RadioBox' then
+				widgetType = ikkuna.RadioBox
+			elseif child.type == 'ScrollArea' then
+				widgetType = ikkuna.ScrollArea
+			elseif child.type == 'ScrollBar' then
+				widgetType = ikkuna.ScrollBar
+			elseif child.type == 'SpinBox' then
+				widgetType = ikkuna.SpinBox
+			elseif child.type == 'TabBar' then
+				widgetType = ikkuna.TabBar
+			elseif child.type == 'TextInput' then
+				widgetType = ikkuna.TextInput
+			elseif child.type == 'Window' then
+				widgetType = ikkuna.Window
+			end
+
+			if widgetType then
+				self:addChild(widgetType:new(child.args))
+			else
+				print(('Widget::parseArgs: Unknown child type: %s'):format(child.type))
+			end
+		end
+	end
 end
 
 function Widget:update(delta)
@@ -257,15 +311,28 @@ function Widget:drawAt(x, y)
 end
 
 function Widget:drawBase(x, y)
-	love.graphics.setColor(1, 1, 1, 0.1)
+	local style = self:getStyle()
+	if style.borderSize then
+		love.graphics.setLineWidth(style.borderSize)
+
+		if style.border then
+			love.graphics.setColor(style.border.r, style.border.g, style.border.b, style.border.a)
+		end
+		love.graphics.rectangle('line', x, y, self.width, self.height)
+	end
+
+	if style.background then
+		love.graphics.setColor(style.background.r, style.background.g, style.background.b, style.background.a)
+	end
 	love.graphics.rectangle('fill', x, y, self.width, self.height)
-	love.graphics.setColor(1, 1, 1, 1)
 
 	if ikkuna.Debug then
 		love.graphics.setColor(1, 0, 0, 1)
 		love.graphics.rectangle('line', x, y, self.width, self.height)
-		love.graphics.setColor(1, 1, 1, 1)
 	end
+
+	-- Restore the painter color.
+	love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Widget:drawText(x, y)
@@ -388,6 +455,10 @@ end
 
 function Widget:onWheelMoved(dx, dy)
 	return self.onMouseWheel:emit(dx, dy)
+end
+
+function Widget:isHovered()
+	return self.hovered
 end
 
 function Widget:setHovered(hovered)
@@ -522,6 +593,35 @@ function Widget:setPhantom(phantom)
 	self.phantom = phantom
 end
 
+function Widget:isDisabled()
+	return self.disabled
+end
+
+function Widget:disable()
+	self.disabled = true
+end
+
+function Widget:enable()
+	self.disabled = false
+end
+
+function Widget:getStyleState()
+	-- NOTE: In order of importance.
+	if self:isDisabled() then
+		return ikkuna.StyleState.Disabled
+	end
+
+	if self:isHovered() then
+		return ikkuna.StyleState.Hovered
+	end
+
+	return ikkuna.StyleState.Normal
+end
+
+function Widget:getStyle()
+	return ikkuna.Widget.Style:getStyle(self.style or ikkuna.WidgetName[self.type], self:getStyleState())
+end
+
 function Widget:setText(text)
 	if self.textString == text then
 		return
@@ -608,6 +708,23 @@ function Widget:getChildAt(x, y)
 
 			if not child:isPhantom() then
 				return child
+			end
+		end
+	end
+
+	return nil
+end
+
+function Widget:getChild(id, recursive)
+	for _, child in pairs(self.children) do
+		if child.id == id then
+			return child
+		end
+
+		if recursive then
+			local subChild = child:getChild(id, recursive)
+			if subChild then
+				return subChild
 			end
 		end
 	end

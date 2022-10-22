@@ -1,11 +1,17 @@
 local Display = ikkuna.class('Display')
 
 function Display:initialize()
-	self.root = ikkuna.Widget:new()
+	self.root = ikkuna.Widget:new({style = 'Root'})
 	ikkuna.root = self.root
 
 	local width, height = love.graphics.getDimensions()
 	self.root:setExplicitSize(width, height)
+
+	self.style = ikkuna.Style:new()
+	self.style:load(require('src.styles.default'))
+
+	-- TODO: Figure out a way to make Style globally accessible to all widgets per Display instance.
+	ikkuna.Widget.Style = self.style
 
 	self.tooltip = nil
 	self.baseTooltip = ikkuna.Widget:new({
@@ -38,6 +44,9 @@ function Display:draw()
 end
 
 function Display:onResize(width, height)
+	ikkuna.Width = width
+	ikkuna.Height = height
+
 	self.root:setExplicitSize(width, height)
 end
 

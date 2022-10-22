@@ -5,18 +5,8 @@ function SpinBox:initialize(args)
 	self.max = 0
 	self.value = self.min
 
-	-- NOTE: Used to update the value and children properly post-initialization.
-	self.needUpdateValue = false
-
-	ikkuna.Widget.initialize(self, args)
-
-	self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
-	self:setText(self.value)
-
-	self.onValueChange = ikkuna.Event()
-
 	self.incButton = ikkuna.Button:new()
-	self.incButton:setExplicitSize(10, self.height / 2)
+	self.incButton:setExplicitSize(25, 25)
 	self.incButton:setText('^')
 	self.incButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.incButton.onClick:connect(function()
@@ -30,10 +20,9 @@ function SpinBox:initialize(args)
 	self.incButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
-	self:addChild(self.incButton)
 
 	self.decButton = ikkuna.Button:new()
-	self.decButton:setExplicitSize(10, self.height / 2)
+	self.decButton:setExplicitSize(25, 25)
 	self.decButton:setText('v')
 	self.decButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.decButton.onClick:connect(function()
@@ -47,6 +36,21 @@ function SpinBox:initialize(args)
 	self.decButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
+
+	-- NOTE: Used to update the value and children properly post-initialization.
+	self.needUpdateValue = false
+
+	self.preferredSize = {width = 100, height = 30}
+
+	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.SpinBox
+
+	self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
+	self:setText(self.value)
+
+	self.onValueChange = ikkuna.Event()
+
+	self:addChild(self.incButton)
 	self:addChild(self.decButton)
 
 	self.onMouseWheel:connect(function(dx, dy)
@@ -58,6 +62,8 @@ function SpinBox:parseArgs(args)
 	if not args then
 		return
 	end
+
+	ikkuna.Widget.parseArgs(self, args)
 
 	if args.min then
 		self:setMin(args.min)

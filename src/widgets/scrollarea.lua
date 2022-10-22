@@ -7,6 +7,7 @@ function ScrollArea:initialize(args)
 	self.orientation = ikkuna.ScrollAreaOrientation.Vertical
 
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.ScrollArea
 
 	self:setOrientation(self.orientation)
 

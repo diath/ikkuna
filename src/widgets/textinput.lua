@@ -1,11 +1,6 @@
 local TextInput = ikkuna.class('TextInput', ikkuna.Widget)
 
 function TextInput:initialize(args)
-	ikkuna.Widget.initialize(self, args)
-
-	self.focusable = true
-	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
-
 	self.editable = true
 	self.buffer = ''
 
@@ -17,6 +12,14 @@ function TextInput:initialize(args)
 	self.maskCharacter = '*'
 
 	self.frontBufferWidth = 0
+
+	self.preferredSize = {width = 100, height = 30}
+
+	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.TextInput
+
+	self.focusable = true
+	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
 end
 
 function TextInput:update(delta)
@@ -30,9 +33,9 @@ function TextInput:update(delta)
 end
 
 function TextInput:drawAt(x, y)
-	love.graphics.setScissor(x, y, self.width, self.height)
 	self:drawBase(x, y)
 
+	love.graphics.setScissor(x, y, self.width, self.height)
 	if self.frontBufferWidth < self.width then
 		self:drawText(x, y)
 
@@ -56,7 +59,6 @@ function TextInput:drawAt(x, y)
 			love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
 		end
 	end
-
 	love.graphics.setScissor()
 end
 

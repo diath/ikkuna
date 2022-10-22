@@ -2,6 +2,7 @@ local ContextMenu = ikkuna.class('ContextMenu', ikkuna.Widget)
 
 function ContextMenu:initialize(args)
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.ContextMenu
 
 	self.draggable = false
 	self.focusable = false

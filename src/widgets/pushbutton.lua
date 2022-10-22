@@ -2,6 +2,7 @@ local PushButton = ikkuna.class('PushButton', ikkuna.Button)
 
 function PushButton:initialize(args)
 	ikkuna.Button.initialize(self, args)
+	self.type = ikkuna.WidgetType.PushButton
 
 	self.pushed = false
 

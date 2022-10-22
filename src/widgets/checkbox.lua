@@ -1,7 +1,10 @@
 local CheckBox = ikkuna.class('CheckBox', ikkuna.Widget)
 
 function CheckBox:initialize(args)
+	self.preferredSize = {width = 100, height = 20}
+
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.CheckBox
 
 	self.textOffset.x = 20
 	self.checked = false
@@ -11,7 +14,7 @@ function CheckBox:initialize(args)
 end
 
 function CheckBox:drawAt(x, y)
-	ikkuna.Widget.draw(self)
+	self:drawBase(x, y)
 
 	love.graphics.setColor(0, 0, 0, 1)
 	love.graphics.rectangle('line', x - 1, y - 1, 18, 18)
@@ -22,6 +25,8 @@ function CheckBox:drawAt(x, y)
 		love.graphics.setColor(1, 0, 0, 1)
 	end
 	love.graphics.rectangle('fill', x, y, 16, 16)
+
+	self:drawText(x, y)
 end
 
 function CheckBox:onMousePressed(x, y, button, touch, presses)

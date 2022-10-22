@@ -1,10 +1,13 @@
 ikkuna = {}
 ikkuna.class = require('src.vendor.middleclass')
 
-ikkuna.font = love.graphics.newFont('res/VeraMono.ttf', 11)
+ikkuna.font = love.graphics.newFont('res/VeraMono.ttf', 12)
 ikkuna.fontHeight = ikkuna.font:getHeight()
 
 -- Const
+ikkuna.Width = 800
+ikkuna.Height = 600
+
 ikkuna.TextAlign = {}
 ikkuna.TextAlign.Horizontal = {}
 ikkuna.TextAlign.Horizontal.Left = 1
@@ -22,6 +25,45 @@ ikkuna.ScrollAreaOrientation.Vertical = 2
 ikkuna.ScrollBarOrientation = {}
 ikkuna.ScrollBarOrientation.Horizontal = 1
 ikkuna.ScrollBarOrientation.Vertical = 2
+
+ikkuna.StyleState = {}
+ikkuna.StyleState.Normal = 1
+ikkuna.StyleState.Hovered = 2
+ikkuna.StyleState.Disabled = 3
+
+ikkuna.WidgetType = {}
+ikkuna.WidgetType.Widget = 1
+ikkuna.WidgetType.Button = 2
+ikkuna.WidgetType.CheckBox = 3
+ikkuna.WidgetType.ComboBox = 4
+ikkuna.WidgetType.ContextMenu = 5
+ikkuna.WidgetType.Label = 6
+ikkuna.WidgetType.ProgressBar = 7
+ikkuna.WidgetType.PushButton = 8
+ikkuna.WidgetType.RadioBox = 9
+ikkuna.WidgetType.ScrollArea = 10
+ikkuna.WidgetType.ScrollBar = 11
+ikkuna.WidgetType.SpinBox = 12
+ikkuna.WidgetType.TabBar = 13
+ikkuna.WidgetType.TextInput = 14
+ikkuna.WidgetType.Window = 15
+
+ikkuna.WidgetName = {}
+ikkuna.WidgetName[ikkuna.WidgetType.Widget] = 'Widget'
+ikkuna.WidgetName[ikkuna.WidgetType.Button] = 'Button'
+ikkuna.WidgetName[ikkuna.WidgetType.CheckBox] = 'CheckBox'
+ikkuna.WidgetName[ikkuna.WidgetType.ComboBox] = 'ComboBox'
+ikkuna.WidgetName[ikkuna.WidgetType.ContextMenu] = 'ContextMenu'
+ikkuna.WidgetName[ikkuna.WidgetType.Label] = 'Label'
+ikkuna.WidgetName[ikkuna.WidgetType.ProgressBar] = 'ProgressBar'
+ikkuna.WidgetName[ikkuna.WidgetType.PushButton] = 'PushButton'
+ikkuna.WidgetName[ikkuna.WidgetType.RadioBox] = 'RadioBox'
+ikkuna.WidgetName[ikkuna.WidgetType.ScrollArea] = 'ScrollArea'
+ikkuna.WidgetName[ikkuna.WidgetType.ScrollBar] = 'ScrollBar'
+ikkuna.WidgetName[ikkuna.WidgetType.SpinBox] = 'SpinBox'
+ikkuna.WidgetName[ikkuna.WidgetType.TabBar] = 'TabBar'
+ikkuna.WidgetName[ikkuna.WidgetType.TextInput] = 'TextInput'
+ikkuna.WidgetName[ikkuna.WidgetType.Window] = 'Window'
 
 ikkuna.Mouse = {}
 ikkuna.Mouse.Button = {}
@@ -97,6 +139,31 @@ function ikkuna.parseColor(color)
 	return result
 end
 
+function ikkuna.copyTable(t)
+	local result = {}
+	for key, value in pairs(t) do
+		if type(value) == 'table' then
+			result[key] = ikkuna.copyTable(value)
+		else
+			result[key] = value
+		end
+	end
+
+	return result
+end
+
+function ikkuna.dump(t, level)
+	local level = level or 0
+	for key, value in pairs(t) do
+		if type(value) == 'table' then
+			print(('%s%s'):format(('\t'):rep(level), key))
+			ikkuna.dump(value, level + 1)
+		else
+			print(('%s%s => %s'):format(('\t'):rep(level), key, value))
+		end
+	end
+end
+
 -- Util
 require('src.util.math')
 require('src.util.table')
@@ -108,6 +175,7 @@ require('src.util.set')
 require('src.gui.event')
 require('src.gui.display')
 require('src.gui.widget')
+require('src.gui.style')
 
 -- Layouts
 require('src.layout.layout')

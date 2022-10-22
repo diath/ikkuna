@@ -8,7 +8,10 @@ function ProgressBar:initialize(args)
 	self.fillColor = {r = 0, g = 0, b = 1, a = 1}
 	self.format = '|percent|'
 
+	self.preferredSize = {width = 100, height = 30}
+
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.ProgressBar
 
 	self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 end
@@ -41,8 +44,8 @@ function ProgressBar:drawAt(x, y)
 	self:drawBase(x, y)
 
 	if self.fillWidth ~= 0 then
-		local color = self.fillColor
-		love.graphics.setColor(color.r, color.g, color.b, color.a)
+		local style = self:getStyle()
+		love.graphics.setColor(style.fillColor.r, style.fillColor.g, style.fillColor.b, style.fillColor.a)
 		love.graphics.rectangle('fill', x + 1, y + 1, self.fillWidth, self.height - 2)
 	end
 

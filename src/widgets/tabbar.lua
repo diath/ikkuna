@@ -5,6 +5,7 @@ function TabBar:initialize(args)
 	self.activeTab = nil
 
 	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.TabBar
 
 	self.draggable = false
 	self.phantom = true

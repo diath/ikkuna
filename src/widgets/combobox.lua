@@ -4,19 +4,10 @@ function ComboBox:initialize(args)
 	self.selectedIndex = 0
 	self.options = {}
 
-	ikkuna.Widget.initialize(self, args)
-
-	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
-	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
-
-	self.onValueChange = ikkuna.Event()
-
-	if #self.options > 0 then
-		self:selectByIndex(1)
-	end
+	self.preferredSize = {width = 100, height = 30}
 
 	self.prevButton = ikkuna.Button:new()
-	self.prevButton:setExplicitSize(10, 25)
+	self.prevButton:setExplicitSize(25, 25)
 	self.prevButton:setText('<')
 	self.prevButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.prevButton.onClick:connect(function()
@@ -30,10 +21,9 @@ function ComboBox:initialize(args)
 	self.prevButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
-	self:addChild(self.prevButton)
 
 	self.nextButton = ikkuna.Button:new()
-	self.nextButton:setExplicitSize(10, 25)
+	self.nextButton:setExplicitSize(25, 25)
 	self.nextButton:setText('>')
 	self.nextButton:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.nextButton.onClick:connect(function()
@@ -47,6 +37,20 @@ function ComboBox:initialize(args)
 	self.nextButton.onMouseWheel:connect(function(dx, dy)
 		return self:handleMouseWheel(dx, dy)
 	end)
+
+	ikkuna.Widget.initialize(self, args)
+	self.type = ikkuna.WidgetType.ComboBox
+
+	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
+	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
+
+	self.onValueChange = ikkuna.Event()
+
+	if #self.options > 0 then
+		self:selectByIndex(1)
+	end
+
+	self:addChild(self.prevButton)
 	self:addChild(self.nextButton)
 
 	self.onMouseWheel:connect(function(dx, dy)
@@ -58,6 +62,8 @@ function ComboBox:parseArgs(args)
 	if not args then
 		return
 	end
+
+	ikkuna.Widget.parseArgs(self, args)
 
 	if args.options then
 		for _, option in pairs(args.options) do
