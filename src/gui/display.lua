@@ -15,6 +15,7 @@ function Display:initialize()
 
 	self.tooltip = nil
 	self.baseTooltip = ikkuna.Widget:new({
+		style = 'Tooltip',
 		visible = false,
 		phantom = true,
 		resizeToText = true,
@@ -165,6 +166,7 @@ function Display:onMouseMoved(x, y, dx, dy, touch)
 						self.baseTooltip:setText(widget.tooltip)
 						self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
 						self.baseTooltip:show()
+						self.baseTooltip.parent:moveChildToBack(self.baseTooltip)
 					else
 						self.tooltip = widget.tooltip
 						self.tooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)

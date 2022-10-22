@@ -527,6 +527,7 @@ function Widget:moveChildToBack(widget)
 	for index, child in pairs(self.children) do
 		if child == widget then
 			table.remove(self.children, index)
+			self.knownChildren:remove(child)
 			found = true
 			break
 		end

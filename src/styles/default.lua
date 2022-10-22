@@ -89,6 +89,14 @@ return {
 			borderSize = 1,
 		},
 	},
+	['Tooltip'] = {
+		normal = {
+			color = {red = 187, green = 192, blue = 202},
+			border = {red = 69, green = 74, blue = 87},
+			background = {red = 42, green = 46, blue = 58},
+			borderSize = 1,
+		},
+	},
 	['Root'] = {
 		normal = {
 			background = {red = 1, green = 1, blue = 1, alpha = 0},
