@@ -11,13 +11,12 @@ function ContextMenu:initialize(args)
 end
 
 function ContextMenu:addOption(name, callback)
-	local label = ikkuna.Label:new()
-	label:setExplicitSize(80, 25)
-	label.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
-	label.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Left
-	label:setText(name)
+	local button = ikkuna.Button:new({style = 'ContextMenuItem'})
+	button:setExplicitSize(80, 25)
+	button:setTextAlign({vertical = ikkuna.TextAlign.Vertical.Center, horizontal = ikkuna.TextAlign.Horizontal.Left})
+	button:setText(name)
 
-	label.onClick:connect(function()
+	button.onClick:connect(function()
 		if callback then
 			callback()
 		end
@@ -30,12 +29,16 @@ function ContextMenu:addOption(name, callback)
 		return false
 	end)
 
-	self:addChild(label)
+	self:addChild(button)
 end
 
 function ContextMenu:show(x, y)
+	if not x and not y then
+		x, y = love.mouse.getPosition()
+	end
+
 	ikkuna.root:addChild(self)
-	ikkuna.root:moveChildToBack(widget)
+	ikkuna.root:moveChildToBack(self)
 
 	self:setPosition(x, y)
 	ikkuna.Widget.show(self)

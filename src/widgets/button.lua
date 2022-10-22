@@ -1,7 +1,7 @@
 local Button = ikkuna.class('Button', ikkuna.Widget)
 
 function Button:initialize(args)
-	self.preferredSize = {width = 100, height = 65}
+	self.preferredSize = {width = 100, height = 25}
 
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.Button
