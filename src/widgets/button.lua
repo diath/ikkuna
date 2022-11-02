@@ -7,6 +7,8 @@ function Button:initialize(args)
 	self.type = ikkuna.WidgetType.Button
 
 	self.draggable = false
+	self.focusable = true
+
 	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
 	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
 end

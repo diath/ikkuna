@@ -327,7 +327,12 @@ function Widget:drawBase(x, y)
 	love.graphics.rectangle('fill', x, y, self.width, self.height)
 
 	if ikkuna.Debug then
-		love.graphics.setColor(1, 0, 0, 1)
+		if self:isFocused() then
+			love.graphics.setColor(0, 1, 0, 1)
+		else
+			love.graphics.setColor(1, 0, 0, 1)
+		end
+
 		love.graphics.rectangle('line', x, y, self.width, self.height)
 	end
 
@@ -348,10 +353,29 @@ function Widget:onTextInput(text)
 end
 
 function Widget:onKeyPressed(key, code, repeated)
+	if key == 'tab' then
+		if ikkuna.isShiftPressed() then
+			self:focusPreviousChild()
+		else
+			self:focusNextChild()
+		end
+		return true
+	end
+
+	local focusedWidget = ikkuna.display.focusedWidget
+	if focusedWidget and focusedWidget ~= self then
+		return focusedWidget:onKeyPressed(key, code, repeated)
+	end
+
 	return false
 end
 
 function Widget:onKeyReleased(key, code)
+	local focusedWidget = ikkuna.display.focusedWidget
+	if focusedWidget and focusedWidget ~= self then
+		return focusedWidget:onKeyReleased(key, code)
+	end
+
 	return false
 end
 
@@ -455,6 +479,111 @@ end
 
 function Widget:onWheelMoved(dx, dy)
 	return self.onMouseWheel:emit(dx, dy)
+end
+
+function Widget:getAllFocusableChildren()
+	local children = {}
+	for _, child in pairs(self.children) do
+		if child.focusable and child:isVisible() then
+			table.insert(children, child)
+		end
+
+		if #child.children > 0 then
+			for _, subChild in pairs(child:getAllFocusableChildren()) do
+				if subChild.focusable and child:isVisible() then
+					table.insert(children, subChild)
+				end
+			end
+		end
+	end
+
+	return children
+end
+
+function Widget:focusPreviousChild()
+	local allChildren = self:getAllFocusableChildren()
+	if #allChildren == 0 then
+		return
+	end
+
+	local focusedChildIndex = -1
+	for index, child in pairs(allChildren) do
+		if child:isFocused() then
+			focusedChildIndex = index
+			break
+		end
+	end
+
+	if focusedChildIndex ~= -1 then
+		allChildren[focusedChildIndex]:unfocus()
+	end
+
+	if focusedChildIndex ~= -1 and focusedChildIndex > 1 then
+		allChildren[focusedChildIndex - 1]:focus()
+	else
+		allChildren[#allChildren]:focus()
+	end
+end
+
+function Widget:focusNextChild()
+	local allChildren = self:getAllFocusableChildren()
+	if #allChildren == 0 then
+		return
+	end
+
+	local focusedChildIndex = -1
+	for index, child in pairs(allChildren) do
+		if child:isFocused() then
+			focusedChildIndex = index
+			break
+		end
+	end
+
+	if focusedChildIndex ~= -1 then
+		allChildren[focusedChildIndex]:unfocus()
+	end
+
+	if focusedChildIndex ~= -1 and focusedChildIndex < #allChildren then
+		allChildren[focusedChildIndex + 1]:focus()
+	else
+		allChildren[1]:focus()
+	end
+end
+
+function Widget:unfocus()
+	if not self:isFocused() then
+		return
+	end
+
+	self.focused = false
+	self.onFocusChange:emit(self, false)
+end
+
+function Widget:focus()
+	if not self.focusable then
+		return
+	end
+
+	if self:isFocused() then
+		return
+	end
+
+	if ikkuna.Debug then
+		print(('Widget::focus: Switching focus to %s::%s.'):format(ikkuna.WidgetName[self.type], self.id))
+	end
+
+	if ikkuna.display.focusedWidget then
+		ikkuna.display.focusedWidget:unfocus()
+		ikkuna.display.focusedWidget = nil
+	end
+
+	ikkuna.display.focusedWidget = self
+	self.focused = true
+	self.onFocusChange:emit(self, true)
+end
+
+function Widget:isFocused()
+	return self.focused
 end
 
 function Widget:isHovered()
@@ -616,6 +745,10 @@ function Widget:getStyleState()
 		return ikkuna.StyleState.Hovered
 	end
 
+	if self:isFocused() then
+		return ikkuna.StyleState.Focused
+	end
+
 	return ikkuna.StyleState.Normal
 end
 
@@ -703,7 +836,7 @@ function Widget:getChildAt(x, y)
 		local child = self.children[index]
 		if child:isVisible() and child:contains(x, y) then
 			local subChild = child:getChildAt(x, y)
-			if subChild then
+			if subChild and subChild:isVisible() then
 				return subChild
 			end
 

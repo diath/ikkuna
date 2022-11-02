@@ -29,7 +29,8 @@ ikkuna.ScrollBarOrientation.Vertical = 2
 ikkuna.StyleState = {}
 ikkuna.StyleState.Normal = 1
 ikkuna.StyleState.Hovered = 2
-ikkuna.StyleState.Disabled = 3
+ikkuna.StyleState.Focused = 3
+ikkuna.StyleState.Disabled = 4
 
 ikkuna.WidgetType = {}
 ikkuna.WidgetType.Widget = 1

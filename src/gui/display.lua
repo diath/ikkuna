@@ -3,6 +3,7 @@ local Display = ikkuna.class('Display')
 function Display:initialize()
 	self.root = ikkuna.Widget:new({style = 'Root'})
 	ikkuna.root = self.root
+	ikkuna.display = self
 
 	local width, height = love.graphics.getDimensions()
 	self.root:setExplicitSize(width, height)
@@ -52,14 +53,14 @@ function Display:onResize(width, height)
 end
 
 function Display:onTextInput(text)
-	return self.focusedWidget and self.focusedWidget:onTextInput(text) or false
+	if self.focusedWidget then
+		return self.focusedWidget:onTextInput(text)
+	end
+
+	return false
 end
 
 function Display:onKeyPressed(key, code, repeated)
-	if self.focusedWidget then
-		return self.focusedWidget:onKeyPressed(key, code, repeated)
-	end
-
 	return self.root:onKeyPressed(key, code, repeated)
 end
 
@@ -83,24 +84,8 @@ function Display:onMousePressed(x, y, button, touch, presses)
 
 			self.pressedWidget = widget
 
-			if widget ~= self.focusedWidget then
-				if self.focusedWidget then
-					self.focusedWidget.focused = false
-					self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
-					self.focusedWidget = nil
-				end
-
-				if widget.focusable then
-					self.focusedWidget = widget
-					self.focusedWidget.focused = true
-					self.focusedWidget.onFocusChange:emit(self.focusedWidget, true)
-				end
-			end
+			widget:focus()
 		end
-	elseif self.focusedWidget ~= nil then
-		self.focusedWidget.onFocusChange:emit(self.focusedWidget, false)
-		self.focusedWidget.focused = false
-		self.focusedWidget = nil
 	end
 
 	return result

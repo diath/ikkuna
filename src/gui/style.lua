@@ -23,26 +23,9 @@ function Style:load(sheet)
 		local result = {}
 		if style.normal then
 			result[ikkuna.StyleState.Normal] = style.normal
-
-			if style.hovered then
-				local section = ikkuna.copyTable(style.normal)
-				for propertyName, propertyValue in pairs(style.hovered) do
-					section[propertyName] = propertyValue
-				end
-				result[ikkuna.StyleState.Hovered] = section
-			else
-				result[ikkuna.StyleState.Hovered] = ikkuna.copyTable(style.normal)
-			end
-
-			if style.disabled then
-				local section = ikkuna.copyTable(style.normal)
-				for propertyName, propertyValue in pairs(style.disabled) do
-					section[propertyName] = propertyValue
-				end
-				result[ikkuna.StyleState.Disabled] = section
-			else
-				result[ikkuna.StyleState.Disabled] = ikkuna.copyTable(style.normal)
-			end
+			result[ikkuna.StyleState.Hovered] = self:mergeStyles(style.normal, style.hovered)
+			result[ikkuna.StyleState.Focused] = self:mergeStyles(style.normal, style.focused)
+			result[ikkuna.StyleState.Disabled] = self:mergeStyles(style.normal, style.disabled)
 
 			self.styles[name] = result
 		end
@@ -50,6 +33,19 @@ function Style:load(sheet)
 
 	-- ikkuna.dump(self.styles)
 	return true
+end
+
+function Style:mergeStyles(base, style)
+	if style then
+		local section = ikkuna.copyTable(base)
+		for propertyName, propertyValue in pairs(style) do
+			section[propertyName] = propertyValue
+		end
+
+		return section
+	end
+
+	return ikkuna.copyTable(base)
 end
 
 function Style:parseProperty(name, value)
@@ -83,12 +79,17 @@ end
 function Style:getStyle(name, state)
 	local style = self.styles[name]
 	if not style then
-		-- TODO: Error?
-		print(('Style::getStyle: Missing style for %s (State: %d)'):format(name, state))
+		print(('Style::getStyle: Missing style for %s (state: %d).'):format(name, state))
 		return {}
 	end
 
-	return style[state]
+	local style = style[state]
+	if not style then
+		print(('Style::getStyle: Missing state style for %s (state: %d).'):format(name, state))
+		return {}
+	end
+
+	return style
 end
 
 ikkuna.Style = Style

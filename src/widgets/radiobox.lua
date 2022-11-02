@@ -5,6 +5,8 @@ function RadioBox:initialize(args)
 	self.type = ikkuna.WidgetType.RadioBox
 
 	self.draggable = false
+	self.focusable = true
+
 	self.textOffset.x = 20
 	self.checked = false
 

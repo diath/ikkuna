@@ -8,6 +8,7 @@ function CheckBox:initialize(args)
 
 	self.textOffset.x = 20
 	self.checked = false
+	self.focusable = true
 	self.draggable = false
 
 	self.onCheckChange = ikkuna.Event()

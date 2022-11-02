@@ -39,7 +39,7 @@ function TextInput:drawAt(x, y)
 	if self.frontBufferWidth < self.width then
 		self:drawText(x, y)
 
-		if self.cursorVisible and self.focused then
+		if self.cursorVisible and self:isFocused() then
 			local cursorSpace = 2
 			local height = ikkuna.fontHeight
 			local x = x + self.frontBufferWidth + cursorSpace
@@ -51,7 +51,7 @@ function TextInput:drawAt(x, y)
 		local cursorWidth = 3
 		self:drawText(x + self.width - self.frontBufferWidth - cursorWidth, y)
 
-		if self.cursorVisible and self.focused then
+		if self.cursorVisible and self:isFocused() then
 			local height = ikkuna.fontHeight
 			local x = x + self.width - cursorWidth
 
@@ -86,6 +86,7 @@ end
 
 function TextInput:onKeyPressed(key, code, repeated)
 	if not self.editable then
+		ikkuna.Widget.onKeyPressed(self, key, code, repeated)
 		return false
 	end
 
@@ -116,6 +117,8 @@ function TextInput:onKeyPressed(key, code, repeated)
 			self:setCursorPosition(self.cursorPosition + #clipboard)
 			self:updateText()
 		end
+	else
+		ikkuna.Widget.onKeyPressed(self, key, code, repeated)
 	end
 
 	return true

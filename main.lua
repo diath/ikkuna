@@ -7,6 +7,7 @@ function love.load()
 	display = ikkuna.Display:new()
 
 	local window = ikkuna.Window:new({
+		id = 'Window',
 		title = 'TabBar Test',
 		size = {width = 640, height = 480},
 		position = {x = 200, y = 25},
@@ -66,6 +67,18 @@ function love.load()
 					id = 'radio3',
 					text = 'Choose me, choose me!',
 				}},
+			}
+		}},
+		{type = 'Button', args = {
+			text = 'Open Menu',
+			events = {
+				onClick = function()
+					local contextMenu = ikkuna.ContextMenu:new()
+					contextMenu:addOption('One')
+					contextMenu:addOption('Two')
+					contextMenu:addOption('Three')
+					contextMenu:show()
+				end,
 			}
 		}},
 	}})
