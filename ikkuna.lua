@@ -26,6 +26,11 @@ ikkuna.ScrollBarOrientation = {}
 ikkuna.ScrollBarOrientation.Horizontal = 1
 ikkuna.ScrollBarOrientation.Vertical = 2
 
+ikkuna.TextInputMode = {}
+ikkuna.TextInputMode.SingleLine = 1
+ikkuna.TextInputMode.MultiLine = 2
+ikkuna.TextInputMode.Number = 3
+
 ikkuna.StyleState = {}
 ikkuna.StyleState.Normal = 1
 ikkuna.StyleState.Hovered = 2

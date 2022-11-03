@@ -15,11 +15,35 @@ function TextInput:initialize(args)
 
 	self.preferredSize = {width = 100, height = 30}
 
+	self.mode = ikkuna.TextInputMode.SingleLine
+
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.TextInput
 
 	self.focusable = true
 	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
+end
+
+function TextInput:parseArgs(args)
+	if not args then
+		return
+	end
+
+	ikkuna.Widget.parseArgs(self, args)
+
+	if args.editable ~= nil then
+		self.editable = args.editable
+	end
+
+	if args.mode then
+		if args.mode == 'singleline' then
+			self:setInputMode(ikkuna.TextInputMode.SingleLine)
+		elseif args.mode == 'multiline' then
+			self:setInputMode(ikkuna.TextInputMode.MultiLine)
+		elseif args.mode == 'number' then
+			self:setInputMode(ikkuna.TextInputMode.Number)
+		end
+	end
 end
 
 function TextInput:update(delta)
@@ -61,10 +85,6 @@ function TextInput:drawAt(x, y)
 	love.graphics.setScissor()
 end
 
-function TextInput:onMousePressed(x, y, button, touch, presses)
-	return true
-end
-
 function TextInput:onTextInput(text)
 	if not self.editable then
 		return false
@@ -75,11 +95,13 @@ function TextInput:onTextInput(text)
 		return false
 	end
 
-	self.buffer = ('%s%s%s'):format(self.buffer:sub(1, self.cursorPosition), text, self.buffer:sub(self.cursorPosition + 1))
-	self:setCursorPosition(self.cursorPosition + 1)
+	if self.mode == ikkuna.TextInputMode.Number then
+		if not table.contains({'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}, text) then
+			return false
+		end
+	end
 
-	self:updateText()
-
+	self:insertText(text)
 	return true
 end
 
@@ -110,17 +132,25 @@ function TextInput:onKeyPressed(key, code, repeated)
 	elseif key == 'end' then
 		self:setCursorPosition(#self.buffer)
 	elseif (key == 'v' and ikkuna.isControlPressed()) or (key == 'insert' and ikkuna.isShiftPressed()) then
-		local clipboard = love.system.getClipboardText():gsub('\n', '')
+		local clipboard = love.system.getClipboardText()
 		if #clipboard > 0 then
-			self.buffer = ('%s%s%s'):format(self:getFrontBuffer(), clipboard, self:getBackBuffer())
-			self:setCursorPosition(self.cursorPosition + #clipboard)
-			self:updateText()
+			self:insertText(clipboard)
+		end
+	elseif key == 'return' then
+		if self.mode == ikkuna.TextInputMode.MultiLine then
+			self:insertText('\n')
 		end
 	else
-		ikkuna.Widget.onKeyPressed(self, key, code, repeated)
+		return ikkuna.Widget.onKeyPressed(self, key, code, repeated)
 	end
 
-	return true
+	return false
+end
+
+function TextInput:insertText(text)
+	self.buffer = ('%s%s%s'):format(self.buffer:sub(1, self.cursorPosition), text, self.buffer:sub(self.cursorPosition + 1))
+	self:setCursorPosition(self.cursorPosition + 1)
+	self:updateText()
 end
 
 function TextInput:updateText()
@@ -167,6 +197,28 @@ end
 function TextInput:setMaskCharacter(maskCharacter)
 	self.maskCharacter = maskCharacter
 	self:updateText()
+end
+
+function TextInput:setBuffer(buffer)
+	self.buffer = buffer
+	self.cursorPosition = #self.buffer
+	self:updateText()
+end
+
+function TextInput:setInputMode(mode)
+	if self.mode == mode then
+		return
+	end
+
+	self.mode = mode
+
+	if mode == ikkuna.TextInputMode.SingleLine then
+		self:setBuffer(self.buffer:gsub('\n', ''))
+	elseif mode == ikkuna.TextInputMode.Number then
+		if not tonumber(self.buffer) then
+			self:setBuffer('')
+		end
+	end
 end
 
 ikkuna.TextInput = TextInput
