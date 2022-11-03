@@ -77,7 +77,7 @@ function Display:onMousePressed(x, y, button, touch, presses)
 	local result = self.root:onMousePressed(x, y, button, touch, presses)
 	if result then
 		local widget = self.root:getChildAt(x, y, true)
-		if widget then
+		if widget and not widget:isDisabled() then
 			if widget.dragging then
 				self.draggingWidget = widget
 			end

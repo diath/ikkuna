@@ -132,6 +132,10 @@ function Widget:parseArgs(args)
 		self.phantom = args.phantom
 	end
 
+	if args.disabled ~= nil then
+		self.disabled = args.disabled
+	end
+
 	-- Padding and margin
 	if args.padding then
 		if type(args.padding) == 'number' then
@@ -484,13 +488,13 @@ end
 function Widget:getAllFocusableChildren()
 	local children = {}
 	for _, child in pairs(self.children) do
-		if child.focusable and child:isVisible() then
+		if child.focusable and child:isVisible() and not child:isDisabled() then
 			table.insert(children, child)
 		end
 
 		if #child.children > 0 then
 			for _, subChild in pairs(child:getAllFocusableChildren()) do
-				if subChild.focusable and child:isVisible() then
+				if subChild.focusable and child:isVisible() and not child:isDisabled() then
 					table.insert(children, subChild)
 				end
 			end
