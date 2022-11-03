@@ -41,8 +41,9 @@ function ComboBox:initialize(args)
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.ComboBox
 
-	self.textAlign.horizontal = ikkuna.TextAlign.Horizontal.Center
-	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
+	self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
+
+	self.focusable = true
 
 	self.onValueChange = ikkuna.Event()
 
@@ -74,6 +75,18 @@ function ComboBox:parseArgs(args)
 			end
 		end
 	end
+end
+
+function ComboBox:onKeyPressed(key, code, repeated)
+	if key == 'left' or key == 'down' then
+		self:selectPrevious()
+		return true
+	elseif key == 'right' or key == 'up' then
+		self:selectNext()
+		return true
+	end
+
+	return ikkuna.Widget.onKeyPressed(self, key, code, repeated)
 end
 
 function ComboBox:setExplicitSize(width, height)

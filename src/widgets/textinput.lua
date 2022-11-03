@@ -5,7 +5,7 @@ function TextInput:initialize(args)
 	self.buffer = ''
 
 	self.cursorPosition = 0
-	self.cursorTime = 0
+	self.cursorTimer = ikkuna.Timer()
 	self.cursorVisible = false
 
 	self.masked = false
@@ -25,10 +25,9 @@ end
 function TextInput:update(delta)
 	ikkuna.Widget.update(self, delta)
 
-	self.cursorTime = self.cursorTime + delta
-	if self.cursorTime > 0.35 then
+	if self.cursorTimer:elapsed() > 0.35 then
 		self.cursorVisible = not self.cursorVisible
-		self.cursorTime = 0
+		self.cursorTimer:reset()
 	end
 end
 
@@ -153,7 +152,7 @@ end
 function TextInput:setCursorPosition(position)
 	self.cursorPosition = position
 	self.cursorVisible = true
-	self.cursorTime = 0
+	self.cursorTimer:reset()
 
 	local text = love.graphics.newText(ikkuna.font)
 	text:set(self:getFrontBuffer())

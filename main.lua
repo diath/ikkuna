@@ -45,6 +45,9 @@ function love.load()
 		{type = 'SpinBox', args = {
 			min = 0, max = 100, value = 50,
 		}},
+		{type = 'ScrollBar', args = {
+			min = 0, max = 100, value = 50,
+		}},
 		{type = 'TextInput', args = {
 		}},
 		{type = 'CheckBox', args = {

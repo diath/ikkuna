@@ -1,6 +1,8 @@
 local ScrollBar = ikkuna.class('ScrollBar', ikkuna.Widget)
 
 function ScrollBar:initialize(args)
+	self.preferredSize = {width = 100, height = 25}
+
 	self.min = 0
 	self.max = 1
 	self.value = 0
@@ -123,6 +125,18 @@ function ScrollBar:update(delta)
 
 		self.needUpdateValue = false
 	end
+end
+
+function ScrollBar:onKeyPressed(key, code, repeated)
+	if key == 'left' or key == 'down' then
+		self:decrease()
+		return true
+	elseif key == 'right' or key == 'up' then
+		self:increase()
+		return true
+	end
+
+	return ikkuna.Widget.onKeyPressed(self, key, code, repeated)
 end
 
 function ScrollBar:setExplicitSize(width, height)

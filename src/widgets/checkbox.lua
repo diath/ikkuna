@@ -30,12 +30,24 @@ function CheckBox:drawAt(x, y)
 	self:drawText(x, y)
 end
 
+function CheckBox:onKeyPressed(key, code, repeated)
+	if key == 'space' or key == 'return' then
+		self:toggle()
+		return true
+	end
+
+	return ikkuna.Widget.onKeyPressed(self, key, code, repeated)
+end
+
 function CheckBox:onMousePressed(x, y, button, touch, presses)
+	self:toggle()
+	return true
+end
+
+function CheckBox:toggle()
 	if self.onCheckChange:emit(self, self.checked, not self.checked) then
 		self.checked = not self.checked
 	end
-
-	return ikkuna.Widget.onMousePressed(self, x, y, button, touch, presses)
 end
 
 ikkuna.CheckBox = CheckBox

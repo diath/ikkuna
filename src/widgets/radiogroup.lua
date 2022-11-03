@@ -18,23 +18,31 @@ function RadioGroup:addChild(widget)
 	table.insert(self.children, widget)
 
 	if not self.selected then
-		self.selected = widget
-		widget.checked = true
-		widget.onCheckChange:emit(widget, true)
+		self:setSelected(widget)
 	end
 
 	widget.onClick:connect(function(widget, x, y, button, touch, presses)
-		if not widget.selected and widget ~= self.selected then
-			self.selected.checked = false
-			self.selected.onCheckChange:emit(self.selected, false)
-
-			self.selected = widget
-			self.selected.checked = true
-			self.selected.onCheckChange:emit(self.selected, true)
-		end
+		self:setSelected(widget)
 	end)
 
+	widget.group = self
 	return true
+end
+
+function RadioGroup:setSelected(widget)
+	if self.selected == widget then
+		return
+	end
+
+	if self.selected then
+		self.selected:uncheck()
+	end
+	self.previouslySelected = self.selected
+
+	self.selected = widget
+	self.selected:check()
+
+	self.onSelectedChildChange:emit(self, self.previouslySelected, self.selected)
 end
 
 ikkuna.RadioGroup = RadioGroup

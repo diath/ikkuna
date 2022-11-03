@@ -29,4 +29,39 @@ function RadioBox:drawAt(x, y)
 	self:drawText(x, y)
 end
 
+function RadioBox:onKeyPressed(key, code, repeated)
+	if key == 'space' or key == 'return' then
+		self:toggle()
+		return true
+	end
+
+	return ikkuna.Widget.onKeyPressed(self, key, code, repeated)
+end
+
+function RadioBox:setChecked(checked)
+	if self.onCheckChange:emit(self, self.checked, checked) then
+		self.checked = checked
+
+		if self.group and checked then
+			self.group:setSelected(self)
+		end
+
+		return true
+	end
+
+	return false
+end
+
+function RadioBox:toggle()
+	return self:setChecked(not self.checked)
+end
+
+function RadioBox:check()
+	return self:setChecked(true)
+end
+
+function RadioBox:uncheck()
+	return self:setChecked(false)
+end
+
 ikkuna.RadioBox = RadioBox

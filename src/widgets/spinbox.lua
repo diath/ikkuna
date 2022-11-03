@@ -4,6 +4,7 @@ function SpinBox:initialize(args)
 	self.min = 0
 	self.max = 0
 	self.value = self.min
+	self.editTimer = ikkuna.Timer()
 
 	self.incButton = ikkuna.Button:new()
 	self.incButton:setExplicitSize(25, 25)
@@ -48,6 +49,8 @@ function SpinBox:initialize(args)
 	self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self:setText(self.value)
 
+	self.focusable = true
+
 	self.onValueChange = ikkuna.Event()
 
 	self:addChild(self.incButton)
@@ -72,6 +75,46 @@ function SpinBox:parseArgs(args)
 	if args.max then
 		self:setMax(args.max)
 	end
+end
+
+function SpinBox:onKeyPressed(key, code, repeated)
+	if key == 'left' or key == 'down' then
+		self:decrease()
+		return true
+	elseif key == 'right' or key == 'up' then
+		self:increase()
+		return true
+	elseif table.contains({
+		'1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+		'kp1', 'kp2', 'kp3', 'kp4', 'kp5', 'kp6', 'kp7', 'kp8', 'kp9', 'kp0',
+	}, key) then
+		local value = key
+		if value:find('kp') == 1 then
+			value = value:sub(3)
+		end
+
+		value = tonumber(value)
+		if not value then
+			return false
+		end
+
+		local elapsed = self.editTimer:elapsed()
+		if elapsed >= 1 then
+			self:setValue(value)
+		else
+			value = tonumber(('%d%d'):format(self.value, value))
+			if not value then
+				return false
+			end
+
+			self:setValue(value)
+		end
+		self.editTimer:reset()
+
+		return true
+	end
+
+	return ikkuna.Widget.onKeyPressed(self, key, code, repeated)
 end
 
 function SpinBox:update(delta)
@@ -106,8 +149,10 @@ function SpinBox:calculateChildrenPosition()
 end
 
 function SpinBox:setValue(value)
-	if value < self.min or value > self.max then
-		return false
+	if value < self.min then
+		return self:setValue(self.min)
+	elseif value > self.max then
+		return self:setValue(self.max)
 	end
 
 	if self.value == value then

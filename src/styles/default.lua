@@ -33,6 +33,14 @@ return {
 			background = {red = 42, green = 46, blue = 58},
 			borderSize = 1,
 		},
+		hovered = {
+			background = {red = 57, green = 61, blue = 74},
+			border = {red = 187, green = 192, blue = 202},
+		},
+		focused = {
+			background = {red = 57, green = 61, blue = 74},
+			border = {red = 187, green = 192, blue = 202},
+		},
 	},
 	['ContextMenu'] = {
 		normal = {
@@ -96,6 +104,30 @@ return {
 			border = {red = 69, green = 74, blue = 87},
 			background = {red = 42, green = 46, blue = 58},
 			borderSize = 1,
+		},
+		hovered = {
+			background = {red = 57, green = 61, blue = 74},
+			border = {red = 187, green = 192, blue = 202},
+		},
+		focused = {
+			background = {red = 57, green = 61, blue = 74},
+			border = {red = 187, green = 192, blue = 202},
+		},
+	},
+	['ScrollBar'] = {
+		normal = {
+			color = {red = 187, green = 192, blue = 202},
+			border = {red = 69, green = 74, blue = 87},
+			background = {red = 42, green = 46, blue = 58},
+			borderSize = 1,
+		},
+		hovered = {
+			background = {red = 57, green = 61, blue = 74},
+			border = {red = 187, green = 192, blue = 202},
+		},
+		focused = {
+			background = {red = 57, green = 61, blue = 74},
+			border = {red = 187, green = 192, blue = 202},
 		},
 	},
 	['TabBar'] = {
