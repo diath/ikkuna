@@ -425,7 +425,7 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 		return child:onMousePressed(x, y, button, touch, presses)
 	end
 
-	if button == ikkuna.Mouse.Button.Primary then
+	if button == ikkuna.MouseButton.Primary then
 		if self.draggable then
 			if self.onDragStart:emit(self, x, y) then
 				self.dragging = true
@@ -440,7 +440,7 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 			self.pressTimer:reset()
 			return presses % 2 == 0 and self.onDoubleClick:emit(self, x, y, button, touch, presses) or true
 		end
-	elseif button == ikkuna.Mouse.Button.Secondary then
+	elseif button == ikkuna.MouseButton.Secondary then
 		if self.contextMenu then
 			self.contextMenu:show(x, y)
 		end
@@ -450,7 +450,7 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 end
 
 function Widget:onMouseReleased(x, y, button, touch, presses)
-	if button == ikkuna.Mouse.Button.Primary and self.dragging then
+	if button == ikkuna.MouseButton.Primary and self.dragging then
 		self.dragging = false
 		return self.onDragEnd:emit(self, x, y)
 	end
@@ -460,7 +460,7 @@ function Widget:onMouseReleased(x, y, button, touch, presses)
 		return child:onMouseReleased(x, y, button, touch, presses)
 	end
 
-	if button == ikkuna.Mouse.Button.Primary and self.pressed then
+	if button == ikkuna.MouseButton.Primary and self.pressed then
 		self.pressed = false
 	end
 

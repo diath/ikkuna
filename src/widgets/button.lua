@@ -15,7 +15,7 @@ end
 
 function Button:onKeyPressed(key, code, repeated)
 	if key == 'space' or key == 'return' then
-		self.onClick:emit(self, self.x, self.y, ikkuna.Mouse.Button.Left, false, 1)
+		self.onClick:emit(self, self.x, self.y, ikkuna.MouseButton.Left, false, 1)
 		return true
 	end
 

@@ -8,51 +8,32 @@ ikkuna.fontHeight = ikkuna.font:getHeight()
 ikkuna.Width = 800
 ikkuna.Height = 600
 
+local function enum(...)
+	local result = {}
+	for index, key in pairs({...}) do
+		result[key] = index
+	end
+	return result
+end
+
 ikkuna.TextAlign = {}
-ikkuna.TextAlign.Horizontal = {}
-ikkuna.TextAlign.Horizontal.Left = 1
-ikkuna.TextAlign.Horizontal.Right = 2
-ikkuna.TextAlign.Horizontal.Center = 3
-ikkuna.TextAlign.Vertical = {}
-ikkuna.TextAlign.Vertical.Top = 1
-ikkuna.TextAlign.Vertical.Bottom = 2
-ikkuna.TextAlign.Vertical.Center = 3
+ikkuna.TextAlign.Horizontal = enum('Left', 'Right', 'Center')
+ikkuna.TextAlign.Vertical = enum('Top', 'Bottom', 'Center')
 
-ikkuna.ScrollAreaOrientation = {}
-ikkuna.ScrollAreaOrientation.Horizontal = 1
-ikkuna.ScrollAreaOrientation.Vertical = 2
+ikkuna.ScrollAreaOrientation = enum('Horizontal', 'Vertical')
+ikkuna.ScrollBarOrientation = enum('Horizontal', 'Vertical')
 
-ikkuna.ScrollBarOrientation = {}
-ikkuna.ScrollBarOrientation.Horizontal = 1
-ikkuna.ScrollBarOrientation.Vertical = 2
+ikkuna.TextInputMode = enum('SingleLine', 'MultiLine', 'Number')
+ikkuna.StyleState = enum('Normal', 'Hovered', 'Focused', 'Disabled')
 
-ikkuna.TextInputMode = {}
-ikkuna.TextInputMode.SingleLine = 1
-ikkuna.TextInputMode.MultiLine = 2
-ikkuna.TextInputMode.Number = 3
+ikkuna.WidgetType = enum(
+	'Widget', 'Button', 'CheckBox', 'ComboBox',
+	'ContextMenu', 'Label', 'ProgressBar', 'PushButton', 'RadioBox',
+	'ScrollArea', 'ScrollBar', 'SpinBox', 'TabBar',
+	'TextInput', 'Window'
+)
 
-ikkuna.StyleState = {}
-ikkuna.StyleState.Normal = 1
-ikkuna.StyleState.Hovered = 2
-ikkuna.StyleState.Focused = 3
-ikkuna.StyleState.Disabled = 4
-
-ikkuna.WidgetType = {}
-ikkuna.WidgetType.Widget = 1
-ikkuna.WidgetType.Button = 2
-ikkuna.WidgetType.CheckBox = 3
-ikkuna.WidgetType.ComboBox = 4
-ikkuna.WidgetType.ContextMenu = 5
-ikkuna.WidgetType.Label = 6
-ikkuna.WidgetType.ProgressBar = 7
-ikkuna.WidgetType.PushButton = 8
-ikkuna.WidgetType.RadioBox = 9
-ikkuna.WidgetType.ScrollArea = 10
-ikkuna.WidgetType.ScrollBar = 11
-ikkuna.WidgetType.SpinBox = 12
-ikkuna.WidgetType.TabBar = 13
-ikkuna.WidgetType.TextInput = 14
-ikkuna.WidgetType.Window = 15
+ikkuna.MouseButton = enum('Primary', 'Secondary', 'Middle')
 
 ikkuna.WidgetName = {}
 ikkuna.WidgetName[ikkuna.WidgetType.Widget] = 'Widget'
@@ -70,12 +51,6 @@ ikkuna.WidgetName[ikkuna.WidgetType.SpinBox] = 'SpinBox'
 ikkuna.WidgetName[ikkuna.WidgetType.TabBar] = 'TabBar'
 ikkuna.WidgetName[ikkuna.WidgetType.TextInput] = 'TextInput'
 ikkuna.WidgetName[ikkuna.WidgetType.Window] = 'Window'
-
-ikkuna.Mouse = {}
-ikkuna.Mouse.Button = {}
-ikkuna.Mouse.Button.Primary = 1
-ikkuna.Mouse.Button.Secondary = 2
-ikkuna.Mouse.Button.Middle = 3
 
 ikkuna.Debug = false
 ikkuna.ScrollAreaScrollStep = 10
