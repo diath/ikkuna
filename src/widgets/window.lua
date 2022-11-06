@@ -26,6 +26,7 @@ function Window:initialize(args)
 
 	self.statusTime = 0
 	self.statusTimeout = -1
+	self.dockMode = ikkuna.WindowDockMode.None
 
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.Window
@@ -190,6 +191,32 @@ function Window:setContentWidget(widget)
 	self:addChild(self.contentWidget)
 
 	self:calculateChildrenPositionAndSize()
+end
+
+function Window:setDockMode(dockMode)
+	if self.dockMode == dockMode then
+		return
+	end
+
+	if dockMode == ikkuna.WindowDockMode.None then
+		self.draggable = true
+	elseif dockMode == ikkuna.WindowDockMode.Left then
+		self.draggable = false
+		self:setPosition(0, 0)
+		self:setExplicitSize(self.width, ikkuna.Height)
+	elseif dockMode == ikkuna.WindowDockMode.Right then
+		self.draggable = false
+		self:setPosition(ikkuna.Width - self.width, 0)
+		self:setExplicitSize(self.width, ikkuna.Height)
+	elseif dockMode == ikkuna.WindowDockMode.Top then
+		self.draggable = false
+		self:setPosition(0, 0)
+		self:setExplicitSize(ikkuna.Width, self.height)
+	elseif dockMode == ikkuna.WindowDockMode.Bottom then
+		self.draggable = false
+		self:setPosition(0, ikkuna.Height - self.height)
+		self:setExplicitSize(ikkuna.Width, self.height)
+	end
 end
 
 ikkuna.Window = Window

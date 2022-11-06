@@ -25,6 +25,7 @@ ikkuna.ScrollBarOrientation = enum('Horizontal', 'Vertical')
 
 ikkuna.TextInputMode = enum('SingleLine', 'MultiLine', 'Number')
 ikkuna.StyleState = enum('Normal', 'Hovered', 'Focused', 'Disabled')
+ikkuna.WindowDockMode = enum('None', 'Left', 'Right', 'Top', 'Bottom')
 
 ikkuna.WidgetType = enum(
 	'Widget', 'Button', 'CheckBox', 'ComboBox',
