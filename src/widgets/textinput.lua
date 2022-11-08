@@ -21,6 +21,7 @@ function TextInput:initialize(args)
 	self.type = ikkuna.WidgetType.TextInput
 
 	self.focusable = true
+	self.receivesInput = true
 	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
 end
 

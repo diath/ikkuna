@@ -38,6 +38,7 @@ function Widget:initialize(args)
 
 	self.focused = false
 	self.focusable = false
+	self.receivesInput = false
 
 	self.tooltip = nil
 

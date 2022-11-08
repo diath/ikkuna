@@ -30,6 +30,8 @@ function Display:initialize()
 
 	self.root:addChild(self.baseTooltip)
 
+	self.keybinds = {}
+
 	self.draggingWidget = nil
 	self.focusedWidget = nil
 	self.hoveredWidget = nil
@@ -43,6 +45,10 @@ end
 function Display:draw()
 	love.graphics.setColor(1, 1, 1, 1)
 	self.root:draw()
+end
+
+function Display:addKeybind(keys, callback)
+	self.keybinds[keys] = callback
 end
 
 function Display:onResize(width, height)
@@ -61,6 +67,26 @@ function Display:onTextInput(text)
 end
 
 function Display:onKeyPressed(key, code, repeated)
+	if self.focusedWidget and self.focusedWidget.receivesInput then
+		return self.root:onKeyPressed(key, code, repeated)
+	end
+
+	local name = ''
+	if ikkuna.isControlPressed() then
+		name = 'ctrl-'
+	end
+	if ikkuna.isShiftPressed() then
+		name = ('%sshift-'):format(name)
+	end
+	if ikkuna.isAltPressed() then
+		name = ('%salt-'):format(name)
+	end
+	name = ('%s%s'):format(name, key)
+
+	if self.keybinds[name] then
+		return self.keybinds[name]()
+	end
+
 	return self.root:onKeyPressed(key, code, repeated)
 end
 

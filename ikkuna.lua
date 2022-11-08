@@ -67,6 +67,10 @@ function ikkuna.isShiftPressed()
 	return love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
 end
 
+function ikkuna.isAltPressed()
+	return love.keyboard.isDown('lalt') or love.keyboard.isDown('ralt')
+end
+
 function ikkuna.startSwith(s, prefix)
 	if #s < #prefix then
 		return false
