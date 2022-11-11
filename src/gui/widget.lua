@@ -68,15 +68,32 @@ function Widget:initialize(args)
 	end
 end
 
+function Widget:parseArg(args, typeName, name, field)
+	if args[name] == nil then
+		return
+	end
+
+	if type(args[name]) == typeName then
+		if type(field) == 'function' then
+			field(self, args[name])
+		else
+			self[field] = args[name]
+		end
+		return
+	end
+
+	print(('Widget::parseArg: %s expected argument "%s" to be of type "%s", got "%s" (%s).'):format(
+		ikkuna.WidgetName[self.type], name, typeName, type(name), args[name]
+	))
+end
+
 function Widget:parseArgs(args)
 	if type(args) ~= 'table' then
 		return
 	end
 
 	-- ID
-	if args.id then
-		self.id = args.id
-	end
+	self:parseArg(args, 'string', 'id', 'id')
 
 	-- Size
 	if args.size then
@@ -117,25 +134,11 @@ function Widget:parseArgs(args)
 	end
 
 	-- State
-	if args.draggable ~= nil then
-		self.draggable = args.draggable
-	end
-
-	if args.focusable ~= nil then
-		self.focusable = args.focusable
-	end
-
-	if args.visible ~= nil then
-		self.visible = args.visible
-	end
-
-	if args.phantom ~= nil then
-		self.phantom = args.phantom
-	end
-
-	if args.disabled ~= nil then
-		self.disabled = args.disabled
-	end
+	self:parseArg(args, 'boolean', 'draggable', 'draggable')
+	self:parseArg(args, 'boolean', 'focusable', 'focusable')
+	self:parseArg(args, 'boolean', 'visible', 'visible')
+	self:parseArg(args, 'boolean', 'phantom', 'phantom')
+	self:parseArg(args, 'boolean', 'disabled', 'disabled')
 
 	-- Padding and margin
 	if args.padding then
@@ -225,18 +228,11 @@ function Widget:parseArgs(args)
 		end
 	end
 
-	if args.resizeToText ~= nil then
-		self.resizeToText = args.resizeToText
-	end
+	self:parseArg(args, 'boolean', 'resizeToText', 'resizeToText')
 
 	-- Misc
-	if args.tooltip then
-		self.tooltip = args.tooltip
-	end
-
-	if args.style then
-		self.style = args.style
-	end
+	self:parseArg(args, 'string', 'tooltip', 'tooltip')
+	self:parseArg(args, 'string', 'style', 'style')
 
 	if args.children then
 		for _, child in pairs(args.children) do

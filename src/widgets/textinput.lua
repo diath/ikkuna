@@ -32,9 +32,7 @@ function TextInput:parseArgs(args)
 
 	ikkuna.Widget.parseArgs(self, args)
 
-	if args.editable ~= nil then
-		self.editable = args.editable
-	end
+	self:parseArg(args, 'boolean', 'editable', 'editable')
 
 	if args.mode then
 		if args.mode == 'singleline' then

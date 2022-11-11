@@ -47,16 +47,14 @@ function Window:parseArgs(args)
 
 	ikkuna.Widget.parseArgs(self, args)
 
+	self:parseArg(args, 'string', 'title', Window.setTitle)
+
 	if args.titleBarVisible ~= nil then
 		if args.titleBarVisible then
 			self:showTitleBar()
 		else
 			self:hideTitleBar()
 		end
-	end
-
-	if args.title then
-		self:setTitle(args.title)
 	end
 
 	if args.statusBarVisible ~= nil then

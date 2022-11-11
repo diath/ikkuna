@@ -95,25 +95,11 @@ function ScrollBar:parseArgs(args)
 
 	ikkuna.Widget.parseArgs(self, args)
 
-	if args.min then
-		self:setMin(args.min)
-	end
-
-	if args.max then
-		self:setMax(args.max)
-	end
-
-	if args.displayValue then
-		self:setDisplayValue(args.displayValue)
-	end
-
-	if args.orientation then
-		self:setOrientation(args.orientation)
-	end
-
-	if args.format then
-		self:setFormat(args.format)
-	end
+	self:parseArg(args, 'number', 'min', ScrollBar.setMin)
+	self:parseArg(args, 'number', 'max', ScrollBar.setMax)
+	self:parseArg(args, 'boolean', 'displayValue', ScrollBar.setDisplayValue)
+	self:parseArg(args, 'string', 'orientation', ScrollBar.setOrientation)
+	self:parseArg(args, 'string', 'format', ScrollBar.setFormat)
 end
 
 function ScrollBar:update(delta)

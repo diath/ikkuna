@@ -23,21 +23,10 @@ function ProgressBar:parseArgs(args)
 
 	ikkuna.Widget.parseArgs(self, args)
 
-	if args.min then
-		self:setMin(args.min)
-	end
-
-	if args.max then
-		self:setMax(args.max)
-	end
-
-	if args.value then
-		self:setValue(args.value)
-	end
-
-	if args.format then
-		self:setFormat(args.format)
-	end
+	self:parseArg(args, 'number', 'min', ProgressBar.setMin)
+	self:parseArg(args, 'number', 'max', ProgressBar.setMax)
+	self:parseArg(args, 'number', 'value', ProgressBar.setValue)
+	self:parseArg(args, 'string', 'format', ProgressBar.setFormat)
 end
 
 function ProgressBar:drawAt(x, y)

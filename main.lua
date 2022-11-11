@@ -137,7 +137,7 @@ function love.keypressed(key, code, repeated)
 end
 
 function love.keyreleased(key, code)
-	if display:onKeyReleased(key, code, repeated) then
+	if display:onKeyReleased(key, code) then
 		return
 	end
 

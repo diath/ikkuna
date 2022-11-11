@@ -68,13 +68,8 @@ function SpinBox:parseArgs(args)
 
 	ikkuna.Widget.parseArgs(self, args)
 
-	if args.min then
-		self:setMin(args.min)
-	end
-
-	if args.max then
-		self:setMax(args.max)
-	end
+	self:parseArg(args, 'number', 'min', SpinBox.setMin)
+	self:parseArg(args, 'number', 'max', SpinBox.setMax)
 end
 
 function SpinBox:onKeyPressed(key, code, repeated)
