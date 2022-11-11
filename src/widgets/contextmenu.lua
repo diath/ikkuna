@@ -32,6 +32,12 @@ function ContextMenu:addOption(name, callback)
 	self:addChild(button)
 end
 
+function ContextMenu:addSeparator()
+	local separator = ikkuna.Separator:new()
+	separator:setExplicitSize(80, 6)
+	self:addChild(separator)
+end
+
 function ContextMenu:show(x, y)
 	if not x and not y then
 		x, y = love.mouse.getPosition()

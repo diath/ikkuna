@@ -50,6 +50,8 @@ function love.load()
 		}},
 		{type = 'TextInput', args = {
 		}},
+		{type = 'Separator', args = {
+		}},
 		{type = 'CheckBox', args = {
 			text = 'Check Box',
 		}},
@@ -79,6 +81,7 @@ function love.load()
 					local contextMenu = ikkuna.ContextMenu:new()
 					contextMenu:addOption('One')
 					contextMenu:addOption('Two')
+					contextMenu:addSeparator()
 					contextMenu:addOption('Three')
 					contextMenu:show()
 				end,

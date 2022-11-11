@@ -255,6 +255,8 @@ function Widget:parseArgs(args)
 				widgetType = ikkuna.PushButton
 			elseif child.type == 'RadioBox' then
 				widgetType = ikkuna.RadioBox
+			elseif child.type == 'Separator' then
+				widgetType = ikkuna.Separator
 			elseif child.type == 'ScrollArea' then
 				widgetType = ikkuna.ScrollArea
 			elseif child.type == 'ScrollBar' then

@@ -30,7 +30,7 @@ ikkuna.WindowDockMode = enum('None', 'Left', 'Right', 'Top', 'Bottom')
 ikkuna.WidgetType = enum(
 	'Widget', 'Button', 'CheckBox', 'ComboBox',
 	'ContextMenu', 'Label', 'ProgressBar', 'PushButton', 'RadioBox',
-	'ScrollArea', 'ScrollBar', 'SpinBox', 'TabBar',
+	'Separator', 'ScrollArea', 'ScrollBar', 'SpinBox', 'TabBar',
 	'TextInput', 'Window'
 )
 
@@ -46,6 +46,7 @@ ikkuna.WidgetName[ikkuna.WidgetType.Label] = 'Label'
 ikkuna.WidgetName[ikkuna.WidgetType.ProgressBar] = 'ProgressBar'
 ikkuna.WidgetName[ikkuna.WidgetType.PushButton] = 'PushButton'
 ikkuna.WidgetName[ikkuna.WidgetType.RadioBox] = 'RadioBox'
+ikkuna.WidgetName[ikkuna.WidgetType.Separator] = 'Separator'
 ikkuna.WidgetName[ikkuna.WidgetType.ScrollArea] = 'ScrollArea'
 ikkuna.WidgetName[ikkuna.WidgetType.ScrollBar] = 'ScrollBar'
 ikkuna.WidgetName[ikkuna.WidgetType.SpinBox] = 'SpinBox'
@@ -58,6 +59,7 @@ ikkuna.ScrollAreaScrollStep = 10
 ikkuna.ScrollBarMinKnobSize = 20
 ikkuna.RadioBoxCircleSegments = 20
 ikkuna.TooltipOffset = {x = 10, y = 10}
+ikkuna.SeparatorHeight = 2
 
 function ikkuna.isControlPressed()
 	return love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')
@@ -178,6 +180,7 @@ require('src.widgets.progressbar')
 require('src.widgets.pushbutton')
 require('src.widgets.radiobox')
 require('src.widgets.radiogroup')
+require('src.widgets.separator')
 require('src.widgets.scrollarea')
 require('src.widgets.scrollbar')
 require('src.widgets.spinbox')

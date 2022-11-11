@@ -98,6 +98,11 @@ return {
 			background = {red = 1, green = 1, blue = 1, alpha = 0},
 		},
 	},
+	['Separator'] = {
+		normal = {
+			color = {red = 187, green = 192, blue = 202},
+		}
+	},
 	['SpinBox'] = {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
