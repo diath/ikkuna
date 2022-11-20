@@ -9,7 +9,7 @@ function Display:initialize()
 	self.root:setExplicitSize(width, height)
 
 	self.style = ikkuna.Style:new()
-	self.style:load(require('src.styles.default'))
+	self.style:load(require(ikkuna.path('src.styles.default')))
 
 	-- TODO: Figure out a way to make Style globally accessible to all widgets per Display instance.
 	ikkuna.Widget.Style = self.style

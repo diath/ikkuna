@@ -1,7 +1,18 @@
-ikkuna = {}
-ikkuna.class = require('src.vendor.middleclass')
+local _PATH = (...):match('^(.*[%./])[^%.%/]+$') or ''
 
-ikkuna.font = love.graphics.newFont('res/VeraMono.ttf', 12)
+ikkuna = {}
+
+function ikkuna.path(suffix, ext, separator)
+	if separator then
+		return ('%s%s%s'):format(_PATH:gsub('%.', separator), suffix, ext or '')
+	end
+
+	return ('%s%s%s'):format(_PATH, suffix, ext or '')
+end
+
+ikkuna.class = require(ikkuna.path('src.vendor.middleclass'))
+
+ikkuna.font = love.graphics.newFont(ikkuna.path('res/VeraMono', '.ttf', '/'), 13, 'mono')
 ikkuna.fontHeight = ikkuna.font:getHeight()
 
 -- Const
@@ -153,37 +164,37 @@ function ikkuna.dump(t, level)
 end
 
 -- Util
-require('src.util.math')
-require('src.util.table')
-require('src.util.timer')
-require('src.util.rect')
-require('src.util.set')
+require(ikkuna.path('src.util.math'))
+require(ikkuna.path('src.util.table'))
+require(ikkuna.path('src.util.timer'))
+require(ikkuna.path('src.util.rect'))
+require(ikkuna.path('src.util.set'))
 
 -- Base
-require('src.gui.event')
-require('src.gui.display')
-require('src.gui.widget')
-require('src.gui.style')
+require(ikkuna.path('src.gui.event'))
+require(ikkuna.path('src.gui.display'))
+require(ikkuna.path('src.gui.widget'))
+require(ikkuna.path('src.gui.style'))
 
 -- Layouts
-require('src.layout.layout')
-require('src.layout.horizontal')
-require('src.layout.vertical')
+require(ikkuna.path('src.layout.layout'))
+require(ikkuna.path('src.layout.horizontal'))
+require(ikkuna.path('src.layout.vertical'))
 
 -- Widgets
-require('src.widgets.button')
-require('src.widgets.checkbox')
-require('src.widgets.combobox')
-require('src.widgets.contextmenu')
-require('src.widgets.label')
-require('src.widgets.progressbar')
-require('src.widgets.pushbutton')
-require('src.widgets.radiobox')
-require('src.widgets.radiogroup')
-require('src.widgets.separator')
-require('src.widgets.scrollarea')
-require('src.widgets.scrollbar')
-require('src.widgets.spinbox')
-require('src.widgets.tabbar')
-require('src.widgets.textinput')
-require('src.widgets.window')
+require(ikkuna.path('src.widgets.button'))
+require(ikkuna.path('src.widgets.checkbox'))
+require(ikkuna.path('src.widgets.combobox'))
+require(ikkuna.path('src.widgets.contextmenu'))
+require(ikkuna.path('src.widgets.label'))
+require(ikkuna.path('src.widgets.progressbar'))
+require(ikkuna.path('src.widgets.pushbutton'))
+require(ikkuna.path('src.widgets.radiobox'))
+require(ikkuna.path('src.widgets.radiogroup'))
+require(ikkuna.path('src.widgets.separator'))
+require(ikkuna.path('src.widgets.scrollarea'))
+require(ikkuna.path('src.widgets.scrollbar'))
+require(ikkuna.path('src.widgets.spinbox'))
+require(ikkuna.path('src.widgets.tabbar'))
+require(ikkuna.path('src.widgets.textinput'))
+require(ikkuna.path('src.widgets.window'))
