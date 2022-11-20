@@ -9,6 +9,7 @@ function Window:initialize(args)
 	self.titleLabel:setExplicitSize(100, 20)
 	self.titleLabel:setPhantom(true)
 
+	self.closeButtonVisible = true
 	self.closeButton = ikkuna.Button:new()
 	self.closeButton:setText('x')
 	self.closeButton:setExplicitSize(20, 20)
@@ -17,7 +18,7 @@ function Window:initialize(args)
 	end)
 
 	-- Status bar
-	self.statusBarVisible = true
+	self.statusBarVisible = false
 
 	self.statusLabel = ikkuna.Label:new({style = 'WindowStatusBar'})
 	self.statusLabel:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
@@ -48,22 +49,9 @@ function Window:parseArgs(args)
 	ikkuna.Widget.parseArgs(self, args)
 
 	self:parseArg(args, 'string', 'title', Window.setTitle)
-
-	if args.titleBarVisible ~= nil then
-		if args.titleBarVisible then
-			self:showTitleBar()
-		else
-			self:hideTitleBar()
-		end
-	end
-
-	if args.statusBarVisible ~= nil then
-		if args.statusBarVisible then
-			self:showStatusBar()
-		else
-			self:hideStatusBar()
-		end
-	end
+	self:parseArg(args, 'boolean', 'titleBarVisible', Window.setTitleBarVisible)
+	self:parseArg(args, 'boolean', 'statusBarVisible', Window.setStatusBarVisible)
+	self:parseArg(args, 'boolean', 'closeButtonVisible', Window.setCloseButtonVisible)
 end
 
 function Window:update(delta)
@@ -85,7 +73,10 @@ function Window:drawAt(x, y)
 	-- Title bar
 	if self.titleBarVisible then
 		self.titleLabel:draw()
-		self.closeButton:draw()
+
+		if self.closeButtonVisible then
+			self.closeButton:draw()
+		end
 	end
 
 	-- Content widget
@@ -121,6 +112,11 @@ function Window:hideTitleBar()
 	self:calculateChildrenPositionAndSize()
 end
 
+function Window:setTitleBarVisible(visible)
+	self.titleBarVisible = visible
+	self:calculateChildrenPositionAndSize()
+end
+
 function Window:setStatus(status, timeout)
 	self.statusLabel:setText(status)
 
@@ -140,6 +136,16 @@ end
 
 function Window:hideStatusBar()
 	self.statusBarVisible = false
+	self:calculateChildrenPositionAndSize()
+end
+
+function Window:setStatusBarVisible(visible)
+	self.statusBarVisible = visible
+	self:calculateChildrenPositionAndSize()
+end
+
+function Window:setCloseButtonVisible(visible)
+	self.closeButtonVisible = visible
 	self:calculateChildrenPositionAndSize()
 end
 
