@@ -16,6 +16,7 @@ function TextInput:initialize(args)
 	self.preferredSize = {width = 100, height = 30}
 
 	self.mode = ikkuna.TextInputMode.SingleLine
+	self.textFilterFunction = nil
 
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.TextInput
@@ -33,6 +34,7 @@ function TextInput:parseArgs(args)
 	ikkuna.Widget.parseArgs(self, args)
 
 	self:parseArg(args, 'boolean', 'editable', 'editable')
+	self:parseArg(args, 'function', 'textFilterFunction', TextInput.setTextFilterFunction)
 
 	if args.mode then
 		if args.mode == 'singleline' then
@@ -86,6 +88,15 @@ end
 
 function TextInput:onTextInput(text)
 	if not self.editable then
+		return false
+	end
+
+	if self.textFilterFunction then
+		if self.textFilterFunction(text) then
+			self:insertText(text)
+			return true
+		end
+
 		return false
 	end
 
@@ -218,6 +229,10 @@ function TextInput:setInputMode(mode)
 			self:setBuffer('')
 		end
 	end
+end
+
+function TextInput:setTextFilterFunction(fn)
+	self.textFilterFunction = fn
 end
 
 ikkuna.TextInput = TextInput
