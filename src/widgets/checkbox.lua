@@ -50,4 +50,10 @@ function CheckBox:toggle()
 	end
 end
 
+function CheckBox:setChecked(checked)
+	if self.onCheckChange:emit(self, self.checked, checked) then
+		self.checked = checked
+	end
+end
+
 ikkuna.CheckBox = CheckBox
