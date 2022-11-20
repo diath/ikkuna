@@ -278,6 +278,10 @@ function Widget:parseArgs(args)
 			end
 		end
 	end
+
+	if args.parent then
+		args.parent:addChild(self)
+	end
 end
 
 function Widget:update(delta)
