@@ -8,7 +8,7 @@ return {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 		hovered = {
@@ -30,7 +30,7 @@ return {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 		hovered = {
@@ -46,14 +46,14 @@ return {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 	},
 	['ContextMenuItem'] = {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 		},
 		hovered = {
 			background = {red = 57, green = 61, blue = 74},
@@ -72,7 +72,7 @@ return {
 			color = {red = 187, green = 192, blue = 202},
 			fillColor = {red = 79, green = 129, blue = 163},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 	},
@@ -80,7 +80,7 @@ return {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 		hovered = {
@@ -107,7 +107,7 @@ return {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 		hovered = {
@@ -123,7 +123,7 @@ return {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 		hovered = {
@@ -159,6 +159,8 @@ return {
 	['Window'] = {
 		normal = {
 			background = {red = 1, green = 1, blue = 1},
+			border = {red = 64, green = 70, blue = 82},
+			borderSize = 2,
 		},
 	},
 	['WindowTitleBar'] = {
@@ -179,7 +181,7 @@ return {
 		normal = {
 			color = {red = 187, green = 192, blue = 202},
 			border = {red = 69, green = 74, blue = 87},
-			background = {red = 42, green = 46, blue = 58},
+			background = {red = 36, green = 40, blue = 52},
 			borderSize = 1,
 		},
 	},
