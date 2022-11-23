@@ -624,10 +624,18 @@ function Widget:setHovered(hovered)
 end
 
 function Widget:setExplicitSize(width, height)
+	if self.width == width and self.height == height then
+		return
+	end
+
 	self.width = width
 	self.height = height
 
 	self.onResize:emit(width, height)
+
+	if self.layout then
+		self.layout:update()
+	end
 
 	-- TODO: Emit child geometry update on the parent to update the layout
 end
