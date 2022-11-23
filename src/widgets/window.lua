@@ -11,8 +11,8 @@ function Window:initialize(args)
 
 	self.closeButtonVisible = true
 	self.closeButton = ikkuna.Button:new()
-	self.closeButton:setText('x')
-	self.closeButton:setExplicitSize(20, 20)
+	self.closeButton:setText('X')
+	self.closeButton:setExplicitSize(16, 16)
 	self.closeButton.onClick:connect(function()
 		self:hide()
 	end)
@@ -156,7 +156,7 @@ function Window:calculateChildrenPositionAndSize()
 		self.titleLabel:setExplicitSize(self.width, self.titleLabel.height)
 		self.titleLabel:setPosition(self.x, self.y)
 
-		self.closeButton:setPosition(self.x + self.width - self.closeButton.width, self.y)
+		self.closeButton:setPosition(self.x + self.width - self.closeButton.width - 1, self.y + (self.titleLabel.height / 2) - (self.closeButton.height / 2))
 
 		contentHeight = contentHeight - self.titleLabel.height
 		contentOffset = contentOffset + self.titleLabel.height
