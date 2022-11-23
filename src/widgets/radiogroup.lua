@@ -7,7 +7,7 @@ function RadioGroup:initialize()
 end
 
 function RadioGroup:addChild(widget)
-	if tostring(widget) ~= 'instance of class RadioBox' then
+	if widget.type ~= ikkuna.WidgetType.RadioBox then
 		return false
 	end
 
