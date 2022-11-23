@@ -12,7 +12,7 @@ end
 
 ikkuna.class = require(ikkuna.path('src.vendor.middleclass'))
 
-ikkuna.font = love.graphics.newFont(ikkuna.path('res/VeraMono', '.ttf', '/'), 13, 'mono')
+ikkuna.font = love.graphics.newFont(ikkuna.path('res/NotoSansDisplayBold', '.ttf', '/'), 12)
 ikkuna.fontHeight = ikkuna.font:getHeight()
 
 -- Const
