@@ -232,7 +232,7 @@ function Widget:parseArgs(args)
 		end
 	end
 
-	self:parseArg(args, 'boolean', 'resizeToText', 'resizeToText')
+	self:parseArg(args, 'boolean', 'resizeToText', Widget.setResizeToText)
 
 	-- Misc
 	self:parseArg(args, 'string', 'tooltip', 'tooltip')
@@ -773,7 +773,6 @@ function Widget:setText(text)
 	end
 
 	if not self.text then
-		-- TODO: Shared font resources?
 		self.text = love.graphics.newText(ikkuna.font)
 	end
 
@@ -782,6 +781,15 @@ function Widget:setText(text)
 	self.isTextDirty = true
 
 	if self.resizeToText then
+		local width, height = self.text:getDimensions()
+		self:setExplicitSize(width + self.padding.left + self.padding.right, height + self.padding.top + self.padding.bottom)
+	end
+end
+
+function Widget:setResizeToText(resize)
+	self.resizeToText = resize
+
+	if self.resizeToText and self.text then
 		local width, height = self.text:getDimensions()
 		self:setExplicitSize(width + self.padding.left + self.padding.right, height + self.padding.top + self.padding.bottom)
 	end
