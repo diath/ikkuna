@@ -48,6 +48,22 @@ ikkuna.WidgetType = enum(
 	'TextInput', 'Window'
 )
 
+ikkuna.Anchor = enum(
+	'Left', 'Right', 'Top', 'Bottom',
+	'CenterIn', 'Fill',
+	'HorizontalCenter', 'VerticalCenter'
+)
+
+ikkuna.AnchorByName = {}
+ikkuna.AnchorByName['left'] = ikkuna.Anchor.Left
+ikkuna.AnchorByName['right'] = ikkuna.Anchor.Right
+ikkuna.AnchorByName['top'] = ikkuna.Anchor.Top
+ikkuna.AnchorByName['bottom'] = ikkuna.Anchor.Bottom
+ikkuna.AnchorByName['centerIn'] = ikkuna.Anchor.CenterIn
+ikkuna.AnchorByName['fill'] = ikkuna.Anchor.Fill
+ikkuna.AnchorByName['horizontalCenter'] = ikkuna.Anchor.HorizontalCenter
+ikkuna.AnchorByName['verticalCenter'] = ikkuna.Anchor.VerticalCenter
+
 ikkuna.MouseButton = enum('Primary', 'Secondary', 'Middle')
 
 ikkuna.WidgetName = {}
@@ -170,6 +186,7 @@ end
 
 -- Util
 require(ikkuna.path('src.util.math'))
+require(ikkuna.path('src.util.misc'))
 require(ikkuna.path('src.util.table'))
 require(ikkuna.path('src.util.timer'))
 require(ikkuna.path('src.util.rect'))
@@ -183,6 +200,7 @@ require(ikkuna.path('src.gui.style'))
 
 -- Layouts
 require(ikkuna.path('src.layout.layout'))
+require(ikkuna.path('src.layout.anchor'))
 require(ikkuna.path('src.layout.horizontal'))
 require(ikkuna.path('src.layout.vertical'))
 

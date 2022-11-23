@@ -10,6 +10,9 @@ function Widget:initialize(args)
 	self.parent = nil
 	self.children = {}
 
+	self.layout = nil
+	self.anchors = nil
+
 	-- NOTE: We use a set in addition to children array for O(1) lookup to check if a widget is already a known child.
 	self.knownChildren = ikkuna.Set()
 
@@ -72,6 +75,10 @@ function Widget:initialize(args)
 	end
 end
 
+function Widget:__tostring()
+	return ('%s::%s'):format(ikkuna.WidgetName[self.type], self.id)
+end
+
 function Widget:parseArg(args, typeName, name, field)
 	if args[name] == nil then
 		return
@@ -123,18 +130,30 @@ function Widget:parseArgs(args)
 	if args.layout then
 		if type(args.layout) == 'table' then
 			local layout = args.layout
-			if layout.type == 'horizontal' then
+			if layout.type == 'anchor' then
+				self:setLayout(ikkuna.AnchorLayout:new())
+			elseif layout.type == 'horizontal' then
 				self:setLayout(ikkuna.HorizontalLayout:new(layout.args))
 			elseif layout.type == 'vertical' then
 				self:setLayout(ikkuna.VerticalLayout:new(layout.args))
+			else
+				print(('Widget::parseArgs: Widget "%s" has unknown layout "%s".'):format(self, layout.type))
 			end
 		elseif type(args.layout) == 'string' then
-			if args.layout == 'horizontal' then
+			if args.layout == 'anchor' then
+				self:setLayout(ikkuna.AnchorLayout:new())
+			elseif args.layout == 'horizontal' then
 				self:setLayout(ikkuna.HorizontalLayout:new())
 			elseif args.layout == 'vertical' then
 				self:setLayout(ikkuna.VerticalLayout:new())
+			else
+				print(('Widget::parseArgs: Widget "%s" has unknown layout "%s".'):format(self, args.layout))
 			end
 		end
+	end
+
+	if args.anchors then
+		self.anchors = args.anchors
 	end
 
 	-- State
@@ -589,7 +608,7 @@ function Widget:focus()
 	end
 
 	if ikkuna.Debug then
-		print(('Widget::focus: Switching focus to %s::%s.'):format(ikkuna.WidgetName[self.type], self.id))
+		print(('Widget::focus: Switching focus to "%s".'):format(self))
 	end
 
 	if ikkuna.display.focusedWidget then
@@ -646,7 +665,7 @@ function Widget:addChild(child)
 	end
 
 	if self.knownChildren:contains(child) then
-		print(('Widget %s already contains child widget %s'):format(self.id, child.id))
+		print(('Widget::addChild: Widget "%s" already contains child Widget "%s".'):format(self, child))
 		return false
 	end
 

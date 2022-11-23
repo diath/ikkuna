@@ -1,7 +1,7 @@
 local Display = ikkuna.class('Display')
 
 function Display:initialize()
-	self.root = ikkuna.Widget:new({style = 'Root'})
+	self.root = ikkuna.Widget:new({style = 'Root', layout = 'anchor'})
 	ikkuna.root = self.root
 	ikkuna.display = self
 
