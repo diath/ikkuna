@@ -25,4 +25,12 @@ end
 function Layout:updateInternal()
 end
 
+function Layout:disableUpdates()
+	self.updatesEnabled = false
+end
+
+function Layout:enableUpdates()
+	self.updatesEnabled = true
+end
+
 ikkuna.Layout = Layout

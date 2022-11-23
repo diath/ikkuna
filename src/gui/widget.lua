@@ -239,6 +239,10 @@ function Widget:parseArgs(args)
 	self:parseArg(args, 'string', 'style', 'style')
 
 	if args.children then
+		if self.layout then
+			self.layout:disableUpdates()
+		end
+
 		for _, child in pairs(args.children) do
 			local widgetType = nil
 			if child.type == 'Widget' then
@@ -279,6 +283,11 @@ function Widget:parseArgs(args)
 				self:addChild(widgetType:new(child.args))
 			else
 				print(('Widget::parseArgs: Unknown child type: %s'):format(child.type))
+			end
+
+			if self.layout then
+				self.layout:enableUpdates()
+				self.layout:update()
 			end
 		end
 	end
