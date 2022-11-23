@@ -7,25 +7,38 @@ function CheckBox:initialize(args)
 	self.type = ikkuna.WidgetType.CheckBox
 
 	self.textOffset.x = 20
-	self.checked = false
 	self.focusable = true
 	self.draggable = false
 
+	self.checked = false
 	self.onCheckChange = ikkuna.Event()
+
+	-- TODO: Use a resource manager to share loaded images.
+	self.image = love.graphics.newImage(ikkuna.path('res/checkbox', '.png', '/'))
 end
 
 function CheckBox:drawAt(x, y)
 	self:drawBase(x, y)
 
-	love.graphics.setColor(0, 0, 0, 1)
-	love.graphics.rectangle('line', x - 1, y - 1, 18, 18)
+	-- TODO: Make these based on the Style definition.
+	local r = 57 / 255
+	local g = 62 / 255
+	local b = 75 / 255
+	love.graphics.setColor(r, g, b, 1)
+	love.graphics.rectangle('fill', x, y, ikkuna.CheckBoxBoxSize, ikkuna.CheckBoxBoxSize)
+
+	local r = 32 / 255
+	local g = 36 / 255
+	local b = 48 / 255
+	love.graphics.setColor(r, g, b, 1)
+	love.graphics.setLineWidth(ikkuna.CheckBoxFrameSize)
+	love.graphics.rectangle('line', x, y, ikkuna.CheckBoxBoxSize, ikkuna.CheckBoxBoxSize)
+	love.graphics.setLineWidth(1)
 
 	if self.checked then
-		love.graphics.setColor(0, 1, 0, 1)
-	else
-		love.graphics.setColor(1, 0, 0, 1)
+		love.graphics.setColor(1, 1, 1, 1)
+		love.graphics.draw(self.image, x + 2, y + 3)
 	end
-	love.graphics.rectangle('fill', x, y, 16, 16)
 
 	self:drawText(x, y)
 end
@@ -47,12 +60,18 @@ end
 function CheckBox:toggle()
 	if self.onCheckChange:emit(self, self.checked, not self.checked) then
 		self.checked = not self.checked
+		ikkuna.sound:play()
 	end
 end
 
 function CheckBox:setChecked(checked)
+	if self.checked == checked then
+		return
+	end
+
 	if self.onCheckChange:emit(self, self.checked, checked) then
 		self.checked = checked
+		ikkuna.sound:play()
 	end
 end
 

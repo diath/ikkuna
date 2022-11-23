@@ -15,6 +15,9 @@ ikkuna.class = require(ikkuna.path('src.vendor.middleclass'))
 ikkuna.font = love.graphics.newFont(ikkuna.path('res/NotoSansDisplayBold', '.ttf', '/'), 12)
 ikkuna.fontHeight = ikkuna.font:getHeight()
 
+ikkuna.sound = love.audio.newSource(ikkuna.path('res/ui_click', '.ogg', '/'), 'static')
+ikkuna.sound:setVolume(1)
+
 -- Const
 ikkuna.Width = 800
 ikkuna.Height = 600
@@ -71,6 +74,8 @@ ikkuna.ScrollBarMinKnobSize = 20
 ikkuna.RadioBoxCircleSegments = 20
 ikkuna.TooltipOffset = {x = 10, y = 10}
 ikkuna.SeparatorHeight = 2
+ikkuna.CheckBoxBoxSize = 15
+ikkuna.CheckBoxFrameSize = 2
 
 function ikkuna.isControlPressed()
 	return love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')

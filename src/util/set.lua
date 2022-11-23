@@ -13,7 +13,7 @@ function Set.create(data)
 				set:add(value)
 			end
 		else
-			print('[Warning] Set data not a table.')
+			print('Set::create: Set data not a table.')
 		end
 	end
 
