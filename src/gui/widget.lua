@@ -65,6 +65,10 @@ function Widget:initialize(args)
 
 	if args then
 		self:parseArgs(args)
+	else
+		if self.preferredSize then
+			self:setExplicitSize(self.preferredSize.width, self.preferredSize.height)
+		end
 	end
 end
 
