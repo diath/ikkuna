@@ -255,7 +255,12 @@ function Widget:parseArgs(args)
 
 	-- Misc
 	self:parseArg(args, 'string', 'tooltip', 'tooltip')
-	self:parseArg(args, 'string', 'style', 'style')
+
+	if type(args.style) == 'string' then
+		self.style = args.style
+	elseif type(args.style) == 'table' then
+		ikkuna.display.style:addInlineStyle(self.id, args.style)
+	end
 
 	if args.children then
 		if self.layout then
@@ -800,7 +805,17 @@ function Widget:getStyleState()
 end
 
 function Widget:getStyle()
-	return ikkuna.Widget.Style:getStyle(self.style or ikkuna.WidgetName[self.type], self:getStyleState())
+	local state = self:getStyleState()
+	if self.style then
+		return ikkuna.Widget.Style:getStyle(self.style, state)
+	end
+
+	local style = ikkuna.Widget.Style:getStyle(self.id, state)
+	if style then
+		return style
+	end
+
+	return ikkuna.Widget.Style:getStyle(ikkuna.WidgetName[self.type], state)
 end
 
 function Widget:setText(text)

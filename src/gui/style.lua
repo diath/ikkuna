@@ -11,28 +11,44 @@ function Style:initialize()
 end
 
 function Style:load(sheet)
-	for name, info in pairs(sheet) do
-		local style = {}
-		for stateName, properties in pairs(info) do
-			style[stateName] = {}
-			for propertyName, propertyValue in pairs(properties) do
-				style[stateName][propertyName] = self:parseProperty(propertyName, propertyValue)
-			end
-		end
-
-		local result = {}
-		if style.normal then
-			result[ikkuna.StyleState.Normal] = style.normal
-			result[ikkuna.StyleState.Hovered] = self:mergeStyles(style.normal, style.hovered)
-			result[ikkuna.StyleState.Focused] = self:mergeStyles(style.normal, style.focused)
-			result[ikkuna.StyleState.Disabled] = self:mergeStyles(style.normal, style.disabled)
-
+	for name, node in pairs(sheet) do
+		local result = self:parseStyleNode(node)
+		if result then
 			self.styles[name] = result
 		end
 	end
 
-	-- ikkuna.dump(self.styles)
 	return true
+end
+
+function Style:addInlineStyle(widgetId, node)
+	-- TODO: This should merge the base WidgetType node with the loaded ID node.
+	local result = self:parseStyleNode(node)
+	if result then
+		self.styles[widgetId] = result
+	end
+end
+
+function Style:parseStyleNode(node)
+	local style = {}
+	for stateName, properties in pairs(node) do
+		style[stateName] = {}
+		for propertyName, propertyValue in pairs(properties) do
+			style[stateName][propertyName] = self:parseProperty(propertyName, propertyValue)
+		end
+	end
+
+	local result = {}
+	if style.normal then
+		result[ikkuna.StyleState.Normal] = style.normal
+		result[ikkuna.StyleState.Hovered] = self:mergeStyles(style.normal, style.hovered)
+		result[ikkuna.StyleState.Focused] = self:mergeStyles(style.normal, style.focused)
+		result[ikkuna.StyleState.Disabled] = self:mergeStyles(style.normal, style.disabled)
+
+		return result
+	end
+
+	return nil
 end
 
 function Style:mergeStyles(base, style)
@@ -79,14 +95,20 @@ end
 function Style:getStyle(name, state)
 	local style = self.styles[name]
 	if not style then
-		print(('Style::getStyle: Missing style for %s (state: %d).'):format(name, state))
-		return {}
+		if ikkuna.Debug then
+			print(('Style::getStyle: Missing style for %s (state: %d).'):format(name, state))
+		end
+
+		return nil
 	end
 
 	local style = style[state]
 	if not style then
-		print(('Style::getStyle: Missing state style for %s (state: %d).'):format(name, state))
-		return {}
+		if ikkuna.Debug then
+			print(('Style::getStyle: Missing state style for %s (state: %d).'):format(name, state))
+		end
+
+		return nil
 	end
 
 	return style
