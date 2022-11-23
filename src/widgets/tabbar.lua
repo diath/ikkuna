@@ -73,10 +73,15 @@ function TabBar:removeTab(title)
 end
 
 function TabBar:selectTab(title)
+	if self.activeTab and self.activeTab.title == title then
+		return
+	end
+
 	if self.activeTab then
 		self.activeTab.panel:hide()
 	end
 
+	-- TODO: onTabChange event
 	for _, tab in pairs(self.tabs) do
 		if tab.title == title then
 			self.activeTab = tab
