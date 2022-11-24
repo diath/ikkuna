@@ -12,7 +12,7 @@ function Resources.getImage(path)
 		return nil
 	end
 
-	Resources[path] = image
+	Resources.cache[path] = image
 	return image
 end
 
@@ -28,7 +28,7 @@ function Resources.getFont(path, size)
 		return nil
 	end
 
-	Resources[path] = font
+	Resources.cache[key] = font
 	return font
 end
 
@@ -44,7 +44,7 @@ function Resources.getSound(path)
 	end
 
 	sound:setVolume(1)
-	Resources[path] = sound
+	Resources.cache[path] = sound
 	return sound
 end
 
