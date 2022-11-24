@@ -429,8 +429,8 @@ function Widget:onKeyReleased(key, code)
 end
 
 function Widget:setPosition(x, y)
-	self.x = x
-	self.y = y
+	self.x = math.floor(x)
+	self.y = math.floor(y)
 
 	self:calculateTextPosition()
 
@@ -657,10 +657,10 @@ function Widget:setExplicitSize(width, height)
 		return
 	end
 
-	self.width = width
-	self.height = height
+	self.width = math.floor(width)
+	self.height = math.floor(height)
 
-	self.onResize:emit(width, height)
+	self.onResize:emit(self.width, self.height)
 
 	if self.layout then
 		self.layout:update()
