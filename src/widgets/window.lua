@@ -29,10 +29,13 @@ function Window:initialize(args)
 	self.statusTimeout = -1
 	self.dockMode = ikkuna.WindowDockMode.None
 
+	self.shouldResizeToContentWidget = false
+
+	self.contentWidget = nil
+	self.contentWidgetResizeCallbackId = nil
+
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.Window
-
-	self.draggable = true
 
 	self:addChild(self.titleLabel)
 	self:addChild(self.closeButton)
@@ -60,6 +63,7 @@ function Window:parseArgs(args)
 	self:parseArg(args, 'boolean', 'titleBarVisible', Window.setTitleBarVisible)
 	self:parseArg(args, 'boolean', 'statusBarVisible', Window.setStatusBarVisible)
 	self:parseArg(args, 'boolean', 'closeButtonVisible', Window.setCloseButtonVisible)
+	self:parseArg(args, 'boolean', 'resizeToContentWidget', Window.setResizeToContentWidget)
 end
 
 function Window:update(delta)
@@ -157,6 +161,14 @@ function Window:setCloseButtonVisible(visible)
 	self:calculateChildrenPositionAndSize()
 end
 
+function Window:setResizeToContentWidget(resize)
+	self.shouldResizeToContentWidget = resize
+
+	if resize then
+		self:resizeToContentWidget()
+	end
+end
+
 function Window:calculateChildrenPositionAndSize()
 	local contentOffset = 0
 	local contentHeight = self.height
@@ -177,9 +189,31 @@ function Window:calculateChildrenPositionAndSize()
 	end
 
 	if self.contentWidget then
-		self.contentWidget:setExplicitSize(self.width, contentHeight)
+		if not self.shouldResizeToContentWidget then
+			self.contentWidget:setExplicitSize(self.width, contentHeight)
+		end
+
 		self.contentWidget:setPosition(self.x, self.y + contentOffset)
 	end
+end
+
+function Window:resizeToContentWidget()
+	if not self.contentWidget then
+		return
+	end
+
+	local height = 0
+	if self.titleBarVisible then
+		height = height + self.titleLabel.height
+	end
+
+	if self.statusBarVisible then
+		height = height + self.statusLabel.height
+	end
+
+	height = height + self.contentWidget.height
+	self:setExplicitSize(self.width, height)
+	self.contentWidget:setExplicitSize(self.width, self.contentWidget.height)
 end
 
 function Window:setExplicitSize(width, height)
@@ -195,14 +229,33 @@ end
 function Window:setContentWidget(widget)
 	if self.contentWidget then
 		self:removeChild(self.contentWidget)
+		self.contentWidget.onResize:disconnect(self.contentWidgetResizeCallbackId)
+
 		self.contentWidget = nil
+		self.contentWidgetResizeCallbackId = nil
+	end
+
+	if not widget then
+		return
 	end
 
 	self.contentWidget = widget
+	self.contentWidgetResizeCallbackId = self.contentWidget.onResize:connect(function(widget, width, height)
+		if self.shouldResizeToContentWidget then
+			self:resizeToContentWidget()
+		end
+
+		return true
+	end)
+
 	self.contentWidget:setPhantom(true)
 	self:addChild(self.contentWidget)
 
 	self:calculateChildrenPositionAndSize()
+
+	if self.shouldResizeToContentWidget then
+		self:resizeToContentWidget()
+	end
 end
 
 function Window:setDockMode(dockMode)
