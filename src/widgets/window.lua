@@ -39,6 +39,14 @@ function Window:initialize(args)
 	self:addChild(self.statusLabel)
 
 	self:calculateChildrenPositionAndSize()
+
+	self.onDragStart:connect(function(widget, x, y)
+		if self.draggable and self.parent then
+			self.parent:moveChildToBack(self)
+		end
+
+		return true
+	end)
 end
 
 function Window:parseArgs(args)
