@@ -100,6 +100,20 @@ function Widget:parseArg(args, typeName, name, field)
 	))
 end
 
+function Widget:parseEventsArg(event, field)
+	if not field then
+		return
+	end
+
+	if type(field) == 'function' then
+		event:connect(field)
+	elseif type(field) == 'table' then
+		for _, func in pairs(field) do
+			event:connect(func)
+		end
+	end
+end
+
 function Widget:parseArgs(args)
 	if type(args) ~= 'table' then
 		return
@@ -180,31 +194,17 @@ function Widget:parseArgs(args)
 
 	-- Events
 	if args.events then
-		local function parseEvents(event, field)
-			if not field then
-				return
-			end
-
-			if type(field) == 'function' then
-				event:connect(field)
-			elseif type(field) == 'table' then
-				for _, func in pairs(field) do
-					event:connect(func)
-				end
-			end
-		end
-
-		parseEvents(self.onResize, args.events.onResize)
-		parseEvents(self.onClick, args.events.onClick)
-		parseEvents(self.onPress, args.events.onPress)
-		parseEvents(self.onDoubleClick, args.events.onDoubleClick)
-		parseEvents(self.onMouseWheel, args.events.onMouseWheel)
-		parseEvents(self.onDragStart, args.events.onDragStart)
-		parseEvents(self.onDragMove, args.events.onDragMove)
-		parseEvents(self.onDragEnd, args.events.onDragEnd)
-		parseEvents(self.onMouseMove, args.events.onMouseMove)
-		parseEvents(self.onHoverChange, args.events.onHoverChange)
-		parseEvents(self.onFocusChange, args.events.onFocusChange)
+		self:parseEventsArg(self.onResize, args.events.onResize)
+		self:parseEventsArg(self.onClick, args.events.onClick)
+		self:parseEventsArg(self.onPress, args.events.onPress)
+		self:parseEventsArg(self.onDoubleClick, args.events.onDoubleClick)
+		self:parseEventsArg(self.onMouseWheel, args.events.onMouseWheel)
+		self:parseEventsArg(self.onDragStart, args.events.onDragStart)
+		self:parseEventsArg(self.onDragMove, args.events.onDragMove)
+		self:parseEventsArg(self.onDragEnd, args.events.onDragEnd)
+		self:parseEventsArg(self.onMouseMove, args.events.onMouseMove)
+		self:parseEventsArg(self.onHoverChange, args.events.onHoverChange)
+		self:parseEventsArg(self.onFocusChange, args.events.onFocusChange)
 	end
 
 	-- Text

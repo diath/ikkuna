@@ -38,14 +38,14 @@ function ComboBox:initialize(args)
 		return self:handleMouseWheel(dx, dy)
 	end)
 
+	self.onValueChange = ikkuna.Event()
+
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.ComboBox
 
 	self:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 
 	self.focusable = true
-
-	self.onValueChange = ikkuna.Event()
 
 	if #self.options > 0 then
 		self:selectByIndex(1)
@@ -74,6 +74,10 @@ function ComboBox:parseArgs(args)
 				self:addOption(option, nil)
 			end
 		end
+	end
+
+	if args.events then
+		self:parseEventsArg(self.onValueChange, args.events.onValueChange)
 	end
 end
 

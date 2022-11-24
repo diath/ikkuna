@@ -6,6 +6,18 @@ function RadioGroup:initialize()
 	self.onSelectedChildChange = ikkuna.Event()
 end
 
+function RadioGroup:parseArgs(args)
+	if not args then
+		return
+	end
+
+	ikkuna.Widget.parseArgs(self, args)
+
+	if args.events then
+		self:parseEventsArg(self.onSelectedChildChange, args.events.onSelectedChildChange)
+	end
+end
+
 function RadioGroup:addChild(widget)
 	if widget.type ~= ikkuna.WidgetType.RadioBox then
 		return false

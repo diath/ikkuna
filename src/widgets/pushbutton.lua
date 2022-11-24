@@ -1,12 +1,23 @@
 local PushButton = ikkuna.class('PushButton', ikkuna.Button)
 
 function PushButton:initialize(args)
+	self.pushed = false
+	self.onPushChange = ikkuna.Event()
+
 	ikkuna.Button.initialize(self, args)
 	self.type = ikkuna.WidgetType.PushButton
+end
 
-	self.pushed = false
+function PushButton:parseArgs(args)
+	if not args then
+		return
+	end
 
-	self.onPushChange = ikkuna.Event()
+	ikkuna.Widget.parseArgs(self, args)
+
+	if args.events then
+		self:parseEventsArg(self.onPushChange, args.events.onPushChange)
+	end
 end
 
 function PushButton:drawAt(x, y)

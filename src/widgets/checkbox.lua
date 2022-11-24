@@ -3,6 +3,9 @@ local CheckBox = ikkuna.class('CheckBox', ikkuna.Widget)
 function CheckBox:initialize(args)
 	self.preferredSize = {width = 100, height = 20}
 
+	self.checked = false
+	self.onCheckChange = ikkuna.Event()
+
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.CheckBox
 
@@ -10,11 +13,20 @@ function CheckBox:initialize(args)
 	self.focusable = true
 	self.draggable = false
 
-	self.checked = false
-	self.onCheckChange = ikkuna.Event()
-
 	self.image = ikkuna.Resources.getImage(ikkuna.path('res/checkbox', '.png', '/'))
 	self.sound = ikkuna.Resources.getSound(ikkuna.path('res/ui_click', '.ogg', '/'))
+end
+
+function CheckBox:parseArgs(args)
+	if not args then
+		return
+	end
+
+	ikkuna.Widget.parseArgs(self, args)
+
+	if args.events then
+		self:parseEventsArg(self.onCheckChange, args.events.onCheckChange)
+	end
 end
 
 function CheckBox:drawAt(x, y)

@@ -100,6 +100,10 @@ function ScrollBar:parseArgs(args)
 	self:parseArg(args, 'boolean', 'displayValue', ScrollBar.setDisplayValue)
 	self:parseArg(args, 'string', 'orientation', ScrollBar.setOrientation)
 	self:parseArg(args, 'string', 'format', ScrollBar.setFormat)
+
+	if args.events then
+		self:parseEventsArg(self.onValueChange, args.events.onValueChange)
+	end
 end
 
 function ScrollBar:update(delta)

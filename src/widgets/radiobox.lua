@@ -1,6 +1,9 @@
 local RadioBox = ikkuna.class('RadioBox', ikkuna.Widget)
 
 function RadioBox:initialize(args)
+	self.checked = false
+	self.onCheckChange = ikkuna.Event()
+
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.RadioBox
 
@@ -8,13 +11,22 @@ function RadioBox:initialize(args)
 	self.focusable = true
 
 	self.textOffset.x = 20
-	self.checked = false
-
-	self.onCheckChange = ikkuna.Event()
 
 	self.image = ikkuna.Resources.getImage(ikkuna.path('res/radiobox', '.png', '/'))
 	self.imageChecked = ikkuna.Resources.getImage(ikkuna.path('res/radiobox_checked', '.png', '/'))
 	self.sound = ikkuna.Resources.getSound(ikkuna.path('res/ui_click', '.ogg', '/'))
+end
+
+function RadioBox:parseArgs(args)
+	if not args then
+		return
+	end
+
+	ikkuna.Widget.parseArgs(self, args)
+
+	if args.events then
+		self:parseEventsArg(self.onCheckChange, args.events.onCheckChange)
+	end
 end
 
 function RadioBox:drawAt(x, y)

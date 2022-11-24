@@ -41,6 +41,8 @@ function SpinBox:initialize(args)
 	-- NOTE: Used to update the value and children properly post-initialization.
 	self.needUpdateValue = false
 
+	self.onValueChange = ikkuna.Event()
+
 	self.preferredSize = {width = 100, height = 30}
 
 	ikkuna.Widget.initialize(self, args)
@@ -50,8 +52,6 @@ function SpinBox:initialize(args)
 	self:setText(self.value)
 
 	self.focusable = true
-
-	self.onValueChange = ikkuna.Event()
 
 	self:addChild(self.incButton)
 	self:addChild(self.decButton)
@@ -70,6 +70,10 @@ function SpinBox:parseArgs(args)
 
 	self:parseArg(args, 'number', 'min', SpinBox.setMin)
 	self:parseArg(args, 'number', 'max', SpinBox.setMax)
+
+	if args.events then
+		self:parseEventsArg(self.onValueChange, args.events.onValueChange)
+	end
 end
 
 function SpinBox:onKeyPressed(key, code, repeated)
