@@ -95,19 +95,11 @@ end
 function Style:getStyle(name, state)
 	local style = self.styles[name]
 	if not style then
-		if ikkuna.Debug then
-			print(('Style::getStyle: Missing style for %s (state: %d).'):format(name, state))
-		end
-
 		return nil
 	end
 
 	local style = style[state]
 	if not style then
-		if ikkuna.Debug then
-			print(('Style::getStyle: Missing state style for %s (state: %d).'):format(name, state))
-		end
-
 		return nil
 	end
 

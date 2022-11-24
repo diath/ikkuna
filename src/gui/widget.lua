@@ -818,7 +818,13 @@ function Widget:getStyle()
 		return style
 	end
 
-	return ikkuna.Widget.Style:getStyle(ikkuna.WidgetName[self.type], state)
+	local style = ikkuna.Widget.Style:getStyle(ikkuna.WidgetName[self.type], state)
+	if not style then
+		print(('Widget::getStyle: Missing style for Widget type "%s".'):format(
+			ikkuna.WidgetName[self.type]
+		))
+	end
+	return style
 end
 
 function Widget:setText(text)
