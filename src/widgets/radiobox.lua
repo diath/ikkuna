@@ -43,7 +43,7 @@ end
 
 function RadioBox:onKeyPressed(key, code, repeated)
 	if key == 'space' or key == 'return' then
-		self:toggle()
+		self:setChecked(true)
 		return true
 	end
 
