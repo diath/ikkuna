@@ -117,8 +117,7 @@ end
 
 function TextInput:onKeyPressed(key, code, repeated)
 	if not self.editable then
-		ikkuna.Widget.onKeyPressed(self, key, code, repeated)
-		return false
+		return ikkuna.Widget.onKeyPressed(self, key, code, repeated)
 	end
 
 	if key == 'backspace' then
