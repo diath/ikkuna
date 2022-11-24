@@ -40,6 +40,7 @@ function Widget:initialize(args)
 	self.dragOffset = {x = 0, y = 0}
 
 	self.focused = false
+	self.focusReason = ikkuna.FocusReason.Mouse
 	self.focusable = false
 	self.receivesInput = false
 
@@ -568,9 +569,9 @@ function Widget:focusPreviousChild()
 	end
 
 	if focusedChildIndex ~= -1 and focusedChildIndex > 1 then
-		allChildren[focusedChildIndex - 1]:focus()
+		allChildren[focusedChildIndex - 1]:focus(ikkuna.FocusReason.Keyboard)
 	else
-		allChildren[#allChildren]:focus()
+		allChildren[#allChildren]:focus(ikkuna.FocusReason.Keyboard)
 	end
 end
 
@@ -593,9 +594,9 @@ function Widget:focusNextChild()
 	end
 
 	if focusedChildIndex ~= -1 and focusedChildIndex < #allChildren then
-		allChildren[focusedChildIndex + 1]:focus()
+		allChildren[focusedChildIndex + 1]:focus(ikkuna.FocusReason.Keyboard)
 	else
-		allChildren[1]:focus()
+		allChildren[1]:focus(ikkuna.FocusReason.Keyboard)
 	end
 end
 
@@ -605,10 +606,10 @@ function Widget:unfocus()
 	end
 
 	self.focused = false
-	self.onFocusChange:emit(self, false)
+	self.onFocusChange:emit(self, self.focused, self.focusReason)
 end
 
-function Widget:focus()
+function Widget:focus(reason)
 	if not self.focusable then
 		return
 	end
@@ -628,7 +629,8 @@ function Widget:focus()
 
 	ikkuna.display.focusedWidget = self
 	self.focused = true
-	self.onFocusChange:emit(self, true)
+	self.focusReason = reason
+	self.onFocusChange:emit(self, self.focused, self.focusReason)
 end
 
 function Widget:isFocused()
@@ -801,7 +803,11 @@ function Widget:getStyleState()
 	end
 
 	if self:isFocused() then
-		return ikkuna.StyleState.Focused
+		if self.focusReason == ikkuna.FocusReason.Keyboard then
+			return ikkuna.StyleState.Focused
+		else
+			return ikkuna.StyleState.MouseFocused
+		end
 	end
 
 	return ikkuna.StyleState.Normal

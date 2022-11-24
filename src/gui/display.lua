@@ -110,7 +110,7 @@ function Display:onMousePressed(x, y, button, touch, presses)
 
 			self.pressedWidget = widget
 
-			widget:focus()
+			widget:focus(ikkuna.FocusReason.Mouse)
 		end
 	end
 

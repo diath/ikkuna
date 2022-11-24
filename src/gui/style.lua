@@ -43,6 +43,7 @@ function Style:parseStyleNode(node)
 		result[ikkuna.StyleState.Normal] = style.normal
 		result[ikkuna.StyleState.Hovered] = self:mergeStyles(style.normal, style.hovered)
 		result[ikkuna.StyleState.Focused] = self:mergeStyles(style.normal, style.focused)
+		result[ikkuna.StyleState.MouseFocused] = self:mergeStyles(style.normal, style.mouseFocused)
 		result[ikkuna.StyleState.Disabled] = self:mergeStyles(style.normal, style.disabled)
 
 		return result

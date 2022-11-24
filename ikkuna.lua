@@ -32,7 +32,7 @@ ikkuna.ScrollAreaOrientation = enum('Horizontal', 'Vertical')
 ikkuna.ScrollBarOrientation = enum('Horizontal', 'Vertical')
 
 ikkuna.TextInputMode = enum('SingleLine', 'MultiLine', 'Number')
-ikkuna.StyleState = enum('Normal', 'Hovered', 'Focused', 'Disabled')
+ikkuna.StyleState = enum('Normal', 'Hovered', 'Focused', 'MouseFocused', 'Disabled')
 ikkuna.WindowDockMode = enum('None', 'Left', 'Right', 'Top', 'Bottom')
 
 ikkuna.WidgetType = enum(
@@ -59,6 +59,7 @@ ikkuna.AnchorByName['horizontalCenter'] = ikkuna.Anchor.HorizontalCenter
 ikkuna.AnchorByName['verticalCenter'] = ikkuna.Anchor.VerticalCenter
 
 ikkuna.MouseButton = enum('Primary', 'Secondary', 'Middle')
+ikkuna.FocusReason = enum('Mouse', 'Keyboard')
 
 ikkuna.WidgetName = {}
 ikkuna.WidgetName[ikkuna.WidgetType.Widget] = 'Widget'

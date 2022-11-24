@@ -155,6 +155,10 @@ return {
 			background = {red = 57, green = 61, blue = 74},
 			border = {red = 187, green = 192, blue = 202},
 		},
+		mouseFocused = {
+			background = {red = 57, green = 61, blue = 74},
+			border = {red = 187, green = 192, blue = 202},
+		},
 	},
 	['Window'] = {
 		normal = {
