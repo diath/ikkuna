@@ -12,12 +12,6 @@ end
 
 ikkuna.class = require(ikkuna.path('src.vendor.middleclass'))
 
-ikkuna.font = love.graphics.newFont(ikkuna.path('res/NotoSansDisplayBold', '.ttf', '/'), 12)
-ikkuna.fontHeight = ikkuna.font:getHeight()
-
-ikkuna.sound = love.audio.newSource(ikkuna.path('res/ui_click', '.ogg', '/'), 'static')
-ikkuna.sound:setVolume(1)
-
 -- Const
 ikkuna.Width = 800
 ikkuna.Height = 600
@@ -211,6 +205,7 @@ require(ikkuna.path('src.gui.event'))
 require(ikkuna.path('src.gui.display'))
 require(ikkuna.path('src.gui.widget'))
 require(ikkuna.path('src.gui.style'))
+require(ikkuna.path('src.gui.resources'))
 
 -- Layouts
 require(ikkuna.path('src.layout.layout'))

@@ -63,9 +63,9 @@ function TextInput:drawAt(x, y)
 	if self.frontBufferWidth < self.width then
 		self:drawText(x, y)
 
-		if self.cursorVisible and self:isFocused() then
+		if self.cursorVisible and self:isFocused() and self.text then
 			local cursorSpace = 2
-			local height = ikkuna.fontHeight
+			local height = self.text:getFont():getHeight()
 			local x = x + self.frontBufferWidth + cursorSpace
 
 			love.graphics.setColor(1, 1, 1)
@@ -75,8 +75,8 @@ function TextInput:drawAt(x, y)
 		local cursorWidth = 3
 		self:drawText(x + self.width - self.frontBufferWidth - cursorWidth, y)
 
-		if self.cursorVisible and self:isFocused() then
-			local height = ikkuna.fontHeight
+		if self.cursorVisible and self:isFocused() and self.text then
+			local height = self.text:getFont():getHeight()
 			local x = x + self.width - cursorWidth
 
 			love.graphics.setColor(1, 1, 1)
@@ -166,7 +166,7 @@ end
 function TextInput:updateText()
 	self:setText(self.masked and self:getMaskedText() or self.buffer)
 
-	local text = love.graphics.newText(ikkuna.font)
+	local text = love.graphics.newText(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
 	text:set(self.masked and self:getMaskedFrontBuffer() or self:getFrontBuffer())
 	self.frontBufferWidth = text:getWidth()
 end
@@ -194,7 +194,7 @@ function TextInput:setCursorPosition(position)
 	self.cursorVisible = true
 	self.cursorTimer:reset()
 
-	local text = love.graphics.newText(ikkuna.font)
+	local text = love.graphics.newText(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
 	text:set(self:getFrontBuffer())
 	self.frontBufferWidth = text:getWidth()
 end

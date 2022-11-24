@@ -12,9 +12,9 @@ function RadioBox:initialize(args)
 
 	self.onCheckChange = ikkuna.Event()
 
-	-- TODO: Use a resource manager to share loaded images.
-	self.image = love.graphics.newImage(ikkuna.path('res/radiobox', '.png', '/'))
-	self.imageChecked = love.graphics.newImage(ikkuna.path('res/radiobox_checked', '.png', '/'))
+	self.image = ikkuna.Resources.getImage(ikkuna.path('res/radiobox', '.png', '/'))
+	self.imageChecked = ikkuna.Resources.getImage(ikkuna.path('res/radiobox_checked', '.png', '/'))
+	self.sound = ikkuna.Resources.getSound(ikkuna.path('res/ui_click', '.ogg', '/'))
 end
 
 function RadioBox:drawAt(x, y)
@@ -52,7 +52,7 @@ function RadioBox:setChecked(checked)
 
 		-- TODO: Do not play the first auto select sound when adding a RadioBox to an empty RadioGroup.
 		if checked then
-			ikkuna.sound:play()
+			self.sound:play()
 		end
 
 		return true

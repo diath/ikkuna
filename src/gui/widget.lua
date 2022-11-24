@@ -46,6 +46,8 @@ function Widget:initialize(args)
 	self.tooltip = nil
 
 	self.isTextDirty = false
+	self.font = 'res/NotoSansDisplayBold'
+	self.fontSize = 12
 	self.text = nil
 	self.textString = ''
 	self.relativeTextPosition = {x = 0, y = 0}
@@ -822,7 +824,7 @@ function Widget:setText(text)
 	end
 
 	if not self.text then
-		self.text = love.graphics.newText(ikkuna.font)
+		self.text = love.graphics.newText(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
 	end
 
 	self.text:set(text)

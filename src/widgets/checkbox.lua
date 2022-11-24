@@ -13,8 +13,8 @@ function CheckBox:initialize(args)
 	self.checked = false
 	self.onCheckChange = ikkuna.Event()
 
-	-- TODO: Use a resource manager to share loaded images.
-	self.image = love.graphics.newImage(ikkuna.path('res/checkbox', '.png', '/'))
+	self.image = ikkuna.Resources.getImage(ikkuna.path('res/checkbox', '.png', '/'))
+	self.sound = ikkuna.Resources.getSound(ikkuna.path('res/ui_click', '.ogg', '/'))
 end
 
 function CheckBox:drawAt(x, y)
@@ -60,7 +60,7 @@ end
 function CheckBox:toggle()
 	if self.onCheckChange:emit(self, self.checked, not self.checked) then
 		self.checked = not self.checked
-		ikkuna.sound:play()
+		self.sound:play()
 	end
 end
 
@@ -71,7 +71,7 @@ function CheckBox:setChecked(checked)
 
 	if self.onCheckChange:emit(self, self.checked, checked) then
 		self.checked = checked
-		ikkuna.sound:play()
+		self.sound:play()
 	end
 end
 
