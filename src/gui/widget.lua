@@ -253,6 +253,9 @@ function Widget:parseArgs(args)
 		end
 	end
 
+	self:parseArg(args, 'string', 'font', Widget.setFont)
+	self:parseArg(args, 'number', 'fontSize', Widget.setFontSize)
+
 	self:parseArg(args, 'boolean', 'resizeToText', Widget.setResizeToText)
 
 	-- Misc
@@ -834,6 +837,22 @@ function Widget:setText(text)
 	if self.resizeToText then
 		local width, height = self.text:getDimensions()
 		self:setExplicitSize(width + self.padding.left + self.padding.right, height + self.padding.top + self.padding.bottom)
+	end
+end
+
+function Widget:setFont(font)
+	self.font = font
+
+	if self.text then
+		self.text:setFont(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
+	end
+end
+
+function Widget:setFontSize(fontSize)
+	self.fontSize = fontSize
+
+	if self.text then
+		self.text:setFont(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
 	end
 end
 
