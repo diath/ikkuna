@@ -660,8 +660,6 @@ function Widget:setExplicitSize(width, height)
 	if self.layout then
 		self.layout:update()
 	end
-
-	-- TODO: Emit child geometry update on the parent to update the layout
 end
 
 function Widget:addChild(child)

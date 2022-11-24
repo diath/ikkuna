@@ -84,6 +84,15 @@ ikkuna.WidgetName[ikkuna.WidgetType.TabBar] = 'TabBar'
 ikkuna.WidgetName[ikkuna.WidgetType.TextInput] = 'TextInput'
 ikkuna.WidgetName[ikkuna.WidgetType.Window] = 'Window'
 
+ikkuna.Colors = {}
+ikkuna.Colors['transparent'] = {r = 1, g = 1, b = 1, a = 0}
+ikkuna.Colors['green'] = {r = 124/255, g = 168/255, b = 70/255, a = 1}
+ikkuna.Colors['blue'] = {r = 120/255, g = 179/255, b = 209/255, a = 1}
+ikkuna.Colors['purple'] = {r = 132/255, g = 84/255, b = 202/255, a = 1}
+ikkuna.Colors['orange'] = {r = 250/255, g = 155/255, b = 0, a = 1}
+ikkuna.Colors['yellow'] = {r = 214/255, g = 161/255, b = 41/255, a = 1}
+ikkuna.Colors['red'] = {r = 230/255, g = 39/255, b = 72/255, a = 1}
+
 ikkuna.Debug = false
 ikkuna.ScrollAreaScrollStep = 10
 ikkuna.ScrollBarMinKnobSize = 20
@@ -152,7 +161,12 @@ function ikkuna.parseColor(color)
 				result.b = blue / 255
 			end
 		else
-			-- TODO: Basic color lookup by name.
+			local knownColor = ikkuna.Colors[color:lower()]
+			if knownColor then
+				result = knownColor
+			else
+				print(('ikkuna::parseColor: Unknown named color "%s".'):format(color))
+			end
 		end
 	end
 
