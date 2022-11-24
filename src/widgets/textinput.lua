@@ -71,24 +71,36 @@ function TextInput:drawAt(x, y)
 	if self.frontBufferWidth < self.width then
 		self:drawText(x, y)
 
-		if self.cursorVisible and self:isFocused() and self.text then
-			local cursorSpace = 2
-			local height = self.text:getFont():getHeight()
-			local x = x + self.frontBufferWidth + cursorSpace
+		if self.cursorVisible and self:isFocused() then
+			if self.text then
+				local cursorSpace = 2
+				local height = self.text:getFont():getHeight()
+				local x = x + self.frontBufferWidth + cursorSpace
 
-			love.graphics.setColor(1, 1, 1)
-			love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
+				love.graphics.setColor(1, 1, 1)
+				love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
+			else
+				local height = ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize):getHeight()
+				love.graphics.setColor(1, 1, 1)
+				love.graphics.line(self.x, y + (self.height / 2 - height / 2), self.x, y + (self.height / 2 - height / 2) + height)
+			end
 		end
 	else
 		local cursorWidth = 3
 		self:drawText(x + self.width - self.frontBufferWidth - cursorWidth, y)
 
-		if self.cursorVisible and self:isFocused() and self.text then
-			local height = self.text:getFont():getHeight()
-			local x = x + self.width - cursorWidth
+		if self.cursorVisible and self:isFocused() then
+			if self.text then
+				local height = self.text:getFont():getHeight()
+				local x = x + self.width - cursorWidth
 
-			love.graphics.setColor(1, 1, 1)
-			love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
+				love.graphics.setColor(1, 1, 1)
+				love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
+			else
+				local height = ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize):getHeight()
+				love.graphics.setColor(1, 1, 1)
+				love.graphics.line(self.x, y + (self.height / 2 - height / 2), self.x, y + (self.height / 2 - height / 2) + height)
+			end
 		end
 	end
 	love.graphics.setScissor()
