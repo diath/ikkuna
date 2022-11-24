@@ -24,6 +24,14 @@ function TextInput:initialize(args)
 	self.focusable = true
 	self.receivesInput = true
 	self.textAlign.vertical = ikkuna.TextAlign.Vertical.Center
+
+	self.onFocusChange:connect(function(widget, focused)
+		if focused then
+			self.cursorVisible = true
+		end
+
+		return true
+	end)
 end
 
 function TextInput:parseArgs(args)
