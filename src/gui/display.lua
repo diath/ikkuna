@@ -184,11 +184,18 @@ function Display:onMouseMoved(x, y, dx, dy, touch)
 						self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
 						self.baseTooltip:show()
 						self.baseTooltip.parent:moveChildToBack(self.baseTooltip)
-					else
+					elseif type(widget.tooltip) == 'function' then
+						self.baseTooltip:setText(widget.tooltip())
+						self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+						self.baseTooltip:show()
+						self.baseTooltip.parent:moveChildToBack(self.baseTooltip)
+					elseif type(widget.tooltip) == 'userdata' then
 						self.tooltip = widget.tooltip
 						self.tooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
 						self.tooltip:show()
 						self.root:addChild(widget.tooltip)
+					else
+						-- TODO: Warning
 					end
 				end
 

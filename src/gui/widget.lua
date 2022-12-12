@@ -84,21 +84,38 @@ end
 
 function Widget:parseArg(args, typeName, name, field)
 	if args[name] == nil then
-		return
+		return false
 	end
 
-	if type(args[name]) == typeName then
-		if type(field) == 'function' then
-			field(self, args[name])
-		else
-			self[field] = args[name]
+	local typeNames = {}
+	if type(typeName) == 'table' then
+		typeNames = typeName
+	else
+		typeNames = {typeName}
+	end
+
+	local found = false
+	for _, typeName in pairs(typeNames) do
+		if type(args[name]) == typeName then
+			found = true
+			break
 		end
-		return
 	end
 
-	print(('Widget::parseArg: %s expected argument "%s" to be of type "%s", got "%s" (%s).'):format(
-		ikkuna.WidgetName[self.type], name, typeName, type(name), args[name]
-	))
+	if not found then
+		print(('Widget::parseArg: %s expected argument "%s" to be of type "%s", got "%s" (%s).'):format(
+			self, name, table.concat(typeNames, ', '), type(name), args[name]
+		))
+		return false
+	end
+
+	if type(field) == 'function' then
+		field(self, args[name])
+	else
+		self[field] = args[name]
+	end
+
+	return true
 end
 
 function Widget:parseEventsArg(event, field)
@@ -260,7 +277,7 @@ function Widget:parseArgs(args)
 	self:parseArg(args, 'boolean', 'resizeToText', Widget.setResizeToText)
 
 	-- Misc
-	self:parseArg(args, 'string', 'tooltip', 'tooltip')
+	self:parseArg(args, {'string', 'function'}, 'tooltip', 'tooltip')
 
 	if type(args.style) == 'string' then
 		self.style = args.style
