@@ -145,17 +145,33 @@ function Display:onMouseReleased(x, y, button, touch, presses)
 	return false
 end
 
+function Display:getTooltipPosition(widget, x, y)
+	local tx = x + (ikkuna.TooltipOffset.x * 2)
+	if tx + widget.width > ikkuna.Width then
+		tx = ikkuna.Width - widget.width - ikkuna.TooltipOffset.x
+	end
+
+	local ty = y + (ikkuna.TooltipOffset.y * 2)
+	if ty + widget.height > ikkuna.Height then
+		ty = ikkuna.Height - widget.height - ikkuna.TooltipOffset.y
+	end
+
+	return tx, ty
+end
+
 function Display:onMouseMoved(x, y, dx, dy, touch)
 	if self.draggingWidget then
 		return self.draggingWidget:onMouseMoved(x, y, dx, dy, touch)
 	end
 
 	if self.baseTooltip:isVisible() then
-		self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+		local tx, ty = self:getTooltipPosition(self.baseTooltip, x, y)
+		self.baseTooltip:setPosition(tx, ty)
 	end
 
 	if self.tooltip and self.tooltip:isVisible() then
-		self.tooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+		local tx, ty = self:getTooltipPosition(self.tooltip, x, y)
+		self.tooltip:setPosition(tx, ty)
 	end
 
 	local widget = self.root:getChildAt(x, y)
@@ -179,23 +195,28 @@ function Display:onMouseMoved(x, y, dx, dy, touch)
 			local result = widget:setHovered(true)
 			if result then
 				if widget.tooltip then
-					if type(widget.tooltip) == 'string' then
-						self.baseTooltip:setText(widget.tooltip)
-						self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+					if type(widget.tooltip) == 'string' or type(widget.tooltip) == 'function' then
+						local text = widget.tooltip
+						if type(widget.tooltip) == 'function' then
+							text = widget.tooltip()
+						end
+
+						self.baseTooltip:setText(text)
+
+						local tx, ty = self:getTooltipPosition(self.baseTooltip, x, y)
+						self.baseTooltip:setPosition(tx, ty)
+
 						self.baseTooltip:show()
 						self.baseTooltip.parent:moveChildToBack(self.baseTooltip)
-					elseif type(widget.tooltip) == 'function' then
-						self.baseTooltip:setText(widget.tooltip())
-						self.baseTooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
-						self.baseTooltip:show()
-						self.baseTooltip.parent:moveChildToBack(self.baseTooltip)
-					elseif type(widget.tooltip) == 'userdata' then
+					else
+						-- TODO: Handle non-userdata warning?
 						self.tooltip = widget.tooltip
-						self.tooltip:setPosition(x + ikkuna.TooltipOffset.x, y + ikkuna.TooltipOffset.y)
+
+						local tx, ty = self:getTooltipPosition(self.tooltip, x, y)
+						self.tooltip:setPosition(tx, ty)
+
 						self.tooltip:show()
 						self.root:addChild(widget.tooltip)
-					else
-						-- TODO: Warning
 					end
 				end
 
