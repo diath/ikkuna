@@ -783,6 +783,18 @@ function Widget:isVisible()
 	return self.visible
 end
 
+function Widget:getAllChildren()
+	local children = {}
+	for _, child in pairs(self.children) do
+		table.insert(children, child)
+
+		for _, subChild in pairs(child:getAllChildren()) do
+			table.insert(children, subChild)
+		end
+	end
+	return children
+end
+
 function Widget:getVisibleChildren()
 	local children = {}
 	for _, child in pairs(self.children) do
@@ -815,6 +827,20 @@ function Widget:hide()
 
 	if self.parent and self.parent.layout then
 		self.parent.layout:update()
+	end
+
+	for _, child in pairs(self:getAllChildren()) do
+		if child:isFocused() then
+			child:unfocus()
+		end
+	end
+end
+
+function Widget:setVisible(visible)
+	if visible then
+		self:show()
+	else
+		self:hide()
 	end
 end
 
