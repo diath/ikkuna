@@ -3,17 +3,31 @@ require('ikkuna')
 local display = nil
 
 function love.load()
+	love.window.setMode(ikkuna.Width, ikkuna.Height, {resizable = true})
+	love.window.setTitle('ikkuna - GUI library for Love2D.')
+
 	love.keyboard.setKeyRepeat(true)
+	love.graphics.setDefaultFilter('nearest', 'nearest')
+
 	display = ikkuna.Display:new()
 
 	local window = ikkuna.Window:new({
 		id = 'Window',
-		title = 'TabBar Test',
+		title = 'ikkuna - GUI library for Love2D.',
 		size = {width = 640, height = 480},
 		position = {x = 200, y = 25},
+		resizeToContentWidget = true,
 	})
+	local gameRoot = nil
 
-	local content = ikkuna.Widget:new({layout = 'vertical'})
+	local content = ikkuna.Widget:new({
+		layout = {
+			type = 'vertical',
+			args = {
+				resizeParent = true,
+			},
+		},
+	})
 
 	local tabBar = ikkuna.TabBar:new({
 		size = {width = 0, height = 45},
@@ -40,6 +54,7 @@ function love.load()
 			options = {'One', 'Two', 'Three', 'Four'},
 		}},
 		{type = 'ProgressBar', args = {
+			id = 'progress',
 			min = 0, max = 100, value = 50, format = '|value|/|max| (|percent|)',
 		}},
 		{type = 'SpinBox', args = {
@@ -48,10 +63,8 @@ function love.load()
 		{type = 'ScrollBar', args = {
 			min = 0, max = 100, value = 50,
 		}},
-		{type = 'TextInput', args = {
-		}},
-		{type = 'Separator', args = {
-		}},
+		{type = 'TextInput'},
+		{type = 'Separator'},
 		{type = 'CheckBox', args = {
 			text = 'Check Box',
 		}},
@@ -87,6 +100,15 @@ function love.load()
 				end,
 			}
 		}},
+		{type = 'Button', args = {
+			text = 'Switch to game UI mockup.',
+			events = {
+				onClick = function()
+					window:hide()
+					gameRoot:show()
+				end,
+			},
+		}}
 	}})
 
 	local radioGroup = ikkuna.RadioGroup:new()
@@ -113,6 +135,169 @@ function love.load()
 	window:showCentered()
 
 	display.root:addChild(window)
+
+	gameRoot = ikkuna.Widget:new({
+		id = 'gameroot',
+		parent = display.root,
+		visible = false,
+		layout = 'anchor',
+		anchors = {
+			fill = 'parent',
+		},
+		style = {
+			normal = {
+				background = 'transparent',
+			},
+		},
+	})
+
+	local buffs = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'buffs',
+		layout = 'horizontal',
+		size = {width = 250, height = 40},
+		margin = 5,
+		anchors = {
+			top = 'parent.top',
+			left = 'parent.left',
+		},
+		text = 'Buffs',
+	})
+
+	local debuffs = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'debuffs',
+		layout = 'horizontal',
+		size = {width = 250, height = 40},
+		margin = 5,
+		anchors = {
+			top = 'buffs.bottom',
+			left = 'parent.left',
+		},
+		text = 'Debuffs',
+	})
+
+	local minimap = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'minimap',
+		size = {width = 200, height = 200},
+		margin = 5,
+		anchors = {
+			bottom = 'parent.bottom',
+			right = 'parent.right',
+		},
+		text = 'Minimap',
+	})
+
+	local healthInfo = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'healthinfo',
+		size = {width = 200, height = 110},
+		margin = 5,
+		anchors = {
+			bottom = 'parent.bottom',
+			left = 'parent.left',
+		},
+		layout = 'vertical',
+		children = {
+			{type = 'ProgressBar'},
+			{type = 'ProgressBar'},
+			{type = 'ProgressBar'},
+		}
+	})
+
+	local areaInfo = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'areainfo',
+		size = {width = 200, height = 110},
+		margin = 5,
+		anchors = {
+			top = 'parent.top',
+			right = 'parent.right',
+		},
+		layout = 'vertical',
+		children = {
+			{type = 'Label', args = {text = 'Area Name'}},
+			{type = 'Label', args = {text = 'Area Level: 1337'}},
+			{type = 'Label', args = {text = 'Monsters left: 420'}},
+		}
+	})
+
+	local centerMessage = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'centermessage',
+		anchors = {
+			centerIn = 'parent',
+		},
+		resizeToText = true,
+		text = {
+			label = 'Game message.',
+			align = {
+				vertical = 'center',
+				horizontal = 'center',
+			},
+		},
+	})
+
+	local bossHealthInfo = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'bosshealthinfo',
+		anchors = {
+			top = 'parent.top',
+			horizontalCenter = 'parent.horizontalCenter',
+		},
+		layout = {
+			type = 'vertical',
+			args = {
+				resizeParent = true
+			},
+		},
+		size = {width = 200, height = 0},
+		children = {
+			{type = 'Label', args = {
+				text = {
+					label = 'Boss Name',
+				},
+			}},
+			{type = 'ProgressBar'},
+		},
+	})
+
+	local buttons = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'buttons',
+		anchors = {
+			bottom = 'parent.bottom',
+			horizontalCenter = 'parent.horizontalCenter',
+		},
+		layout = {type = 'horizontal', args = {fitParent = true}},
+		size = {width = 200, height = 32},
+		children = {
+			{type = 'Button', args = {text = 'Char'}},
+			{type = 'Button', args = {text = 'Inv'}},
+			{type = 'Button', args = {text = 'Splls'}},
+		},
+	})
+
+	local objectives = ikkuna.Widget:new({
+		parent = gameRoot,
+		id = 'objectives',
+		anchors = {
+			right = 'parent.right',
+			verticalCenter = 'parent.verticalCenter',
+		},
+		layout = {type = 'vertical', args = {resizeParent = true}},
+		size = {width = 200, height = 32},
+		children = {
+			{type = 'Label', args = {text = 'Objectives (1)'}},
+			{type = 'Label', args = {text = '1. Kill boss.'}},
+		},
+		style = {
+			normal = {
+				background = 'transparent',
+			},
+		},
+	})
 end
 
 function love.update(delta)
