@@ -47,7 +47,7 @@ function Widget:initialize(args)
 	self.tooltip = nil
 
 	self.isTextDirty = false
-	self.font = 'res/NotoSansDisplayBold'
+	self.font = ikkuna.defaultFont
 	self.fontSize = 12
 	self.text = nil
 	self.textString = ''
@@ -911,7 +911,7 @@ function Widget:setText(text)
 	end
 
 	if not self.text then
-		self.text = love.graphics.newText(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
+		self.text = love.graphics.newText(self.font)
 	end
 
 	self.text:set(text)
@@ -925,10 +925,10 @@ function Widget:setText(text)
 end
 
 function Widget:setFont(font)
-	self.font = font
+	self.font = Resources.getFont(font, self.fontSize)
 
 	if self.text then
-		self.text:setFont(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
+		self.text:setFont(self.font)
 	end
 end
 
@@ -936,7 +936,7 @@ function Widget:setFontSize(fontSize)
 	self.fontSize = fontSize
 
 	if self.text then
-		self.text:setFont(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
+		self.text:setFont(self.font)
 	end
 end
 

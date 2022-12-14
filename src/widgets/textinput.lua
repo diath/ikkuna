@@ -74,13 +74,13 @@ function TextInput:drawAt(x, y)
 		if self.cursorVisible and self:isFocused() then
 			if self.text then
 				local cursorSpace = 2
-				local height = self.text:getFont():getHeight()
+				local height = self.font:getHeight()
 				local x = x + self.frontBufferWidth + cursorSpace
 
 				love.graphics.setColor(1, 1, 1)
 				love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
 			else
-				local height = ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize):getHeight()
+				local height = self.font:getHeight()
 				love.graphics.setColor(1, 1, 1)
 				love.graphics.line(self.x, y + (self.height / 2 - height / 2), self.x, y + (self.height / 2 - height / 2) + height)
 			end
@@ -91,13 +91,13 @@ function TextInput:drawAt(x, y)
 
 		if self.cursorVisible and self:isFocused() then
 			if self.text then
-				local height = self.text:getFont():getHeight()
+				local height = self.font:getHeight()
 				local x = x + self.width - cursorWidth
 
 				love.graphics.setColor(1, 1, 1)
 				love.graphics.line(x, y + (self.height / 2 - height / 2), x, y + (self.height / 2 - height / 2) + height)
 			else
-				local height = ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize):getHeight()
+				local height = self.font:getHeight()
 				love.graphics.setColor(1, 1, 1)
 				love.graphics.line(self.x, y + (self.height / 2 - height / 2), self.x, y + (self.height / 2 - height / 2) + height)
 			end
@@ -185,7 +185,7 @@ end
 function TextInput:updateText()
 	self:setText(self.masked and self:getMaskedText() or self.buffer)
 
-	local text = love.graphics.newText(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
+	local text = love.graphics.newText(self.font)
 	text:set(self.masked and self:getMaskedFrontBuffer() or self:getFrontBuffer())
 	self.frontBufferWidth = text:getWidth()
 end
@@ -213,7 +213,7 @@ function TextInput:setCursorPosition(position)
 	self.cursorVisible = true
 	self.cursorTimer:reset()
 
-	local text = love.graphics.newText(ikkuna.Resources.getFont(ikkuna.path(self.font, '.ttf', '/'), self.fontSize))
+	local text = love.graphics.newText(self.font)
 	text:set(self:getFrontBuffer())
 	self.frontBufferWidth = text:getWidth()
 end

@@ -231,3 +231,5 @@ require(ikkuna.path('src.widgets.spinbox'))
 require(ikkuna.path('src.widgets.tabbar'))
 require(ikkuna.path('src.widgets.textinput'))
 require(ikkuna.path('src.widgets.window'))
+
+ikkuna.defaultFont = ikkuna.Resources.getFont(ikkuna.path('res/NotoSansDisplayBold', '.ttf', '/'), 12)
