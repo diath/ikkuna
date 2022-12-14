@@ -491,6 +491,10 @@ function Widget:onMousePressed(x, y, button, touch, presses)
 		return child:onMousePressed(x, y, button, touch, presses)
 	end
 
+	if self:isPhantom() then
+		return false
+	end
+
 	if button == ikkuna.MouseButton.Primary then
 		if self.draggable then
 			if self.onDragStart:emit(self, x, y) then
