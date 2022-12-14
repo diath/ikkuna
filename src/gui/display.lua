@@ -78,6 +78,18 @@ function Display:onKeyPressed(key, code, repeated)
 		return self.root:onKeyPressed(key, code, repeated)
 	end
 
+	if self.activeWindow and self.activeWindow:isVisible() then
+		if key == 'return' then
+			if self.activeWindow.onEnter:emit() then
+				return true
+			end
+		elseif key == 'escape' then
+			if self.activeWindow.onEscape:emit() then
+				return true
+			end
+		end
+	end
+
 	local name = ''
 	if ikkuna.isControlPressed() then
 		name = 'ctrl-'

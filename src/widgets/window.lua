@@ -34,6 +34,9 @@ function Window:initialize(args)
 	self.contentWidget = nil
 	self.contentWidgetResizeCallbackId = nil
 
+	self.onEnter = ikkuna.Event:new()
+	self.onEscape = ikkuna.Event:new()
+
 	ikkuna.Widget.initialize(self, args)
 	self.type = ikkuna.WidgetType.Window
 
@@ -74,6 +77,11 @@ function Window:parseArgs(args)
 	self:parseArg(args, 'boolean', 'statusBarVisible', Window.setStatusBarVisible)
 	self:parseArg(args, 'boolean', 'closeButtonVisible', Window.setCloseButtonVisible)
 	self:parseArg(args, 'boolean', 'resizeToContentWidget', Window.setResizeToContentWidget)
+
+	if args.events then
+		self:parseEventsArg(self.onEnter, args.events.onEnter)
+		self:parseEventsArg(self.onEscape, args.events.onEscape)
+	end
 end
 
 function Window:update(delta)
