@@ -151,6 +151,9 @@ function Widget:parseArgs(args)
 		self:setExplicitSize(self.preferredSize.width, self.preferredSize.height)
 	end
 
+	self:parseArg(args, 'number', 'width', Widget.setWidth)
+	self:parseArg(args, 'number', 'height', Widget.setHeight)
+
 	-- Position
 	if args.position then
 		if type(args.position) == 'number' then
@@ -684,6 +687,14 @@ function Widget:setExplicitSize(width, height)
 	if self.layout then
 		self.layout:update()
 	end
+end
+
+function Widget:setWidth(width)
+	self:setExplicitSize(width, self.height)
+end
+
+function Widget:setHeight(height)
+	self:setExplicitSize(self.width, height)
 end
 
 function Widget:addChild(child)
