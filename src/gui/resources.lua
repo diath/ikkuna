@@ -1,9 +1,13 @@
 local Resources = {}
-Resources.cache = {}
+Resources.cache = {
+	images = {},
+	fonts = {},
+	sounds = {},
+}
 
 function Resources.getImage(path)
-	if Resources.cache[path] then
-		return Resources.cache[path]
+	if Resources.cache.images[path] then
+		return Resources.cache.images[path]
 	end
 
 	local status, image = pcall(love.graphics.newImage, path)
@@ -12,14 +16,14 @@ function Resources.getImage(path)
 		return nil
 	end
 
-	Resources.cache[path] = image
+	Resources.cache.images[path] = image
 	return image
 end
 
 function Resources.getFont(path, size)
 	local key = ('%s_%d'):format(path, size)
-	if Resources.cache[key] then
-		return Resources.cache[key]
+	if Resources.cache.fonts[key] then
+		return Resources.cache.fonts[key]
 	end
 
 	local status, font = pcall(love.graphics.newFont, path, size)
@@ -28,13 +32,13 @@ function Resources.getFont(path, size)
 		return nil
 	end
 
-	Resources.cache[key] = font
+	Resources.cache.fonts[key] = font
 	return font
 end
 
 function Resources.getSound(path)
-	if Resources.cache[path] then
-		return Resources.cache[path]
+	if Resources.cache.sounds[path] then
+		return Resources.cache.sounds[path]
 	end
 
 	local status, sound = pcall(love.audio.newSource, path, 'static')
@@ -44,7 +48,7 @@ function Resources.getSound(path)
 	end
 
 	sound:setVolume(1)
-	Resources.cache[path] = sound
+	Resources.cache.sounds[path] = sound
 	return sound
 end
 
