@@ -782,9 +782,9 @@ function Widget:getVisibleChildren()
 end
 
 function Widget:forEachVisibleChild(fn)
-	for _, child in pairs(self.children) do
+	for index, child in pairs(self.children) do
 		if child:isVisible() then
-			fn(child)
+			fn(child, index == 1, index == #self.children)
 		end
 	end
 end
