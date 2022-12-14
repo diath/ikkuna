@@ -625,6 +625,7 @@ function Widget:unfocus()
 		return
 	end
 
+	ikkuna.display.focusedWidget = nil
 	self.focused = false
 	self.onFocusChange:emit(self, self.focused, self.focusReason)
 end
@@ -644,7 +645,6 @@ function Widget:focus(reason)
 
 	if ikkuna.display.focusedWidget then
 		ikkuna.display.focusedWidget:unfocus()
-		ikkuna.display.focusedWidget = nil
 	end
 
 	ikkuna.display.focusedWidget = self
