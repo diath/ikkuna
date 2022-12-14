@@ -50,6 +50,16 @@ function Window:initialize(args)
 
 		return true
 	end)
+
+	self.onFocusChange:connect(function(widget, focused)
+		if focused then
+			ikkuna.display.activeWindow = widget
+		elseif not focused and self.display.activeWindow == widget then
+			ikkuna.display.activeWindow = nil
+		end
+
+		return true
+	end)
 end
 
 function Window:parseArgs(args)

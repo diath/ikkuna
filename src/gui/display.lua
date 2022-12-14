@@ -40,6 +40,7 @@ function Display:initialize()
 
 	self.draggingWidget = nil
 	self.focusedWidget = nil
+	self.activeWindow = nil
 	self.hoveredWidget = nil
 	self.pressedWidget = nil
 end
