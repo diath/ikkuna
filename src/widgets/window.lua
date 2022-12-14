@@ -120,6 +120,20 @@ function Window:drawAt(x, y)
 	end
 end
 
+function Window:hide()
+	if ikkuna.display.activeWindow == self then
+		ikkuna.display.activeWindow = nil
+	end
+
+	ikkuna.Widget.hide(self)
+end
+
+function Window:show()
+	self:focusFirstChild()
+	ikkuna.display.activeWindow = self
+	ikkuna.Widget.show(self)
+end
+
 function Window:showCentered()
 	local x = ikkuna.Width / 2 - self.width / 2
 	local y = ikkuna.Height / 2 - self.height / 2

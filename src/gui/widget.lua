@@ -574,6 +574,15 @@ function Widget:getAllFocusableChildren()
 	return children
 end
 
+function Widget:focusFirstChild()
+	local allChildren = self:getAllFocusableChildren()
+	if #allChildren == 0 then
+		return
+	end
+
+	allChildren[1]:focus()
+end
+
 function Widget:focusPreviousChild()
 	local allChildren = self:getAllFocusableChildren()
 	if #allChildren == 0 then
