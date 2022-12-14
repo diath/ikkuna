@@ -687,6 +687,11 @@ function Widget:setExplicitSize(width, height)
 	if self.layout then
 		self.layout:update()
 	end
+
+	-- :thinking:
+	if self.parent and self.parent.layout then
+		self.parent.layout:update()
+	end
 end
 
 function Widget:setWidth(width)
