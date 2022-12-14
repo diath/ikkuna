@@ -2,15 +2,12 @@ local Window = ikkuna.class('Window', ikkuna.Widget)
 
 function Window:initialize(args)
 	-- Title bar
-	self.titleBarVisible = true
-
-	self.titleLabel = ikkuna.Label:new({style = 'WindowTitleBar'})
+	self.titleLabel = ikkuna.Label:new({id = 'WindowTitleBar', style = 'WindowTitleBar'})
 	self.titleLabel:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.titleLabel:setExplicitSize(100, 20)
 	self.titleLabel:setPhantom(true)
 
-	self.closeButtonVisible = true
-	self.closeButton = ikkuna.Button:new()
+	self.closeButton = ikkuna.Button:new({id = 'WindowCloseButton'})
 	self.closeButton:setText('X')
 	self.closeButton:setExplicitSize(16, 16)
 	self.closeButton.onClick:connect(function()
@@ -18,12 +15,11 @@ function Window:initialize(args)
 	end)
 
 	-- Status bar
-	self.statusBarVisible = false
-
-	self.statusLabel = ikkuna.Label:new({style = 'WindowStatusBar'})
+	self.statusLabel = ikkuna.Label:new({id = 'WindowStatusLabel', style = 'WindowStatusBar'})
 	self.statusLabel:setTextAlign({horizontal = ikkuna.TextAlign.Horizontal.Center, vertical = ikkuna.TextAlign.Vertical.Center})
 	self.statusLabel:setExplicitSize(100, 20)
 	self.statusLabel:setPhantom(true)
+	self.statusLabel:setVisible(false)
 
 	self.statusTime = 0
 	self.statusTimeout = -1
@@ -101,10 +97,10 @@ function Window:drawAt(x, y)
 	self:drawBase(x, y)
 
 	-- Title bar
-	if self.titleBarVisible then
+	if self.titleLabel:isVisible() then
 		self.titleLabel:draw()
 
-		if self.closeButtonVisible then
+		if self.closeButton:isVisible() then
 			self.closeButton:draw()
 		end
 	end
@@ -115,7 +111,7 @@ function Window:drawAt(x, y)
 	end
 
 	-- Status bar
-	if self.statusBarVisible then
+	if self.statusLabel:isVisible() then
 		self.statusLabel:draw()
 	end
 end
@@ -147,17 +143,15 @@ function Window:setTitle(title)
 end
 
 function Window:showTitleBar()
-	self.titleBarVisible = true
-	self:calculateChildrenPositionAndSize()
+	self:setTitleBarVisible(true)
 end
 
 function Window:hideTitleBar()
-	self.titleBarVisible = false
-	self:calculateChildrenPositionAndSize()
+	self:setTitleBarVisible(false)
 end
 
 function Window:setTitleBarVisible(visible)
-	self.titleBarVisible = visible
+	self.titleLabel:setVisible(visible)
 	self:calculateChildrenPositionAndSize()
 end
 
@@ -174,22 +168,20 @@ function Window:setStatus(status, timeout)
 end
 
 function Window:showStatusBar()
-	self.statusBarVisible = true
-	self:calculateChildrenPositionAndSize()
+	self:setStatusBarVisible(true)
 end
 
 function Window:hideStatusBar()
-	self.statusBarVisible = false
-	self:calculateChildrenPositionAndSize()
+	self:setStatusBarVisible(false)
 end
 
 function Window:setStatusBarVisible(visible)
-	self.statusBarVisible = visible
+	self.statusLabel:setVisible(visible)
 	self:calculateChildrenPositionAndSize()
 end
 
 function Window:setCloseButtonVisible(visible)
-	self.closeButtonVisible = visible
+	self.closeButton:setVisible(visible)
 	self:calculateChildrenPositionAndSize()
 end
 
@@ -204,7 +196,7 @@ end
 function Window:calculateChildrenPositionAndSize()
 	local contentOffset = 0
 	local contentHeight = self.height
-	if self.titleBarVisible then
+	if self.titleLabel:isVisible() then
 		self.titleLabel:setExplicitSize(self.width, self.titleLabel.height)
 		self.titleLabel:setPosition(self.x, self.y)
 
@@ -214,7 +206,7 @@ function Window:calculateChildrenPositionAndSize()
 		contentOffset = contentOffset + self.titleLabel.height
 	end
 
-	if self.statusBarVisible then
+	if self.statusLabel:isVisible() then
 		self.statusLabel:setExplicitSize(self.width, self.statusLabel.height)
 		self.statusLabel:setPosition(self.x, self.y + self.height - self.statusLabel.height)
 		contentHeight = contentHeight - self.statusLabel.height
@@ -235,11 +227,11 @@ function Window:resizeToContentWidget()
 	end
 
 	local height = 0
-	if self.titleBarVisible then
+	if self.titleLabel:isVisible() then
 		height = height + self.titleLabel.height
 	end
 
-	if self.statusBarVisible then
+	if self.statusLabel:isVisible() then
 		height = height + self.statusLabel.height
 	end
 
