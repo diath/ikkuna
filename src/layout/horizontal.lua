@@ -47,14 +47,17 @@ function HorizontalLayout:updateInternal()
 		end
 	else
 		local width = parent.padding.left
-		parent:forEachVisibleChild(function(child)
+		parent:forEachVisibleChild(function(child, isFirst, isLast)
 			position = position + child.margin.left
 
 			child:setExplicitSize(child.width, height)
 			child:setPosition(position, parent.y + parent.padding.top)
 
 			position = position + child.width + self.childSpacing + child.margin.right
-			width = width + child.margin.left + child.width + child.margin.right + self.childSpacing
+			width = width + child.margin.left + child.width
+			if not isLast then
+				width = width + self.childSpacing + child.margin.right
+			end
 		end)
 
 		if self.resizeParent then
@@ -66,8 +69,11 @@ end
 function HorizontalLayout:getTotalWidth()
 	local parent = self.parent
 	local width = parent.padding.left
-	parent:forEachVisibleChild(function(child)
-		width = width + child.margin.left + child.width + child.margin.right + self.childSpacing
+	parent:forEachVisibleChild(function(child, isFirst, isLast)
+		width = width + child.margin.left + child.width
+		if not isLast then
+			width = width + child.margin.right + self.childSpacing
+		end
 	end)
 
 	return width

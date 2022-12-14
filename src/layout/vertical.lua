@@ -50,15 +50,18 @@ function VerticalLayout:updateInternal()
 			end
 		end
 	else
-		local height = parent.padding.top
-		parent:forEachVisibleChild(function(child)
+		local height = parent.padding.top + parent.padding.bottom
+		parent:forEachVisibleChild(function(child, isFirst, isLast)
 			position = position + child.margin.top
 
 			child:setExplicitSize(width, child.height)
 			child:setPosition(parent.x + parent.padding.left, position)
 
 			position = position + child.height + self.childSpacing + child.margin.bottom
-			height = height + child.margin.top + child.height + child.margin.bottom + self.childSpacing
+			height = height + child.margin.top + child.height
+			if not isLast then
+				height = height + self.childSpacing + child.margin.bottom
+			end
 		end)
 
 		if self.resizeParent then
@@ -70,8 +73,11 @@ end
 function VerticalLayout:getTotalHeight()
 	local parent = self.parent
 	local height = parent.padding.top
-	parent:forEachVisibleChild(function(child)
-		height = height + child.margin.top + child.height + child.margin.bottom + self.childSpacing
+	parent:forEachVisibleChild(function(child, isFirst, isLast)
+		height = height + child.margin.top + child.height
+		if not isLast then
+			height = height + child.margin.bottom + self.childSpacing
+		end
 	end)
 
 	return height
