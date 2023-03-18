@@ -702,6 +702,15 @@ function Widget:setExplicitSize(width, height)
 	end
 end
 
+function Widget:getBorderSize()
+	local style = self:getStyle()
+	if not style then
+		return 0
+	end
+
+	return style.borderSize or 0
+end
+
 function Widget:setWidth(width)
 	self:setExplicitSize(width, self.height)
 end
