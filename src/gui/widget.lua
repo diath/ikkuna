@@ -750,11 +750,33 @@ function Widget:removeChild(widget)
 		if child == widget then
 			table.remove(self.children, index)
 			self.knownChildren:remove(child)
+
+			if self.layout then
+				self.layout:update()
+			end
+
 			return true
 		end
 	end
 
 	return false
+end
+
+function Widget:removeChildren()
+	if #self.children == 0 then
+		return
+	end
+
+	for _, child in pairs(self.children) do
+		child.parent = nil
+	end
+
+	self.children = {}
+	self.knownChildren:clear()
+
+	if self.layout then
+		self.layout:update()
+	end
 end
 
 function Widget:moveChildToBack(widget)
