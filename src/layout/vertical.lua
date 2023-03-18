@@ -52,15 +52,15 @@ function VerticalLayout:updateInternal()
 	else
 		local height = parent.padding.top + parent.padding.bottom
 		parent:forEachVisibleChild(function(child, isFirst, isLast)
-			position = position + child.margin.top
+			position = position + child.margin.top + child:getBorderSize()
 
 			child:setExplicitSize(width, child.height)
-			child:setPosition(parent.x + parent.padding.left, position)
+			child:setPosition(parent.x + parent.padding.left + child:getBorderSize(), position)
 
 			position = position + child.height + self.childSpacing + child.margin.bottom
 			height = height + child.margin.top + child.height
 			if not isLast then
-				height = height + self.childSpacing + child.margin.bottom
+				height = height + self.childSpacing + child.margin.bottom + (child:getBorderSize() * 2)
 			end
 		end)
 

@@ -46,17 +46,18 @@ function HorizontalLayout:updateInternal()
 			position = position + width + self.childSpacing + child.margin.right
 		end
 	else
-		local width = parent.padding.left
+		local width = parent.padding.left + parent.padding.right
 		parent:forEachVisibleChild(function(child, isFirst, isLast)
-			position = position + child.margin.left
+			position = position + child.margin.left + child:getBorderSize()
 
 			child:setExplicitSize(child.width, height)
-			child:setPosition(position, parent.y + parent.padding.top)
+			child:setPosition(position, parent.y + parent.padding.top + child:getBorderSize())
 
 			position = position + child.width + self.childSpacing + child.margin.right
 			width = width + child.margin.left + child.width
 			if not isLast then
-				width = width + self.childSpacing + child.margin.right
+				-- TODO: This should probably take the borderSize of current and next child instead of x2.
+				width = width + self.childSpacing + child.margin.right + (child:getBorderSize() * 2)
 			end
 		end)
 
