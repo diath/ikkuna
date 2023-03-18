@@ -46,7 +46,6 @@ function Widget:initialize(args)
 
 	self.tooltip = nil
 
-	self.isTextDirty = false
 	self.font = ikkuna.defaultFont
 	self.fontSize = 12
 	self.text = nil
@@ -358,10 +357,6 @@ function Widget:update(delta)
 		self.onPress:emit(self)
 		self.pressTimer:reset()
 	end
-
-	if self.isTextDirty then
-		self:calculateTextPosition()
-	end
 end
 
 function Widget:draw()
@@ -478,7 +473,7 @@ function Widget:drag(x, y)
 		self.y = y - self.dragOffset.y
 	end
 
-	self.isTextDirty = true
+	self:calculateTextPosition()
 
 	for _, child in pairs(self.children) do
 		child:drag(x, y)
@@ -916,7 +911,8 @@ function Widget:setText(text)
 
 	self.text:set(text)
 	self.textString = text
-	self.isTextDirty = true
+
+	self:calculateTextPosition()
 
 	if self.resizeToText then
 		local width, height = self.text:getDimensions()
@@ -953,7 +949,7 @@ function Widget:setTextOffset(x, y)
 	self.textOffset.x = x
 	self.textOffset.y = y
 
-	self.isTextDirty = true
+	self:calculateTextPosition()
 end
 
 function Widget:setTextAlign(align)
@@ -965,7 +961,7 @@ function Widget:setTextAlign(align)
 		self.textAlign.vertical = align.vertical
 	end
 
-	self.isTextDirty = true
+	self:calculateTextPosition()
 end
 
 function Widget:getText()
@@ -995,8 +991,6 @@ function Widget:calculateTextPosition()
 	elseif self.textAlign.vertical == ikkuna.TextAlign.Vertical.Center then
 		self.relativeTextPosition.y = math.floor(self.height / 2 - height / 2 + self.textOffset.y)
 	end
-
-	self.isTextDirty = false
 end
 
 function Widget:contains(x, y)
