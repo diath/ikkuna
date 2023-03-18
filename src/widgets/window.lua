@@ -59,6 +59,11 @@ function Window:initialize(args)
 
 		return true
 	end)
+
+	self.parent.onResize:connect(function(widget, width, height)
+		self:updateDockPositionAndSize()
+		return true
+	end)
 end
 
 function Window:parseArgs(args)
@@ -287,6 +292,13 @@ function Window:setDockMode(dockMode)
 		return
 	end
 
+	self.dockMode = dockMode
+	self:updateDockPositionAndSize()
+end
+
+function Window:updateDockPositionAndSize()
+	-- TODO: Add support for fixed width/height so the window only gets anchored without being resized.
+	local dockMode = self.dockMode
 	if dockMode == ikkuna.WindowDockMode.None then
 		self.draggable = true
 	elseif dockMode == ikkuna.WindowDockMode.Left then
