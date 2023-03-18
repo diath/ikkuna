@@ -34,8 +34,12 @@ function ProgressBar:drawAt(x, y)
 
 	if self.fillWidth ~= 0 then
 		local style = self:getStyle()
-		love.graphics.setColor(style.fillColor.r, style.fillColor.g, style.fillColor.b, style.fillColor.a)
-		love.graphics.rectangle('fill', x + 1, y + 1, self.fillWidth, self.height - 2)
+		if style.fillColor then
+			love.graphics.setColor(style.fillColor.r, style.fillColor.g, style.fillColor.b, style.fillColor.a)
+			love.graphics.rectangle('fill', x + 1, y + 1, self.fillWidth, self.height - 2)
+		else
+			print(('ProgressBar::drawAt: Widget "%s" is missing fillColor style property.'):format(self))
+		end
 	end
 
 	self:drawText(x, y)
