@@ -24,6 +24,7 @@ function Window:initialize(args)
 	self.statusTime = 0
 	self.statusTimeout = -1
 	self.dockMode = ikkuna.WindowDockMode.None
+	self.fixedDockModeSize = false
 
 	self.shouldResizeToContentWidget = false
 
@@ -78,6 +79,8 @@ function Window:parseArgs(args)
 	self:parseArg(args, 'boolean', 'statusBarVisible', Window.setStatusBarVisible)
 	self:parseArg(args, 'boolean', 'closeButtonVisible', Window.setCloseButtonVisible)
 	self:parseArg(args, 'boolean', 'resizeToContentWidget', Window.setResizeToContentWidget)
+	self:parseArg(args, 'number', 'dockMode', Window.setDockMode)
+	self:parseArg(args, 'boolean', 'fixedDockModeSize', Window.setFixedDockModeSize)
 
 	if args.events then
 		self:parseEventsArg(self.onEnter, args.events.onEnter)
@@ -296,27 +299,55 @@ function Window:setDockMode(dockMode)
 	self:updateDockPositionAndSize()
 end
 
+function Window:setFixedDockModeSize(fixedDockModeSize)
+	if self.fixedDockModeSize == fixedDockModeSize then
+		return
+	end
+
+	self.fixedDockModeSize = fixedDockModeSize
+	self:updateDockPositionAndSize()
+end
+
 function Window:updateDockPositionAndSize()
-	-- TODO: Add support for fixed width/height so the window only gets anchored without being resized.
 	local dockMode = self.dockMode
 	if dockMode == ikkuna.WindowDockMode.None then
 		self.draggable = true
 	elseif dockMode == ikkuna.WindowDockMode.Left then
 		self.draggable = false
-		self:setPosition(0, 0)
-		self:setExplicitSize(self.width, ikkuna.Height)
+
+		if self.fixedDockModeSize then
+			self:setPosition(0, ikkuna.Height / 2 - self.height / 2)
+		else
+			self:setPosition(0, 0)
+			self:setExplicitSize(self.width, ikkuna.Height)
+		end
 	elseif dockMode == ikkuna.WindowDockMode.Right then
 		self.draggable = false
-		self:setPosition(ikkuna.Width - self.width, 0)
-		self:setExplicitSize(self.width, ikkuna.Height)
+
+		if self.fixedDockModeSize then
+			self:setPosition(ikkuna.Width - self.width, ikkuna.Height / 2 - self.height / 2)
+		else
+			self:setPosition(ikkuna.Width - self.width, 0)
+			self:setExplicitSize(self.width, ikkuna.Height)
+		end
 	elseif dockMode == ikkuna.WindowDockMode.Top then
 		self.draggable = false
-		self:setPosition(0, 0)
-		self:setExplicitSize(ikkuna.Width, self.height)
+
+		if self.fixedDockModeSize then
+			self:setPosition(ikkuna.Width / 2 - self.width / 2, 0)
+		else
+			self:setPosition(0, 0)
+			self:setExplicitSize(ikkuna.Width, self.height)
+		end
 	elseif dockMode == ikkuna.WindowDockMode.Bottom then
 		self.draggable = false
-		self:setPosition(0, ikkuna.Height - self.height)
-		self:setExplicitSize(ikkuna.Width, self.height)
+
+		if self.fixedDockModeSize then
+			self:setPosition(ikkuna.Width / 2 - self.width / 2, ikkuna.Height - self.height)
+		else
+			self:setPosition(0, ikkuna.Height - self.height)
+			self:setExplicitSize(ikkuna.Width, self.height)
+		end
 	end
 end
 
