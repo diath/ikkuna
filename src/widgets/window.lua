@@ -133,6 +133,10 @@ function Window:hide()
 end
 
 function Window:show()
+	if self.parent then
+		self.parent:moveChildToBack(self)
+	end
+
 	self:focusFirstChild()
 	ikkuna.display.activeWindow = self
 	ikkuna.Widget.show(self)
