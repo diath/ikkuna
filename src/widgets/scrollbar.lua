@@ -98,7 +98,7 @@ function ScrollBar:parseArgs(args)
 	self:parseArg(args, 'number', 'min', ScrollBar.setMin)
 	self:parseArg(args, 'number', 'max', ScrollBar.setMax)
 	self:parseArg(args, 'boolean', 'displayValue', ScrollBar.setDisplayValue)
-	self:parseArg(args, 'string', 'orientation', ScrollBar.setOrientation)
+	self:parseArg(args, 'number', 'orientation', ScrollBar.setOrientation)
 	self:parseArg(args, 'string', 'format', ScrollBar.setFormat)
 
 	if args.events then
