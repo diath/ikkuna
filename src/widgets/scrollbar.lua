@@ -36,7 +36,7 @@ function ScrollBar:initialize(args)
 	self.knob.draggable = true
 	self.knob.onDragMove:connect(function(knob, x, y, dx, dy)
 		if self.orientation == ikkuna.ScrollBarOrientation.Horizontal then
-			if x - knob.dragOffset.x < self.decButton.x + self.decButton.width then
+			if x - knob.dragOffset.x < self.decButton.x + self.decButton.width - 1 then
 				return false
 			end
 
