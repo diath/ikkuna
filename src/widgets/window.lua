@@ -61,12 +61,10 @@ function Window:initialize(args)
 		return true
 	end)
 
-	if self.parent then
-		self.parent.onResize:connect(function(widget, width, height)
-			self:updateDockPositionAndSize()
-			return true
-		end)
-	end
+	self.parent.onResize:connect(function(widget, width, height)
+		self:updateDockPositionAndSize()
+		return true
+	end)
 end
 
 function Window:parseArgs(args)

@@ -13,6 +13,7 @@ function love.load()
 
 	local window = ikkuna.Window:new({
 		id = 'Window',
+		parent = display.root,
 		title = 'ikkuna - GUI library for Love2D.',
 		size = {width = 640, height = 480},
 		position = {x = 200, y = 25},
@@ -133,8 +134,6 @@ function love.load()
 
 	window:setContentWidget(content)
 	window:showCentered()
-
-	display.root:addChild(window)
 
 	gameRoot = ikkuna.Widget:new({
 		id = 'gameroot',
@@ -271,11 +270,17 @@ function love.load()
 			horizontalCenter = 'parent.horizontalCenter',
 		},
 		layout = {type = 'horizontal', args = {fitParent = true}},
-		size = {width = 200, height = 32},
+		size = {width = 300, height = 32},
 		children = {
 			{type = 'Button', args = {text = 'Char'}},
 			{type = 'Button', args = {text = 'Inv'}},
 			{type = 'Button', args = {text = 'Splls'}},
+			{type = 'Button', args = {text = '> Menu', events = {
+				onClick = function()
+					gameRoot:hide()
+					window:show()
+				end,
+			},}},
 		},
 	})
 
